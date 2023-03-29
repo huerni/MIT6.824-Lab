@@ -1,0 +1,8 @@
+{
+    "go.toolsGopath": "/home/code/.gocache/gotools", // tools的绝对路径
+    "go.goroot": "/usr/local/go",
+    "go.gopath": "/home/code/.gocache/gotools",
+    "terminal.integrated.env.linux": {
+        "GO111MODULE": "on"
+    },
+}

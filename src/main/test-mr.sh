@@ -160,6 +160,7 @@ then
   echo '---' saw "$NT" workers rather than 2
   echo '---' map parallelism test: FAIL
   failed_any=1
+  exit
 fi
 
 if cat mr-out* | grep '^parallel.* 2' > /dev/null
@@ -168,6 +169,7 @@ then
 else
   echo '---' map workers did not run in parallel
   echo '---' map parallelism test: FAIL
+  exit 
   failed_any=1
 fi
 
