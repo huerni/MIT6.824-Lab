@@ -190,7 +190,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		// 当候选人记录更新时，才投票给它
 		// 比较最后一个条目的索引和任期号，来决定哪个新。如果两个日志的任期号不同，任期号大的更新；如果任期号相同，更长的日志更新。
 		loglen := len(rf.logEntries)
-		if args.LastLogTerm > rf.logEntries[loglen-1].Term {
+		if loglen == 1 || args.LastLogTerm > rf.logEntries[loglen-1].Term {
 			reply.VoteGranted = true
 			// 本轮已投票，不可再投给其他人
 			// fmt.Printf("term %v, %v 投给 %v 一票\n", args.Term, rf.me, args.CandidateId)
@@ -269,7 +269,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 	rf.changeChan <- 1
 
-	if len(rf.logEntries) < args.PrevLogIndex || rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
+	if len(rf.logEntries) <= args.PrevLogIndex || rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
 		reply.Success = false
 		reply.Term = rf.currentTerm
 		return
@@ -295,8 +295,8 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 
 	// 将提交后还没有使用的日志应用于状态机
 	if args.LeaderCommit > rf.commitIndex {
-		if args.LeaderCommit > len(rf.logEntries)-1 {
-			rf.commitIndex = len(rf.logEntries) - 1
+		if args.LeaderCommit > rf.logEntries[len(rf.logEntries)-1].Index {
+			rf.commitIndex = rf.logEntries[len(rf.logEntries)-1].Index
 		} else {
 			rf.commitIndex = args.LeaderCommit
 		}
@@ -342,25 +342,29 @@ func (rf *Raft) appendEntries() {
 							rf.nextIndex[id]--
 							rf.mu.Unlock()
 						} else {
-							// TODO:Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
+							// Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
 							rf.mu.Lock()
 							// 更新nextIndex和matchIndex
-							rf.nextIndex[id] += len(args.Entries)
+							if len(args.Entries) > 0 {
+								rf.nextIndex[id] = args.Entries[len(args.Entries)-1].Index + 1
+							}
 							rf.matchIndex[id] = rf.nextIndex[id] - 1
 							mapcount := make(map[int]int)
+							// fmt.Printf("检测commit\n")
 							for _, val := range rf.matchIndex {
 								if mapcount[val] != 0 {
 									mapcount[val]++
 								} else {
 									mapcount[val] = 1
 								}
-								if val > rf.commitIndex && mapcount[val] > len(rf.peers)/2 && rf.logEntries[val].Term == rf.currentTerm {
+								// 不包括自己的matchIndex
+								if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val].Term == rf.currentTerm {
 									rf.commitIndex = val
 								}
 							}
 							rf.mu.Unlock()
-							break
 						}
+						break
 					}
 					time.Sleep(10 * time.Millisecond)
 				}
@@ -411,7 +415,6 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// Your code here (2B).
 	term, isLeader = rf.GetState()
 	rf.mu.Lock()
-
 	index = len(rf.logEntries)
 	if isLeader {
 		// start the agreement
