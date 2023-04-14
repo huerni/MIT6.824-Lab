@@ -300,6 +300,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		} else {
 			rf.commitIndex = args.LeaderCommit
 		}
+		go rf.processMsg()
 	}
 }
 
@@ -362,6 +363,7 @@ func (rf *Raft) appendEntries() {
 									rf.commitIndex = val
 								}
 							}
+							go rf.processMsg()
 							rf.mu.Unlock()
 						}
 						break
@@ -374,24 +376,22 @@ func (rf *Raft) appendEntries() {
 }
 
 func (rf *Raft) processMsg() {
-	for rf.killed() == false {
-		rf.mu.Lock()
-		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("%v 开始commit:  ", rf.me)
-		}
-		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
-			fmt.Printf("%v, ", k)
-			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
-			rf.applyCh <- msg
-		}
-		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("\n")
-		}
-		rf.lastApplied = rf.commitIndex
-		rf.mu.Unlock()
-		time.Sleep(10 * time.Millisecond)
+	rf.mu.Lock()
+	if rf.commitIndex > rf.lastApplied {
+		fmt.Printf("%v 开始commit:  ", rf.me)
 	}
+	for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
+		fmt.Printf("%v, ", k)
+		msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
+		rf.applyCh <- msg
+	}
+	if rf.commitIndex > rf.lastApplied {
+		fmt.Printf("\n")
+	}
+	rf.lastApplied = rf.commitIndex
+	rf.mu.Unlock()
 
+	time.Sleep(10 * time.Millisecond)
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -571,7 +571,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.nextIndex = make([]int, len(peers))
 	rf.matchIndex = make([]int, len(peers))
 	rf.lastApplied = 0
-	// TODO: initialization log[] 先添加0，减少判断条件
+	// initialization log[] 先添加0，减少判断条件
 	rf.logEntries = append(rf.logEntries, LogEntrie{Term: 0, Index: 0})
 
 	// initialize from state persisted before a crash
@@ -580,7 +580,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// start ticker goroutine to start elections
 	fmt.Printf("%v 启动\n", rf.me)
 	go rf.ticker()
-	go rf.processMsg()
 
 	return rf
 }
