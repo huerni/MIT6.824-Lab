@@ -189,7 +189,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		// 当候选人记录更新时，才投票给它
 		// 比较最后一个条目的索引和任期号，来决定哪个新。如果两个日志的任期号不同，任期号大的更新；如果任期号相同，更长的日志更新。
 		loglen := len(rf.logEntries)
-		if loglen == 0 || args.LastLogTerm > rf.logEntries[loglen-1].Term {
+		if args.LastLogTerm > rf.logEntries[loglen-1].Term {
 			reply.VoteGranted = true
 			// 本轮已投票，不可再投给其他人
 			// fmt.Printf("term %v, %v 投给 %v 一票\n", args.Term, rf.me, args.CandidateId)
@@ -267,42 +267,8 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		rf.votedFor = -1
 	}
 	rf.changeChan <- 1
-	// 心跳，暂无同步日志
-	if len(args.Entries) == 0 {
-		reply.Success = true
-		loglen := len(rf.logEntries)
-		if args.LeaderCommit > rf.commitIndex && loglen > 0 {
-			if args.LeaderCommit > rf.logEntries[loglen-1].Index {
-				rf.commitIndex = rf.logEntries[loglen-1].Index
-			} else {
-				rf.commitIndex = args.LeaderCommit
-			}
-		}
-		/**
-				loglen := len(rf.logEntries)
-		if args.LeaderCommit > rf.commitIndex && loglen > 0 {
-			k := rf.commitIndex + 1
-			if args.LeaderCommit > rf.logEntries[loglen-1].Index {
-				rf.commitIndex = rf.logEntries[loglen-1].Index
-			} else {
-				rf.commitIndex = args.LeaderCommit
-			}
-			for ; k <= rf.commitIndex; k++ {
-				msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k-1].Command, CommandIndex: rf.logEntries[k-1].Index}
-				rf.applyCh <- msg
-			}
-		}
-		*/
-		return
-	}
 
-	if len(rf.logEntries) < args.PrevLogIndex {
-		reply.Success = false
-		reply.Term = rf.currentTerm
-		return
-	}
-
-	if args.PrevLogTerm != 0 && rf.logEntries[args.PrevLogIndex-1].Term != args.PrevLogTerm {
+	if len(rf.logEntries) < args.PrevLogIndex || rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
 		reply.Success = false
 		reply.Term = rf.currentTerm
 		return
@@ -310,32 +276,35 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 
 	reply.Success = true
 	// 删除不匹配的现有条目
-	for _, val := range args.Entries {
-		if val.Index >= len(rf.logEntries) {
-			break
+	if len(args.Entries) > 0 {
+		for _, val := range args.Entries {
+			if val.Index >= len(rf.logEntries) {
+				break
+			}
+			// index相等，但Term不相等，截断
+			if val.Term != rf.logEntries[val.Index].Term {
+				rf.logEntries = rf.logEntries[:val.Index]
+				break
+			}
 		}
-		// index相等，但Term不相等，截断
-		if val.Term != rf.logEntries[val.Index-1].Term {
-			rf.logEntries = rf.logEntries[:val.Index-1]
-			break
-		}
+
+		rf.logEntries = append(rf.logEntries, args.Entries...)
+		fmt.Printf("%v 添加日志到 %v\n", rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
 	}
-	rf.logEntries = append(rf.logEntries, args.Entries...)
-	fmt.Printf("%v 添加日志到 %v\n", rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
+
 	// 将提交后还没有使用的日志应用于状态机
 	if args.LeaderCommit > rf.commitIndex {
-		if args.LeaderCommit > args.Entries[len(args.Entries)-1].Index {
-			rf.commitIndex = args.Entries[len(args.Entries)-1].Index
+		if args.LeaderCommit > len(rf.logEntries)-1 {
+			rf.commitIndex = len(rf.logEntries) - 1
 		} else {
 			rf.commitIndex = args.LeaderCommit
 		}
 	}
+	go rf.processMsg()
 }
 
 func (rf *Raft) appendEntries() {
 	// 修改成异步发送
-	var copyCount int32 = 0
-	atomic.AddInt32(&copyCount, 1)
 	for index, _ := range rf.peers {
 		if index != rf.me {
 			go func(id int) {
@@ -344,27 +313,25 @@ func (rf *Raft) appendEntries() {
 				args.Term = rf.currentTerm
 				args.LeaderId = rf.me
 				args.LeaderCommit = rf.commitIndex
-				args.PrevLogIndex = rf.nextIndex[id] - 1
-				args.PrevLogTerm = 0
-				// 需要同步的logEntries
-				loglen := len(rf.logEntries)
-				if loglen > 0 && rf.logEntries[loglen-1].Index > args.PrevLogIndex {
-					if args.PrevLogIndex > 0 {
-						args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-1].Term
-					}
-					// 需要同步的日志
-					for i := rf.nextIndex[id]; i <= loglen; i++ {
-						args.Entries = append(args.Entries, rf.logEntries[i-1])
-					}
-				}
 				rf.mu.Unlock()
 				reply := AppendEntriesReply{}
 				// 不断尝试，直到成功
 				for {
+					rf.mu.Lock()
+					// FIXME: 为什么会出现等于0的情况？？
+					if rf.nextIndex[id] > 0 {
+						args.PrevLogIndex = rf.nextIndex[id] - 1
+						args.PrevLogTerm = rf.logEntries[args.PrevLogIndex].Term
+						// 需要同步的logEntries
+						args.Entries = rf.logEntries[rf.nextIndex[id]:]
+					}
+
+					rf.mu.Unlock()
 					ok := rf.peers[id].Call("Raft.ReceiveEntries", &args, &reply)
 					if ok {
 						if reply.Success == false {
 							rf.mu.Lock()
+							// 新leader存在，转为Follower
 							if rf.currentTerm < reply.Term {
 								rf.currentTerm = reply.Term
 								rf.votedFor = -1
@@ -374,43 +341,28 @@ func (rf *Raft) appendEntries() {
 								return
 							}
 							rf.nextIndex[id]--
-							args.PrevLogIndex = rf.nextIndex[id] - 1
-							args.PrevLogTerm = 0
-							if rf.nextIndex[id] > 0 {
-								args.PrevLogTerm = rf.logEntries[rf.nextIndex[id]-1].Term
-								args.Entries = append([]LogEntrie{rf.logEntries[rf.nextIndex[id]-1]}, args.Entries...)
-							}
 							rf.mu.Unlock()
 						} else {
-							atomic.AddInt32(&copyCount, 1)
-							// 超过半数成功同步，进行提交
-							// 首先判断是心跳请求还是通过同步请求
-							// 从lastapplied 到 commit
-							argsloglen := len(args.Entries)
-							if argsloglen > 0 {
-								rf.mu.Lock()
-								if args.Entries[argsloglen-1].Index > rf.matchIndex[id] {
-									rf.matchIndex[id] = args.Entries[argsloglen-1].Index
+							// TODO:Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
+							rf.mu.Lock()
+							// 更新nextIndex和matchIndex
+							rf.nextIndex[id] += len(args.Entries)
+							rf.matchIndex[id] = rf.nextIndex[id] - 1
+							mapcount := make(map[int]int)
+							for _, val := range rf.matchIndex {
+								if mapcount[val] != 0 {
+									mapcount[val]++
+								} else {
+									mapcount[val] = 1
 								}
-								rf.nextIndex[id] = args.Entries[argsloglen-1].Index + 1
-								if int(atomic.LoadInt32(&copyCount)) > len(rf.peers)/2 && args.Entries[argsloglen-1].Term == rf.currentTerm {
-									// 当i被提交时，i以前的应该都已经提交了
-									/**
-										for k := rf.commitIndex + 1; k <= args.Entries[argsloglen-1].Index; k++ {
-										msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k-1].Command, CommandIndex: rf.logEntries[k-1].Index}
-										rf.applyCh <- msg
-									}
-									**/
-									if args.Entries[argsloglen-1].Index > rf.commitIndex {
-										rf.commitIndex = args.Entries[argsloglen-1].Index
-									}
-
+								if val > rf.commitIndex && mapcount[val] > len(rf.peers)/2 && rf.logEntries[val].Term == rf.currentTerm {
+									rf.commitIndex = val
+									go rf.processMsg()
 								}
-								rf.mu.Unlock()
 							}
+							rf.mu.Unlock()
+							break
 						}
-
-						break
 					}
 					time.Sleep(10 * time.Millisecond)
 				}
@@ -420,24 +372,20 @@ func (rf *Raft) appendEntries() {
 }
 
 func (rf *Raft) processMsg() {
-	for rf.killed() == false {
-		rf.mu.Lock()
-		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("%v 开始commit:  ", rf.me)
-		}
-		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
-			fmt.Printf("%v, ", k)
-			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k-1].Command, CommandIndex: rf.logEntries[k-1].Index}
-			rf.applyCh <- msg
-		}
-		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("\n")
-		}
-		rf.lastApplied = rf.commitIndex
-		rf.mu.Unlock()
-		time.Sleep(10 * time.Millisecond)
+	rf.mu.Lock()
+	if rf.commitIndex > rf.lastApplied {
+		fmt.Printf("%v 开始commit:  ", rf.me)
 	}
-
+	for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
+		fmt.Printf("%v, ", k)
+		msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
+		rf.applyCh <- msg
+	}
+	if rf.commitIndex > rf.lastApplied {
+		fmt.Printf("\n")
+	}
+	rf.lastApplied = rf.commitIndex
+	rf.mu.Unlock()
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -457,10 +405,11 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index := -1
 	term := -1
 	isLeader := true
+
 	// Your code here (2B).
 	term, isLeader = rf.GetState()
 	rf.mu.Lock()
-	index = len(rf.logEntries) + 1
+	index = len(rf.logEntries)
 	if isLeader {
 		// start the agreement
 		entrie := LogEntrie{
@@ -469,7 +418,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 			command,
 		}
 		rf.logEntries = append(rf.logEntries, entrie)
-		fmt.Printf("%v 添加日志 %v\n", rf.me, len(rf.logEntries))
+		fmt.Printf("%v 添加日志 %v\n", rf.me, index)
 		// AppendEntrie发送给其他服务器
 		rf.changeChan <- 1
 	}
@@ -505,13 +454,8 @@ func (rf *Raft) startElection() {
 	args := RequestVoteArgs{}
 	args.Term = rf.currentTerm
 	args.CandidateId = rf.me
-	loglen := len(rf.logEntries)
-	args.LastLogIndex = 0
-	args.LastLogTerm = 0
-	if loglen > 0 {
-		args.LastLogIndex = rf.logEntries[loglen-1].Index
-		args.LastLogTerm = rf.logEntries[loglen-1].Term
-	}
+	args.LastLogIndex = rf.logEntries[len(rf.logEntries)-1].Index
+	args.LastLogTerm = rf.logEntries[len(rf.logEntries)-1].Term
 
 	rf.mu.Unlock()
 	// 如果收到多数服务器的投票：成为领先者
@@ -527,7 +471,6 @@ func (rf *Raft) startElection() {
 			if !ok {
 				return
 			}
-
 			if reply.VoteGranted {
 				atomic.AddInt32(&voteCount, 1)
 				rf.mu.Lock()
@@ -564,6 +507,7 @@ func (rf *Raft) ticker() {
 	for rf.killed() == false {
 		// Your code here (2A)
 		// Check if a leader election should be started.
+		go rf.processMsg()
 		switch rf.state {
 		case Follower:
 			select {
@@ -624,7 +568,8 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.nextIndex = make([]int, len(peers))
 	rf.matchIndex = make([]int, len(peers))
 	rf.lastApplied = 0
-	// initialization log[]
+	// TODO: initialization log[] 先添加0，减少判断条件
+	rf.logEntries = append(rf.logEntries, LogEntrie{Term: 0, Index: 0})
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
@@ -632,7 +577,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// start ticker goroutine to start elections
 	fmt.Printf("%v 启动\n", rf.me)
 	go rf.ticker()
-	go rf.processMsg()
 
 	return rf
 }
