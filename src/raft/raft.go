@@ -173,6 +173,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+
 	if args.Term < rf.currentTerm {
 		reply.VoteGranted = false
 		reply.Term = rf.currentTerm
@@ -300,7 +301,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 			rf.commitIndex = args.LeaderCommit
 		}
 	}
-	go rf.processMsg()
 }
 
 func (rf *Raft) appendEntries() {
@@ -325,7 +325,6 @@ func (rf *Raft) appendEntries() {
 						// 需要同步的logEntries
 						args.Entries = rf.logEntries[rf.nextIndex[id]:]
 					}
-
 					rf.mu.Unlock()
 					ok := rf.peers[id].Call("Raft.ReceiveEntries", &args, &reply)
 					if ok {
@@ -357,7 +356,6 @@ func (rf *Raft) appendEntries() {
 								}
 								if val > rf.commitIndex && mapcount[val] > len(rf.peers)/2 && rf.logEntries[val].Term == rf.currentTerm {
 									rf.commitIndex = val
-									go rf.processMsg()
 								}
 							}
 							rf.mu.Unlock()
@@ -372,20 +370,24 @@ func (rf *Raft) appendEntries() {
 }
 
 func (rf *Raft) processMsg() {
-	rf.mu.Lock()
-	if rf.commitIndex > rf.lastApplied {
-		fmt.Printf("%v 开始commit:  ", rf.me)
+	for rf.killed() == false {
+		rf.mu.Lock()
+		if rf.commitIndex > rf.lastApplied {
+			fmt.Printf("%v 开始commit:  ", rf.me)
+		}
+		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
+			fmt.Printf("%v, ", k)
+			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
+			rf.applyCh <- msg
+		}
+		if rf.commitIndex > rf.lastApplied {
+			fmt.Printf("\n")
+		}
+		rf.lastApplied = rf.commitIndex
+		rf.mu.Unlock()
+		time.Sleep(10 * time.Millisecond)
 	}
-	for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
-		fmt.Printf("%v, ", k)
-		msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
-		rf.applyCh <- msg
-	}
-	if rf.commitIndex > rf.lastApplied {
-		fmt.Printf("\n")
-	}
-	rf.lastApplied = rf.commitIndex
-	rf.mu.Unlock()
+
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -409,6 +411,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// Your code here (2B).
 	term, isLeader = rf.GetState()
 	rf.mu.Lock()
+
 	index = len(rf.logEntries)
 	if isLeader {
 		// start the agreement
@@ -423,7 +426,6 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		rf.changeChan <- 1
 	}
 	rf.mu.Unlock()
-
 	return index, term, isLeader
 }
 
@@ -456,7 +458,6 @@ func (rf *Raft) startElection() {
 	args.CandidateId = rf.me
 	args.LastLogIndex = rf.logEntries[len(rf.logEntries)-1].Index
 	args.LastLogTerm = rf.logEntries[len(rf.logEntries)-1].Term
-
 	rf.mu.Unlock()
 	// 如果收到多数服务器的投票：成为领先者
 	var voteCount int32 = 0
@@ -507,7 +508,6 @@ func (rf *Raft) ticker() {
 	for rf.killed() == false {
 		// Your code here (2A)
 		// Check if a leader election should be started.
-		go rf.processMsg()
 		switch rf.state {
 		case Follower:
 			select {
@@ -577,6 +577,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// start ticker goroutine to start elections
 	fmt.Printf("%v 启动\n", rf.me)
 	go rf.ticker()
+	go rf.processMsg()
 
 	return rf
 }
