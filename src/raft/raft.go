@@ -20,7 +20,6 @@ package raft
 import (
 	//	"bytes"
 
-	"fmt"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -193,13 +192,11 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		if loglen == 1 || args.LastLogTerm > rf.logEntries[loglen-1].Term {
 			reply.VoteGranted = true
 			// 本轮已投票，不可再投给其他人
-			// fmt.Printf("term %v, %v 投给 %v 一票\n", args.Term, rf.me, args.CandidateId)
 			rf.votedFor = args.CandidateId
 			rf.changeChan <- 1
 		} else if args.LastLogTerm == rf.logEntries[loglen-1].Term && args.LastLogIndex >= rf.logEntries[loglen-1].Index {
 			reply.VoteGranted = true
 			// 本轮已投票，不可再投给其他人
-			// fmt.Printf("term %v, %v 投给 %v 一票\n", args.Term, rf.me, args.CandidateId)
 			rf.votedFor = args.CandidateId
 			rf.changeChan <- 1
 		}
@@ -290,7 +287,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		}
 
 		rf.logEntries = append(rf.logEntries, args.Entries...)
-		fmt.Printf("%v 添加日志到 %v\n", rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
 	}
 
 	// 将提交后还没有使用的日志应用于状态机
@@ -350,7 +346,6 @@ func (rf *Raft) appendEntries() {
 							}
 							rf.matchIndex[id] = rf.nextIndex[id] - 1
 							mapcount := make(map[int]int)
-							// fmt.Printf("检测commit\n")
 							for _, val := range rf.matchIndex {
 								if mapcount[val] != 0 {
 									mapcount[val]++
@@ -376,16 +371,11 @@ func (rf *Raft) appendEntries() {
 func (rf *Raft) processMsg() {
 	for rf.killed() == false {
 		rf.mu.Lock()
-		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("%v 开始commit:  ", rf.me)
-		}
 		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
-			fmt.Printf("%v, ", k)
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
 			rf.applyCh <- msg
 		}
 		if rf.commitIndex > rf.lastApplied {
-			fmt.Printf("\n")
 		}
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
@@ -424,7 +414,6 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 			command,
 		}
 		rf.logEntries = append(rf.logEntries, entrie)
-		fmt.Printf("%v 添加日志 %v\n", rf.me, index)
 		// AppendEntrie发送给其他服务器
 		rf.changeChan <- 1
 	}
@@ -455,7 +444,6 @@ func (rf *Raft) killed() bool {
 func (rf *Raft) startElection() {
 	rf.mu.Lock()
 	// 开始选举
-	fmt.Printf("term:%v, %v 开始拉投票\n", rf.currentTerm, rf.me)
 	args := RequestVoteArgs{}
 	args.Term = rf.currentTerm
 	args.CandidateId = rf.me
@@ -479,7 +467,6 @@ func (rf *Raft) startElection() {
 				atomic.AddInt32(&voteCount, 1)
 				rf.mu.Lock()
 				if rf.state == Candidate && int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
-					fmt.Printf("term:%v, %v成为leader, 拉到%v张票\n", rf.currentTerm, rf.me, voteCount)
 					// 成为领导者，立马发送心跳
 					rf.state = Leader
 					// 初始化nextIndex 和 matchIndex
@@ -571,14 +558,13 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.nextIndex = make([]int, len(peers))
 	rf.matchIndex = make([]int, len(peers))
 	rf.lastApplied = 0
-	// TODO: initialization log[] 先添加0，减少判断条件
+	// initialization log[] 先添加0，减少判断条件
 	rf.logEntries = append(rf.logEntries, LogEntrie{Term: 0, Index: 0})
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
 	// start ticker goroutine to start elections
-	fmt.Printf("%v 启动\n", rf.me)
 	go rf.ticker()
 	go rf.processMsg()
 
