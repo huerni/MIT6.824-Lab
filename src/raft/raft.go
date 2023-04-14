@@ -296,6 +296,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		} else {
 			rf.commitIndex = args.LeaderCommit
 		}
+		go rf.processMsg()
 	}
 }
 
@@ -357,6 +358,7 @@ func (rf *Raft) appendEntries() {
 									rf.commitIndex = val
 								}
 							}
+							go rf.processMsg()
 							rf.mu.Unlock()
 						}
 						break
@@ -369,19 +371,13 @@ func (rf *Raft) appendEntries() {
 }
 
 func (rf *Raft) processMsg() {
-	for rf.killed() == false {
-		rf.mu.Lock()
-		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
-			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
-			rf.applyCh <- msg
-		}
-		if rf.commitIndex > rf.lastApplied {
-		}
-		rf.lastApplied = rf.commitIndex
-		rf.mu.Unlock()
-		time.Sleep(10 * time.Millisecond)
+	rf.mu.Lock()
+	for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
+		msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
+		rf.applyCh <- msg
 	}
-
+	rf.lastApplied = rf.commitIndex
+	rf.mu.Unlock()
 }
 
 // the service using Raft (e.g. a k/v server) wants to start
@@ -566,7 +562,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// start ticker goroutine to start elections
 	go rf.ticker()
-	go rf.processMsg()
 
 	return rf
 }

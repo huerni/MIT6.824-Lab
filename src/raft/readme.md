@@ -20,6 +20,14 @@ commit与applied
 如果在大多数服务器在同步成功，则将其提交。提交后即持久化，代表将其用于状态机是安全的。所以是先提交，然后再将其用于状态机。  
 
 
+## 测试
+```
+go test -race
+go test -run 2A
+go test -run 2B
+
+```
+
 ## 参考资料
 https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md
 http://thesecretlivesofdata.com/raft/
