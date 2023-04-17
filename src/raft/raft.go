@@ -273,6 +273,12 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		return
 	}
 
+	if rf.lastApplied > args.PrevLogIndex {
+		reply.Success = false
+		reply.Term = rf.currentTerm
+		return
+	}
+
 	reply.Success = true
 	if len(args.Entries) == 0 {
 		if args.LeaderCommit > rf.commitIndex {
@@ -287,10 +293,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 
 	// 删除不匹配的现有条目
-	if len(rf.logEntries) > args.Entries[len(args.Entries)-1].Index {
-		rf.logEntries = rf.logEntries[:args.Entries[len(args.Entries)-1].Index]
-	}
-
+	rf.logEntries = rf.logEntries[:args.PrevLogIndex+1]
 	rf.logEntries = append(rf.logEntries, args.Entries...)
 
 	// 将提交后还没有使用的日志应用于状态机
@@ -415,6 +418,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	if !isLeader {
 		return -1, -1, isLeader
 	}
+
 	if isLeader {
 		// start the agreement
 		rf.mu.Lock()
