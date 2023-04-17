@@ -293,6 +293,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 
 	// 删除不匹配的现有条目
+	// // FIXME 最后一个测试 同步日志需从nextIndex开始，在这里时前面的日志都已经匹配
 	rf.logEntries = rf.logEntries[:args.PrevLogIndex+1]
 	rf.logEntries = append(rf.logEntries, args.Entries...)
 
@@ -407,7 +408,6 @@ func (rf *Raft) processMsg() {
 // term. the third return value is true if this server believes it is
 // the leader.
 // first code
-// FIXME:最后一个测试
 func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index := -1
 	term := -1
