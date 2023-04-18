@@ -25,7 +25,7 @@ commit与applied
 go test -race
 go test -run 2A
 go test -run 2B
-
+go test -run 2C
 ```
 
 ## 参考资料

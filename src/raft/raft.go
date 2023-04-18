@@ -248,6 +248,9 @@ type AppendEntriesArgs struct {
 type AppendEntriesReply struct {
 	Term    int
 	Success bool
+	XTerm   int
+	XIndex  int
+	XLen    int
 }
 
 func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
@@ -267,13 +270,38 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 	rf.changeChan <- 1
 
-	if rf.logEntries[len(rf.logEntries)-1].Index < args.PrevLogIndex || rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
+	if rf.logEntries[len(rf.logEntries)-1].Index < args.PrevLogIndex {
+		reply.XIndex = -1
+		reply.XTerm = -1
+		reply.XLen = rf.logEntries[len(rf.logEntries)-1].Index + 1
+		reply.Success = false
+		reply.Term = rf.currentTerm
+		return
+	}
+	/**
+		XTerm:  term in the conflicting entry (if any)
+	    XIndex: index of first entry with that term (if any)
+	    XLen:   log length
+	**/
+	if rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
+		reply.XLen = -1
+		reply.XTerm = rf.logEntries[args.PrevLogIndex].Term
+		for _, val := range rf.logEntries {
+			if val.Term == reply.XTerm {
+				reply.XIndex = val.Index
+				break
+			}
+		}
 		reply.Success = false
 		reply.Term = rf.currentTerm
 		return
 	}
 
+	// TODO: 为什么出现这种情况？可以快速复制吗？
 	if rf.lastApplied > args.PrevLogIndex {
+		reply.XIndex = -1
+		reply.XTerm = -1
+		reply.XLen = -1
 		reply.Success = false
 		reply.Term = rf.currentTerm
 		return
@@ -341,7 +369,34 @@ func (rf *Raft) appendEntries() {
 							rf.mu.Unlock()
 							return
 						}
-						rf.nextIndex[id]--
+
+						/**
+						  Case 1: leader doesn't have XTerm:
+						    nextIndex = XIndex
+						  Case 2: leader has XTerm:
+						    nextIndex = leader's last entry for XTerm ??
+						  Case 3: follower's log is too short:
+						    nextIndex = XLen
+						**/
+						if reply.XLen != -1 {
+							rf.nextIndex[id] = reply.XLen
+						} else if reply.XTerm != -1 {
+							hasTerm := false
+							for i := len(rf.logEntries) - 1; i >= 0; i-- {
+								if rf.logEntries[i].Term == reply.XTerm {
+									rf.nextIndex[id] = rf.logEntries[i].Index + 1
+									hasTerm = true
+									break
+								}
+							}
+							if hasTerm == false {
+								rf.nextIndex[id] = reply.XIndex
+							}
+						} else {
+
+							rf.nextIndex[id]--
+						}
+
 						if rf.nextIndex[id] < 1 {
 							rf.nextIndex[id] = 1
 						}
