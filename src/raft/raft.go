@@ -450,6 +450,7 @@ func (rf *Raft) appendEntries() {
 						//rf.nextIndex[id] += reply.XLen
 						//fmt.Printf("timestamp[%v] reply %v next:%v\n", curr, id, rf.nextIndex[id])
 						//rf.matchIndex[id] = rf.nextIndex[id] - 1
+						// PASS unreliable agreement
 						rf.matchIndex[id] = args.PrevLogIndex + len(args.Entries)
 						rf.nextIndex[id] = rf.matchIndex[id] + 1
 						mapcount := make(map[int]int)
