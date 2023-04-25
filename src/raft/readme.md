@@ -19,6 +19,11 @@
 commit与applied  
 如果在大多数服务器在同步成功，则将其提交。提交后即持久化，代表将其用于状态机是安全的。所以是先提交，然后再将其用于状态机。  
 
+不能直接截断，可能会接收到过时的AppendEntries RPC，此时follower的日志多于args的日志
+> The if here is crucial. If the follower has all the entries the leader sent, the follower MUST NOT truncate its log. Any elements following the entries sent by the leader MUST be kept. This is because we could be receiving an outdated AppendEntries RPC from the leader, and truncating the log would mean “taking back” entries that we may have already told the leader that we have in our log.
+
+## lab2C 日志持久化
+
 
 ## 测试
 ```
@@ -26,6 +31,7 @@ go test -race
 go test -run 2A
 go test -run 2B
 go test -run 2C
+for i in {0..10}; do go test -run 2B; done
 ```
 
 ## 参考资料
@@ -33,3 +39,7 @@ https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md
 http://thesecretlivesofdata.com/raft/
 https://juejin.cn/post/6844903665275404295
 https://knowledge-sharing.gitbooks.io/raft/content/chapter5.html
+https://thesquareplanet.com/blog/students-guide-to-raft/
+https://gist.github.com/Zrealshadow/9e4a8e213bb9eca5b5ce2e985b396f7c
+https://eli.thegreenplace.net/2020/implementing-raft-part-0-introduction/
+https://www.codercto.com/a/81179.html
