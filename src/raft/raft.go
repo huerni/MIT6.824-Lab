@@ -166,9 +166,13 @@ func (rf *Raft) readPersist(data []byte) {
 // all info up to and including index. this means the
 // service no longer needs the log through (and including)
 // that index. Raft should now trim its log as much as possible.
+// TODO: first code
 func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	// Your code here (2D).
-
+	rf.mu.Lock()
+	rf.mu.Unlock()
+	rf.logEntries = rf.logEntries[(index - rf.logEntries[0].Index):]
+	rf.logEntries[0].Index = index
 }
 
 // example RequestVote RPC arguments structure.
@@ -281,7 +285,7 @@ type AppendEntriesReply struct {
 	XLen    int
 }
 
-// FIXME:TestConcurrentStarts2B  TestUnreliableAgree2C
+// TestConcurrentStarts2B  TestUnreliableAgree2C
 func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
@@ -305,10 +309,10 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 
 	// fmt.Printf("term:%v，%v接收心跳\n", rf.currentTerm, rf.me)
-	if len(rf.logEntries) <= args.PrevLogIndex {
+	if rf.logEntries[len(rf.logEntries)-1].Index <= args.PrevLogIndex {
 		reply.XIndex = -1
 		reply.XTerm = -1
-		reply.XLen = len(rf.logEntries)
+		reply.XLen = rf.logEntries[len(rf.logEntries)-1].Index + 1
 		return
 	}
 	/**
@@ -316,12 +320,13 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	    XIndex: index of first entry with that term (if any)
 	    XLen:   log length
 	**/
-	if rf.logEntries[args.PrevLogIndex].Term != args.PrevLogTerm {
+	lastincludeIndex := rf.logEntries[0].Index
+	if rf.logEntries[args.PrevLogIndex-lastincludeIndex].Term != args.PrevLogTerm {
 		reply.XLen = -1
-		reply.XTerm = rf.logEntries[args.PrevLogIndex].Term
-		for index, val := range rf.logEntries {
+		reply.XTerm = rf.logEntries[args.PrevLogIndex-lastincludeIndex].Term
+		for _, val := range rf.logEntries {
 			if val.Term == reply.XTerm {
-				reply.XIndex = index
+				reply.XIndex = val.Index
 				break
 			}
 		}
@@ -331,16 +336,15 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	// Q: 为什么出现这种情况？可以快速复制吗？
 
 	reply.Success = true
-	reply.XLen = 0
 	var lastlogIndex int
 	if len(args.Entries) > 0 {
 		lastlogIndex = args.Entries[len(args.Entries)-1].Index
 	}
 
-	if rf.lastApplied > args.PrevLogIndex || len(args.Entries) == 0 || (len(rf.logEntries) > lastlogIndex && rf.logEntries[lastlogIndex].Index == lastlogIndex && rf.logEntries[lastlogIndex].Term == args.Entries[len(args.Entries)-1].Term) {
+	if rf.lastApplied > args.PrevLogIndex || len(args.Entries) == 0 || (rf.logEntries[len(rf.logEntries)-1].Index > lastlogIndex && rf.logEntries[lastlogIndex-lastincludeIndex].Index == lastlogIndex && rf.logEntries[lastlogIndex-lastincludeIndex].Term == args.Entries[len(args.Entries)-1].Term) {
 		if args.LeaderCommit > rf.commitIndex {
-			if args.LeaderCommit > len(rf.logEntries)-1 {
-				rf.commitIndex = len(rf.logEntries) - 1
+			if args.LeaderCommit > rf.logEntries[len(rf.logEntries)-1].Index {
+				rf.commitIndex = rf.logEntries[len(rf.logEntries)-1].Index
 			} else {
 				rf.commitIndex = args.LeaderCommit
 			}
@@ -363,7 +367,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	//	fmt.Printf("[%v, %v], ", index, val.Term)
 	//}
 	//fmt.Printf("\n")
-	logIndex := args.PrevLogIndex + 1
+	logIndex := args.PrevLogIndex - lastincludeIndex + 1
 	insertIndex := 0
 	for {
 		if logIndex >= len(rf.logEntries) || insertIndex >= len(args.Entries) {
@@ -376,7 +380,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		logIndex++
 		insertIndex++
 	}
-	reply.XLen = len(args.Entries) - insertIndex
 	if reply.XLen > 0 {
 		rf.logEntries = append(rf.logEntries, args.Entries[insertIndex:]...)
 		rf.persist()
@@ -393,8 +396,8 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 
 	// 将提交后还没有使用的日志应用于状态机
 	if args.LeaderCommit > rf.commitIndex {
-		if args.LeaderCommit > len(rf.logEntries)-1 {
-			rf.commitIndex = len(rf.logEntries) - 1
+		if args.LeaderCommit > rf.logEntries[len(rf.logEntries)-1].Index {
+			rf.commitIndex = rf.logEntries[len(rf.logEntries)-1].Index
 		} else {
 			rf.commitIndex = args.LeaderCommit
 		}
@@ -419,10 +422,10 @@ func (rf *Raft) appendEntries() {
 				args.LeaderCommit = rf.commitIndex
 				nextIndex := rf.nextIndex[id]
 				args.PrevLogIndex = rf.nextIndex[id] - 1
-				args.PrevLogTerm = rf.logEntries[args.PrevLogIndex].Term
+				args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-rf.logEntries[0].Index].Term
 				// 需要同步的logEntries  切片应该是深拷贝
-				if nextIndex < len(rf.logEntries) {
-					args.Entries = append([]LogEntrie{}, rf.logEntries[nextIndex:]...)
+				if nextIndex < rf.logEntries[len(rf.logEntries)-1].Index {
+					args.Entries = append([]LogEntrie{}, rf.logEntries[nextIndex-rf.logEntries[0].Index:]...)
 				}
 				rf.mu.Unlock()
 
@@ -481,7 +484,7 @@ func (rf *Raft) appendEntries() {
 							hasTerm := false
 							for i := len(rf.logEntries) - 1; i >= 0; i-- {
 								if rf.logEntries[i].Term == reply.XTerm {
-									rf.nextIndex[id] = i + 1
+									rf.nextIndex[id] = rf.logEntries[i+1].Index
 									hasTerm = true
 									break
 								} else if rf.logEntries[i].Term < reply.XTerm {
@@ -550,7 +553,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		return -1, -1, isLeader
 	}
 
-	index = len(rf.logEntries)
+	index = rf.logEntries[0].Index + len(rf.logEntries)
 	term = rf.currentTerm
 	entrie := LogEntrie{
 		term,
@@ -604,7 +607,7 @@ func (rf *Raft) startElection() {
 	args := RequestVoteArgs{}
 	args.Term = rf.currentTerm
 	args.CandidateId = rf.me
-	args.LastLogIndex = len(rf.logEntries) - 1
+	args.LastLogIndex = rf.logEntries[len(rf.logEntries)-1].Index
 	args.LastLogTerm = rf.logEntries[args.LastLogIndex].Term
 	var voteCount int32 = 0
 	atomic.AddInt32(&voteCount, 1)
