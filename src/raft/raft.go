@@ -18,6 +18,7 @@ package raft
 //
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 
@@ -167,12 +168,22 @@ func (rf *Raft) readPersist(data []byte) {
 // service no longer needs the log through (and including)
 // that index. Raft should now trim its log as much as possible.
 // TODO: first code
+
+// service hands snapshot to Raft, with last included log index.
+// Raft persists its state and the snapshot.
+// Raft then discards log before snapshot index.
+// every server snapshots (not just the leader).
 func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	// Your code here (2D).
 	rf.mu.Lock()
-	rf.mu.Unlock()
-	rf.logEntries = rf.logEntries[(index - rf.logEntries[0].Index):]
-	rf.logEntries[0].Index = index
+	defer rf.mu.Unlock()
+	fmt.Printf("id: %v, index:%v, rfindex:%v\n", rf.me, index, rf.logEntries[len(rf.logEntries)-1].Index)
+	preIndex := rf.logEntries[0].Index
+	rf.logEntries = rf.logEntries[(index - preIndex):]
+	for _, val := range rf.logEntries {
+		fmt.Printf("[%v, %v], ", val.Index, val.Term)
+	}
+	fmt.Printf("\n")
 }
 
 // example RequestVote RPC arguments structure.
@@ -225,7 +236,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			rf.votedFor = args.CandidateId
 			rf.persist()
 			rf.electionTime.Reset(time.Duration((rand.Int()%150)+300) * time.Millisecond)
-		} else if args.LastLogTerm == rf.logEntries[loglen-1].Term && args.LastLogIndex >= loglen-1 {
+		} else if args.LastLogTerm == rf.logEntries[loglen-1].Term && args.LastLogIndex >= rf.logEntries[loglen-1].Index {
 			reply.VoteGranted = true
 			rf.state = Follower
 			// 本轮已投票，不可再投给其他人
@@ -309,7 +320,8 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 
 	// fmt.Printf("term:%v，%v接收心跳\n", rf.currentTerm, rf.me)
-	if rf.logEntries[len(rf.logEntries)-1].Index <= args.PrevLogIndex {
+
+	if rf.logEntries[len(rf.logEntries)-1].Index < args.PrevLogIndex {
 		reply.XIndex = -1
 		reply.XTerm = -1
 		reply.XLen = rf.logEntries[len(rf.logEntries)-1].Index + 1
@@ -320,10 +332,11 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	    XIndex: index of first entry with that term (if any)
 	    XLen:   log length
 	**/
-	lastincludeIndex := rf.logEntries[0].Index
-	if rf.logEntries[args.PrevLogIndex-lastincludeIndex].Term != args.PrevLogTerm {
+	preIndex := rf.logEntries[0].Index
+	// FIXME: prevlogIndex < preIndex?
+	if rf.logEntries[args.PrevLogIndex-preIndex].Term != args.PrevLogTerm {
 		reply.XLen = -1
-		reply.XTerm = rf.logEntries[args.PrevLogIndex-lastincludeIndex].Term
+		reply.XTerm = rf.logEntries[args.PrevLogIndex-preIndex].Term
 		for _, val := range rf.logEntries {
 			if val.Term == reply.XTerm {
 				reply.XIndex = val.Index
@@ -332,7 +345,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		}
 		return
 	}
-
 	// Q: 为什么出现这种情况？可以快速复制吗？
 
 	reply.Success = true
@@ -341,7 +353,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		lastlogIndex = args.Entries[len(args.Entries)-1].Index
 	}
 
-	if rf.lastApplied > args.PrevLogIndex || len(args.Entries) == 0 || (rf.logEntries[len(rf.logEntries)-1].Index > lastlogIndex && rf.logEntries[lastlogIndex-lastincludeIndex].Index == lastlogIndex && rf.logEntries[lastlogIndex-lastincludeIndex].Term == args.Entries[len(args.Entries)-1].Term) {
+	if rf.lastApplied > args.PrevLogIndex || len(args.Entries) == 0 || (rf.logEntries[len(rf.logEntries)-1].Index > lastlogIndex && rf.logEntries[lastlogIndex-preIndex].Index == lastlogIndex && rf.logEntries[lastlogIndex-preIndex].Term == args.Entries[len(args.Entries)-1].Term) {
 		if args.LeaderCommit > rf.commitIndex {
 			if args.LeaderCommit > rf.logEntries[len(rf.logEntries)-1].Index {
 				rf.commitIndex = rf.logEntries[len(rf.logEntries)-1].Index
@@ -367,7 +379,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	//	fmt.Printf("[%v, %v], ", index, val.Term)
 	//}
 	//fmt.Printf("\n")
-	logIndex := args.PrevLogIndex - lastincludeIndex + 1
+	logIndex := args.PrevLogIndex - preIndex + 1
 	insertIndex := 0
 	for {
 		if logIndex >= len(rf.logEntries) || insertIndex >= len(args.Entries) {
@@ -380,7 +392,8 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		logIndex++
 		insertIndex++
 	}
-	if reply.XLen > 0 {
+
+	if insertIndex < len(args.Entries) {
 		rf.logEntries = append(rf.logEntries, args.Entries[insertIndex:]...)
 		rf.persist()
 		//fmt.Printf("timestamp[%v] %v: len:%v, next:%v ", curr, rf.me, reply.XLen, args.Entries[0].Index)
@@ -392,7 +405,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		//fmt.Printf("timestamp[%v] %v:len is 0\n", curr, rf.me)
 	}
 
-	// fmt.Printf("%v 日志添加到 %v\n", rf.me, len(rf.logEntries)-1)
+	// fmt.Printf("%v 日志添加到 %v\n", rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
 
 	// 将提交后还没有使用的日志应用于状态机
 	if args.LeaderCommit > rf.commitIndex {
@@ -420,12 +433,16 @@ func (rf *Raft) appendEntries() {
 				args.Term = rf.currentTerm
 				args.LeaderId = rf.me
 				args.LeaderCommit = rf.commitIndex
-				nextIndex := rf.nextIndex[id]
 				args.PrevLogIndex = rf.nextIndex[id] - 1
-				args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-rf.logEntries[0].Index].Term
+				prevIndex := rf.logEntries[0].Index
+				// FIXME: 如果 args.PrevLogIndex < prevIndex??
+				if args.PrevLogIndex >= prevIndex {
+					return
+				}
+				args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-prevIndex].Term
 				// 需要同步的logEntries  切片应该是深拷贝
-				if nextIndex < rf.logEntries[len(rf.logEntries)-1].Index {
-					args.Entries = append([]LogEntrie{}, rf.logEntries[nextIndex-rf.logEntries[0].Index:]...)
+				if rf.nextIndex[id] <= rf.logEntries[len(rf.logEntries)-1].Index {
+					args.Entries = append([]LogEntrie{}, rf.logEntries[(rf.nextIndex[id]-prevIndex):]...)
 				}
 				rf.mu.Unlock()
 
@@ -463,7 +480,7 @@ func (rf *Raft) appendEntries() {
 							}
 							mapcount[val]++
 							// 不包括自己的matchIndex
-							if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val].Term == rf.currentTerm {
+							if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val-rf.logEntries[0].Index].Term == rf.currentTerm {
 								rf.commitIndex = val
 								rf.applyCond.Broadcast()
 								break
@@ -496,8 +513,8 @@ func (rf *Raft) appendEntries() {
 							}
 						}
 
-						if rf.nextIndex[id] < 1 {
-							rf.nextIndex[id] = 1
+						if rf.nextIndex[id]-rf.logEntries[0].Index < 1 {
+							rf.nextIndex[id] = rf.logEntries[0].Index + 1
 						}
 					}
 				}
@@ -513,11 +530,12 @@ func (rf *Raft) processMsg() {
 			rf.applyCond.Wait()
 		}
 		msgs := []ApplyMsg{}
-		for k := rf.lastApplied + 1; k <= rf.commitIndex; k++ {
+		preIndex := rf.logEntries[0].Index
+		for k := rf.lastApplied - preIndex + 1; k <= rf.commitIndex-preIndex; k++ {
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
 			msgs = append(msgs, msg)
 		}
-		// log.Printf("%v 日志commit到 %v", rf.me, len(rf.logEntries)-1)
+		// log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
 
@@ -562,7 +580,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 	rf.logEntries = append(rf.logEntries, entrie)
 	rf.persist()
-	//fmt.Printf("timestamp[%v] term: %v, %v 添加日志 %v\n", rf.timestamp, rf.currentTerm, rf.me, len(rf.logEntries)-1)
+	//fmt.Printf("timestamp[%v] term: %v, %v 添加日志 %v\n", rf.timestamp, rf.currentTerm, rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
 
 	// AppendEntrie发送给其他服务器
 	go rf.appendEntries()
@@ -608,7 +626,7 @@ func (rf *Raft) startElection() {
 	args.Term = rf.currentTerm
 	args.CandidateId = rf.me
 	args.LastLogIndex = rf.logEntries[len(rf.logEntries)-1].Index
-	args.LastLogTerm = rf.logEntries[args.LastLogIndex].Term
+	args.LastLogTerm = rf.logEntries[args.LastLogIndex-rf.logEntries[0].Index].Term
 	var voteCount int32 = 0
 	atomic.AddInt32(&voteCount, 1)
 	rf.mu.Unlock()
