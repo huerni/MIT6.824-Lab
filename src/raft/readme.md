@@ -25,12 +25,16 @@ commit与applied
 ## lab2C 日志持久化
 
 
+## lab2C 日志压缩
+
+
 ## 测试
 ```
 go test -race
 go test -run 2A
 go test -run 2B
 go test -run 2C
+go test -run 2D
 for i in {0..10}; do go test -run 2B; done
 ```
 

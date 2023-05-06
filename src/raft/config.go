@@ -113,7 +113,6 @@ func make_config(t *testing.T, n int, unreliable bool, snapshot bool) *config {
 func (cfg *config) crash1(i int) {
 	cfg.disconnect(i)
 	cfg.net.DeleteServer(i) // disable client connections to the server.
-
 	cfg.mu.Lock()
 	defer cfg.mu.Unlock()
 
