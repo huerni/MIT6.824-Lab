@@ -1,13 +1,18 @@
 package kvraft
 
-import "6.5840/labrpc"
-import "crypto/rand"
-import "math/big"
+import (
+	"crypto/rand"
+	"fmt"
+	"math/big"
+	"time"
 
+	"6.5840/labrpc"
+)
 
 type Clerk struct {
 	servers []*labrpc.ClientEnd
 	// You will have to modify this struct.
+	preLeaderId int
 }
 
 func nrand() int64 {
@@ -21,6 +26,7 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
 	ck.servers = servers
 	// You'll have to add code here.
+	ck.preLeaderId = int(nrand()) % len(ck.servers)
 	return ck
 }
 
@@ -34,10 +40,29 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 // the types of args and reply (including whether they are pointers)
 // must match the declared types of the RPC handler function's
 // arguments. and reply must be passed as a pointer.
-func (ck *Clerk) Get(key string) string {
 
+func (ck *Clerk) Get(key string) string {
 	// You will have to modify this function.
-	return ""
+	args := GetArgs{}
+	args.Key = key
+	args.SerialNum = fmt.Sprintf("%d%d", time.Now().UnixNano()/int64(time.Millisecond), nrand())
+	reply := GetReply{}
+	//fmt.Printf("[Get key: %v] \n", key)
+	id := ck.preLeaderId
+	for {
+		//fmt.Printf("%v, ", id)
+
+		ok := ck.servers[id].Call("KVServer.Get", &args, &reply)
+		if ok {
+			if reply.Err == OK || reply.Err == ErrNoKey {
+				ck.preLeaderId = reply.LeaderId
+				break
+			}
+		}
+		id = int(nrand()) % len(ck.servers)
+	}
+	// fmt.Printf("result %v\n", reply.Value)
+	return reply.Value
 }
 
 // shared by Put and Append.
@@ -50,6 +75,26 @@ func (ck *Clerk) Get(key string) string {
 // arguments. and reply must be passed as a pointer.
 func (ck *Clerk) PutAppend(key string, value string, op string) {
 	// You will have to modify this function.
+	args := PutAppendArgs{}
+	args.Key = key
+	args.Value = value
+	args.Op = op
+	args.SerialNum = fmt.Sprintf("%d%d", time.Now().UnixNano()/int64(time.Millisecond), nrand())
+	reply := PutAppendReply{}
+	//fmt.Printf("[%v key: %v, value: %v]\n", op, key, value)
+	id := ck.preLeaderId
+	for {
+		//fmt.Printf("%v, ", id)
+		ok := ck.servers[id].Call("KVServer.PutAppend", &args, &reply)
+		if ok {
+			if reply.Err == OK {
+				ck.preLeaderId = reply.LeaderId
+				break
+			}
+		}
+		id = int(nrand()) % len(ck.servers)
+	}
+	//fmt.Printf("\n")
 }
 
 func (ck *Clerk) Put(key string, value string) {

@@ -16,18 +16,22 @@ type PutAppendArgs struct {
 	// You'll have to add definitions here.
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
+	SerialNum string
 }
 
 type PutAppendReply struct {
-	Err Err
+	Err      Err
+	LeaderId int
 }
 
 type GetArgs struct {
 	Key string
 	// You'll have to add definitions here.
+	SerialNum string
 }
 
 type GetReply struct {
-	Err   Err
-	Value string
+	Err      Err
+	Value    string
+	LeaderId int
 }

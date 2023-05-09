@@ -18,6 +18,7 @@ package raft
 //
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 
@@ -83,6 +84,8 @@ type Raft struct {
 	electionTime *time.Timer
 	leaderTime   *time.Timer
 	applyCh      chan ApplyMsg
+
+	MyLeader int
 
 	applyCond *sync.Cond
 
@@ -321,7 +324,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 
 	rf.state = Follower
 	rf.electionTime.Reset(time.Duration((rand.Int()%150)+300) * time.Millisecond)
-
+	rf.MyLeader = args.LeaderId
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
 		rf.votedFor = args.LeaderId
@@ -436,6 +439,67 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	}
 }
 
+type HeartBeatArgs struct {
+	Term int
+}
+
+type HeartBeatReply struct {
+	Success bool
+	Term    int
+}
+
+func (rf *Raft) GetBeforeHeartBeat(args *HeartBeatArgs, reply *HeartBeatReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	reply.Success = false
+	reply.Term = rf.currentTerm
+	if args.Term < rf.currentTerm {
+		return
+	}
+
+	reply.Success = true
+}
+
+func (rf *Raft) SendGetBeforeHeartBeat() bool {
+
+	rf.mu.Lock()
+	args := HeartBeatArgs{}
+	args.Term = rf.currentTerm
+	rf.mu.Unlock()
+	var voteCount int32 = 0
+	atomic.AddInt32(&voteCount, 1)
+	for index, _ := range rf.peers {
+		reply := HeartBeatReply{}
+		ok := rf.peers[index].Call("Raft.GetBeforeHeartBeat", &args, &reply)
+		if ok {
+			if rf.currentTerm < reply.Term {
+				rf.currentTerm = reply.Term
+				rf.votedFor = -1
+				rf.state = Follower
+				rf.persist()
+				return false
+			}
+
+			if rf.currentTerm != args.Term || rf.state != Leader {
+				return false
+			}
+
+			if reply.Success {
+				atomic.AddInt32(&voteCount, 1)
+				if int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
+					return true
+				}
+			}
+		}
+		if rf.state != Leader {
+			break
+		}
+	}
+
+	return false
+}
+
 type InstallSnapshotArgs struct {
 	Term              int
 	LeaderId          int
@@ -471,7 +535,6 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 		rf.logEntries = append([]LogEntrie{}, LogEntrie{Term: args.LastIncludedTerm, Index: args.LastIncludedIndex})
 	}
 
-	// FIXME: ？？？
 	if rf.commitIndex < args.LastIncludedIndex {
 		rf.commitIndex = args.LastIncludedIndex
 	}
@@ -492,7 +555,6 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 	rf.applyCh <- msg
 }
 
-// TODO: TestSnapshotInstallCrash2D
 func (rf *Raft) appendEntries() {
 	rf.mu.Lock()
 	rf.timestamp++
@@ -656,10 +718,10 @@ func (rf *Raft) processMsg() {
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
 			msgs = append(msgs, msg)
 		}
-		// log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
+
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
-
+		//log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
 		for _, msg := range msgs {
 			rf.applyCh <- msg
 		}
@@ -685,13 +747,13 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	isLeader := true
 
 	// Your code here (2B).
+
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
 	if rf.state != Leader || rf.killed() {
-		return -1, -1, isLeader
+		return -1, rf.MyLeader, false
 	}
-
 	index = rf.logEntries[0].Index + len(rf.logEntries)
 	term = rf.currentTerm
 	entrie := LogEntrie{
@@ -701,7 +763,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 	rf.logEntries = append(rf.logEntries, entrie)
 	rf.persist()
-	// fmt.Printf("timestamp[%v] term: %v, %v 添加日志 %v\n", rf.timestamp, rf.currentTerm, rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
+	//fmt.Printf("timestamp[%v] term: %v, %v 添加日志 %v\n", rf.timestamp, rf.currentTerm, rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
 
 	// AppendEntrie发送给其他服务器
 	go rf.appendEntries()
@@ -780,7 +842,8 @@ func (rf *Raft) startElection() {
 					atomic.AddInt32(&voteCount, 1)
 					if int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
 						// 成为领导者，立马发送心跳
-						// fmt.Printf("term:%v, %v 成为领导者\n", rf.currentTerm, rf.me)
+						fmt.Printf("term:%v, %v 成为领导者\n", rf.currentTerm, rf.me)
+						//To find out, it needs to commit an entry from its term. Raft handles this by having each leader commit a blank no-op entry into the log at the start of its term.
 						rf.state = Leader
 						// 初始化nextIndex 和 matchIndex
 						// nextIndex初始化为leader最后一个index+1

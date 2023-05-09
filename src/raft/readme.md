@@ -35,7 +35,7 @@ go test -run 2A
 go test -run 2B
 go test -run 2C
 go test -run 2D
-for i in {0..10}; do go test -run 2B; done
+for i in {0..10}; do go test -run 2; done
 ```
 
 ## 参考资料
