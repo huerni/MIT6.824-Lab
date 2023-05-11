@@ -337,7 +337,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	//}
 	//fmt.Printf("\n")
 
-	// fmt.Printf("term:%v，%v接收心跳\n", rf.currentTerm, rf.me)
+	//fmt.Printf("term:%v，%v接收心跳\n", rf.currentTerm, rf.me)
 	if rf.logEntries[len(rf.logEntries)-1].Index < args.PrevLogIndex {
 		reply.XIndex = -1
 		reply.XTerm = -1
@@ -454,6 +454,7 @@ func (rf *Raft) GetBeforeHeartBeat(args *HeartBeatArgs, reply *HeartBeatReply) {
 
 	reply.Success = false
 	reply.Term = rf.currentTerm
+
 	if args.Term < rf.currentTerm {
 		return
 	}
@@ -462,14 +463,19 @@ func (rf *Raft) GetBeforeHeartBeat(args *HeartBeatArgs, reply *HeartBeatReply) {
 }
 
 func (rf *Raft) SendGetBeforeHeartBeat() bool {
-
-	rf.mu.Lock()
 	args := HeartBeatArgs{}
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	if rf.state != Leader {
+		return false
+	}
 	args.Term = rf.currentTerm
-	rf.mu.Unlock()
 	var voteCount int32 = 0
 	atomic.AddInt32(&voteCount, 1)
 	for index, _ := range rf.peers {
+		if index == rf.me {
+			continue
+		}
 		reply := HeartBeatReply{}
 		ok := rf.peers[index].Call("Raft.GetBeforeHeartBeat", &args, &reply)
 		if ok {
@@ -480,11 +486,9 @@ func (rf *Raft) SendGetBeforeHeartBeat() bool {
 				rf.persist()
 				return false
 			}
-
 			if rf.currentTerm != args.Term || rf.state != Leader {
 				return false
 			}
-
 			if reply.Success {
 				atomic.AddInt32(&voteCount, 1)
 				if int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
@@ -493,7 +497,7 @@ func (rf *Raft) SendGetBeforeHeartBeat() bool {
 			}
 		}
 		if rf.state != Leader {
-			break
+			return false
 		}
 	}
 
@@ -580,7 +584,6 @@ func (rf *Raft) appendEntries() {
 					rf.mu.Unlock()
 
 					go func(id int, args InstallSnapshotArgs) {
-
 						reply := InstallSnapshotReplys{}
 						ok := rf.peers[id].Call("Raft.InstallSnapshot", &args, &reply)
 						if ok {
@@ -661,6 +664,7 @@ func (rf *Raft) appendEntries() {
 							// 不包括自己的matchIndex
 							if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val-rf.logEntries[0].Index].Term == rf.currentTerm {
 								rf.commitIndex = val
+								//fmt.Printf("commit:%v\n", val)
 								rf.applyCond.Broadcast()
 								break
 							}
@@ -721,7 +725,7 @@ func (rf *Raft) processMsg() {
 
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
-		//log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
+		log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
 		for _, msg := range msgs {
 			rf.applyCh <- msg
 		}
@@ -752,7 +756,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	defer rf.mu.Unlock()
 
 	if rf.state != Leader || rf.killed() {
-		return -1, rf.MyLeader, false
+		return -1, -1, false
 	}
 	index = rf.logEntries[0].Index + len(rf.logEntries)
 	term = rf.currentTerm
@@ -845,6 +849,9 @@ func (rf *Raft) startElection() {
 						fmt.Printf("term:%v, %v 成为领导者\n", rf.currentTerm, rf.me)
 						//To find out, it needs to commit an entry from its term. Raft handles this by having each leader commit a blank no-op entry into the log at the start of its term.
 						rf.state = Leader
+						//go func() {
+						//	rf.applyCh <- ApplyMsg{CommandValid: true, CommandIndex: -1}
+						//}()
 						// 初始化nextIndex 和 matchIndex
 						// nextIndex初始化为leader最后一个index+1
 						for i := 0; i < len(rf.nextIndex); i++ {

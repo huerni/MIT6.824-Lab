@@ -1,6 +1,7 @@
 package kvraft
 
 import (
+	"fmt"
 	"log"
 	"sync"
 	"sync/atomic"
@@ -40,17 +41,19 @@ type KVServer struct {
 	maxraftstate int // snapshot if log grows this big
 
 	// Your definitions here.
-	kvdata        map[string]string
-	serialCache   map[string]string
-	currSerialNum int
+	kvdata      map[string]string
+	serialCache map[string]string
+	currentTerm int
 }
 
 // 直接从map中查询？？ 会查询到过时的数据  需要判断数据是否过期
+// FIXME:频繁更换Leader，导致get到过期数据
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	// Your code here.
 	if kv.killed() == false {
 		reply.Value = ""
 		reply.Err = ErrWrongLeader
+
 		kv.mu.Lock()
 		defer kv.mu.Unlock()
 
@@ -62,15 +65,18 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 
 		// 需要判断数据是否过期后，再从日志中找
 		_, isLeader := kv.rf.GetState()
-		// fmt.Printf("%v\n", isLeader)
 		if !isLeader {
 			return
 		}
-		reply.LeaderId = kv.me
 
-		//if kv.rf.SendGetBeforeHeartBeat() == false {
-		//	return
-		//}
+		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
+		// Leader不断变换时，刚换leader就get，有的状态机apply完，导致数据是过时的
+		if kv.rf.SendGetBeforeHeartBeat() == false {
+			return
+		}
+		// applyMsg
+		//kv.applyMsg()
+		reply.LeaderId = kv.me
 
 		if val, ok := kv.kvdata[args.Key]; ok {
 			reply.Err = OK
@@ -79,47 +85,105 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 			reply.Err = ErrNoKey
 		}
 		kv.serialCache[args.SerialNum] = reply.Value
-
 	}
 }
 
-// FIXME:多客户端并行发送，状态顺序错了或者缺少最后一个apply 服务器故障怎么处理？？
+func (kv *KVServer) applyMsg() {
+	for {
+		select {
+		case msg := <-kv.applyCh:
+			if msg.CommandValid {
+				op := msg.Command.(Op)
+				kv.serialCache[op.SerialNum] = op.Value
+				if op.Opera == "Put" {
+					kv.kvdata[op.Key] = op.Value
+					fmt.Printf("[]put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
+				} else if op.Opera == "Append" {
+					kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
+					fmt.Printf("[]append %v\n", kv.kvdata[op.Key])
+				}
+			}
+		default:
+			return
+		}
+	}
+}
+
+// 每次调用 Clerk.Put() 或 Clerk.Append() 应该只有一次执行，因此你需要确保重新发送不会导致服务器执行请求两次。
 func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	// Your code here.
 	if kv.killed() == false {
-		op := Op{Key: args.Key, Value: args.Value, Opera: args.Op, SerialNum: args.SerialNum}
 		kv.mu.Lock()
-		_, _, isLeader := kv.rf.Start(op)
-		kv.mu.Unlock()
+
+		op := Op{Key: args.Key, Value: args.Value, Opera: args.Op, SerialNum: args.SerialNum}
 		reply.Err = ErrWrongLeader
+
+		if _, ok := kv.serialCache[args.SerialNum]; ok {
+			reply.Err = OK
+			reply.LeaderId = kv.me
+			kv.mu.Unlock()
+			return
+		}
+		currentTerm := kv.currentTerm
+		kv.mu.Unlock()
+
+		// 判断leader不在小分区的办法
+		if kv.rf.SendGetBeforeHeartBeat() == false {
+			return
+		}
+
+		index, term, isLeader := kv.rf.Start(op)
 
 		if !isLeader {
 			return
 		}
 		reply.LeaderId = kv.me
 
-		kv.mu.Lock()
-		if _, ok := kv.serialCache[args.SerialNum]; ok {
-			reply.Err = OK
-			kv.mu.Unlock()
-			return
-		}
-		kv.mu.Unlock()
-
-		msg := <-kv.applyCh
-		if msg.CommandValid {
-			op = msg.Command.(Op)
+		// 换leader时，新leader里面的msg没有读取出来，应该在成为leader之后，将chan里面的信息读取出来到non-op  只在切换Leader时，可用term判断是否切换了leader
+		fmt.Printf("term:%v, currentTerm:%v\n", term, currentTerm)
+		if term > currentTerm {
 			kv.mu.Lock()
-			kv.serialCache[op.SerialNum] = op.Value
-			if op.Opera == "Put" {
-				kv.kvdata[op.Key] = op.Value
-				//fmt.Printf("put %v\n", kv.kvdata[op.Key])
-			} else if op.Opera == "Append" {
-				kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
-				//fmt.Printf("append %v\n", kv.kvdata[op.Key])
-			}
-			reply.Err = OK
+			kv.currentTerm = term
 			kv.mu.Unlock()
+			for msg := range kv.applyCh {
+				//fmt.Printf("commandIndex:%v, index:%v\n", msg.CommandIndex, index)
+				if msg.CommandValid {
+					op = msg.Command.(Op)
+					kv.mu.Lock()
+					kv.serialCache[op.SerialNum] = op.Value
+					if op.Opera == "Put" {
+						kv.kvdata[op.Key] = op.Value
+						//fmt.Printf("put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
+					} else if op.Opera == "Append" {
+						kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
+						//fmt.Printf("append %v\n", kv.kvdata[op.Key])
+					}
+					kv.mu.Unlock()
+					if msg.CommandIndex == index {
+						reply.Err = OK
+						break
+					}
+				}
+			}
+		} else {
+			// FIXME: chan中没数据，卡死
+			msg := <-kv.applyCh
+			// fmt.Printf("commandIndex:%v, index:%v\n", msg.CommandIndex, index)
+			// msg.CommandIndex == index  多客户端并行发送，状态顺序错了或者缺少最后一个apply，提交时确保提交本次操作的日志
+			if msg.CommandValid && msg.CommandIndex == index {
+				op = msg.Command.(Op)
+				kv.mu.Lock()
+				kv.serialCache[op.SerialNum] = op.Value
+				if op.Opera == "Put" {
+					kv.kvdata[op.Key] = op.Value
+					//fmt.Printf("[]put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
+				} else if op.Opera == "Append" {
+					kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
+					//fmt.Printf("[]append %v\n", kv.kvdata[op.Key])
+				}
+				reply.Err = OK
+				kv.mu.Unlock()
+			}
 		}
 	}
 }
@@ -163,6 +227,7 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
+	kv.currentTerm = 0
 
 	// You may need initialization code here.
 	kv.kvdata = make(map[string]string)

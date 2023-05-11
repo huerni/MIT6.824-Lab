@@ -47,11 +47,10 @@ func (ck *Clerk) Get(key string) string {
 	args.Key = key
 	args.SerialNum = fmt.Sprintf("%d%d", time.Now().UnixNano()/int64(time.Millisecond), nrand())
 	reply := GetReply{}
-	//fmt.Printf("[Get key: %v] \n", key)
+	fmt.Printf("[Get key: %v] \n", key)
 	id := ck.preLeaderId
 	for {
 		//fmt.Printf("%v, ", id)
-
 		ok := ck.servers[id].Call("KVServer.Get", &args, &reply)
 		if ok {
 			if reply.Err == OK || reply.Err == ErrNoKey {
@@ -61,7 +60,7 @@ func (ck *Clerk) Get(key string) string {
 		}
 		id = int(nrand()) % len(ck.servers)
 	}
-	// fmt.Printf("result %v\n", reply.Value)
+	//fmt.Printf("result %v\n", reply.Value)
 	return reply.Value
 }
 
@@ -84,7 +83,7 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 	//fmt.Printf("[%v key: %v, value: %v]\n", op, key, value)
 	id := ck.preLeaderId
 	for {
-		//fmt.Printf("%v, ", id)
+		// fmt.Printf("%v, ", id)
 		ok := ck.servers[id].Call("KVServer.PutAppend", &args, &reply)
 		if ok {
 			if reply.Err == OK {
@@ -94,7 +93,7 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 		}
 		id = int(nrand()) % len(ck.servers)
 	}
-	//fmt.Printf("\n")
+	// fmt.Printf("\n")
 }
 
 func (ck *Clerk) Put(key string, value string) {
