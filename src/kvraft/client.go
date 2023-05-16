@@ -2,9 +2,7 @@ package kvraft
 
 import (
 	"crypto/rand"
-	"fmt"
 	"math/big"
-	"time"
 
 	"6.5840/labrpc"
 )
@@ -13,6 +11,8 @@ type Clerk struct {
 	servers []*labrpc.ClientEnd
 	// You will have to modify this struct.
 	preLeaderId int
+	clientId    int64
+	serialId    int
 }
 
 func nrand() int64 {
@@ -27,6 +27,8 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck.servers = servers
 	// You'll have to add code here.
 	ck.preLeaderId = int(nrand()) % len(ck.servers)
+	ck.clientId = nrand()
+	ck.serialId = 0
 	return ck
 }
 
@@ -45,9 +47,11 @@ func (ck *Clerk) Get(key string) string {
 	// You will have to modify this function.
 	args := GetArgs{}
 	args.Key = key
-	args.SerialNum = fmt.Sprintf("%d%d", time.Now().UnixNano()/int64(time.Millisecond), nrand())
+	args.ClientId = ck.clientId
+	args.SerialId = ck.serialId
+	ck.serialId++
 	reply := GetReply{}
-	fmt.Printf("[Get key: %v] \n", key)
+	//fmt.Printf("[Get key: %v] \n", key)
 	id := ck.preLeaderId
 	for {
 		//fmt.Printf("%v, ", id)
@@ -78,12 +82,12 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 	args.Key = key
 	args.Value = value
 	args.Op = op
-	args.SerialNum = fmt.Sprintf("%d%d", time.Now().UnixNano()/int64(time.Millisecond), nrand())
+	args.ClientId = ck.clientId
+	args.SerialId = ck.serialId
+	ck.serialId++
 	reply := PutAppendReply{}
-	//fmt.Printf("[%v key: %v, value: %v]\n", op, key, value)
 	id := ck.preLeaderId
 	for {
-		// fmt.Printf("%v, ", id)
 		ok := ck.servers[id].Call("KVServer.PutAppend", &args, &reply)
 		if ok {
 			if reply.Err == OK {
@@ -93,7 +97,6 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 		}
 		id = int(nrand()) % len(ck.servers)
 	}
-	// fmt.Printf("\n")
 }
 
 func (ck *Clerk) Put(key string, value string) {

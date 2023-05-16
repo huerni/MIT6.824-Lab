@@ -1,0 +1,2893 @@
+warning: only one CPU, which may conceal locking bugs
+Test: partitions, one client (3A) ...
+labgob warning: Decoding into a non-default variable/field Err may not work
+term:1, 4 成为领导者
+[id:4, term:1] 日志commit [1-1]
+[id:4, term:1] put key:0, index:1, last value:
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [2-2]
+[id:4, term:1] append key:0, index:2, last value:x 0 0 y
+[id:1, term:1] 日志commit [1-2]
+[id:2, term:1] 日志commit [1-2]
+[id:3, term:1] 日志commit [1-1]
+[id:0, term:1] 日志commit [1-2]
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [3-3]
+[id:4, term:1] append key:0, index:3, last value:x 0 1 y
+[id:4, term:1] 日志commit [4-4]
+[id:4, term:1] append key:0, index:4, last value:x 0 2 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [5-5]
+[id:4, term:1] append key:0, index:5, last value:x 0 3 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [6-6]
+[id:4, term:1] append key:0, index:6, last value:x 0 4 y
+[id:4, term:1] 日志commit [7-7]
+[id:4, term:1] append key:0, index:7, last value:x 0 5 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [8-8]
+[id:4, term:1] append key:0, index:8, last value:x 0 6 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [9-9]
+[id:4, term:1] append key:0, index:9, last value:x 0 7 y
+[id:4, term:1] 日志commit [10-10]
+[id:4, term:1] append key:0, index:10, last value:x 0 8 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [11-11]
+[id:4, term:1] append key:0, index:11, last value:x 0 9 y
+[id:4, term:1] 日志commit [12-12]
+[id:4, term:1] append key:0, index:12, last value:x 0 10 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [13-13]
+[id:4, term:1] append key:0, index:13, last value:x 0 11 y
+[id:4, term:1] 日志commit [14-14]
+[id:4, term:1] append key:0, index:14, last value:x 0 12 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [15-15]
+[id:4, term:1] append key:0, index:15, last value:x 0 13 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [16-16]
+[id:4, term:1] append key:0, index:16, last value:x 0 14 y
+[id:4, term:1] 日志commit [17-17]
+[id:4, term:1] append key:0, index:17, last value:x 0 15 y
+[id:4, term:1] 日志commit [18-18]
+[id:4, term:1] append key:0, index:18, last value:x 0 16 y
+[id:4, term:1] 日志commit [19-19]
+[id:4, term:1] append key:0, index:19, last value:x 0 17 y
+[id:4, term:1] 日志commit [20-20]
+[id:4, term:1] append key:0, index:20, last value:x 0 18 y
+[id:4, term:1] 日志commit [21-21]
+[id:4, term:1] append key:0, index:21, last value:x 0 19 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [22-22]
+[id:4, term:1] append key:0, index:22, last value:x 0 20 y
+[id:4, term:1] 日志commit [23-23]
+[id:4, term:1] append key:0, index:23, last value:x 0 21 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [24-24]
+[id:4, term:1] append key:0, index:24, last value:x 0 22 y
+[id:4, term:1] 日志commit [25-25]
+[id:4, term:1] append key:0, index:25, last value:x 0 23 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [26-26]
+[id:4, term:1] append key:0, index:26, last value:x 0 24 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [27-27]
+[id:4, term:1] append key:0, index:27, last value:x 0 25 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [28-28]
+[id:4, term:1] append key:0, index:28, last value:x 0 26 y
+[id:4, term:1] 日志commit [29-29]
+[id:4, term:1] append key:0, index:29, last value:x 0 27 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [30-30]
+[id:4, term:1] append key:0, index:30, last value:x 0 28 y
+[id:4, term:1] 日志commit [31-31]
+[id:4, term:1] append key:0, index:31, last value:x 0 29 y
+[id:4, term:1] 日志commit [32-32]
+[id:4, term:1] append key:0, index:32, last value:x 0 30 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [33-33]
+[id:4, term:1] append key:0, index:33, last value:x 0 31 y
+[id:4, term:1] 日志commit [34-34]
+[id:4, term:1] append key:0, index:34, last value:x 0 32 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [35-35]
+[id:4, term:1] append key:0, index:35, last value:x 0 33 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [36-36]
+[id:4, term:1] append key:0, index:36, last value:x 0 34 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [37-37]
+[id:4, term:1] append key:0, index:37, last value:x 0 35 y
+[id:4, term:1] 日志commit [38-38]
+[id:4, term:1] append key:0, index:38, last value:x 0 36 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [39-39]
+[id:4, term:1] append key:0, index:39, last value:x 0 37 y
+[id:4, term:1] 日志commit [40-40]
+[id:4, term:1] append key:0, index:40, last value:x 0 38 y
+[id:4, term:1] 日志commit [41-41]
+[id:4, term:1] append key:0, index:41, last value:x 0 39 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [42-42]
+[id:4, term:1] append key:0, index:42, last value:x 0 40 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [43-43]
+[id:4, term:1] append key:0, index:43, last value:x 0 41 y
+[id:4, term:1] 日志commit [44-44]
+[id:4, term:1] append key:0, index:44, last value:x 0 42 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [45-45]
+[id:4, term:1] append key:0, index:45, last value:x 0 43 y
+[id:4, term:1] 日志commit [46-46]
+[id:4, term:1] append key:0, index:46, last value:x 0 44 y
+[id:4, term:1] 日志commit [47-47]
+[id:4, term:1] append key:0, index:47, last value:x 0 45 y
+[id:4, term:1] 日志commit [48-48]
+[id:4, term:1] append key:0, index:48, last value:x 0 46 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [49-49]
+[id:4, term:1] append key:0, index:49, last value:x 0 47 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [50-50]
+[id:4, term:1] append key:0, index:50, last value:x 0 48 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [51-51]
+[id:4, term:1] append key:0, index:51, last value:x 0 49 y
+[id:4, term:1] 日志commit [52-52]
+[id:4, term:1] append key:0, index:52, last value:x 0 50 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [53-53]
+[id:4, term:1] append key:0, index:53, last value:x 0 51 y
+[id:4, term:1] 日志commit [54-54]
+[id:4, term:1] append key:0, index:54, last value:x 0 52 y
+[id:4, term:1] 日志commit [55-55]
+[id:4, term:1] append key:0, index:55, last value:x 0 53 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [56-56]
+[id:4, term:1] append key:0, index:56, last value:x 0 54 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [57-57]
+[id:4, term:1] append key:0, index:57, last value:x 0 55 y
+[id:4, term:1] 日志commit [58-58]
+[id:4, term:1] append key:0, index:58, last value:x 0 56 y
+[id:4, term:1] 日志commit [59-59]
+[id:4, term:1] append key:0, index:59, last value:x 0 57 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [60-60]
+[id:4, term:1] append key:0, index:60, last value:x 0 58 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [61-61]
+[id:4, term:1] append key:0, index:61, last value:x 0 59 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [62-62]
+[id:4, term:1] append key:0, index:62, last value:x 0 60 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [63-63]
+[id:4, term:1] append key:0, index:63, last value:x 0 61 y
+[id:4, term:1] 日志commit [64-64]
+[id:4, term:1] append key:0, index:64, last value:x 0 62 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [65-65]
+[id:4, term:1] append key:0, index:65, last value:x 0 63 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [66-66]
+[id:4, term:1] append key:0, index:66, last value:x 0 64 y
+[id:4, term:1] 日志commit [67-67]
+[id:4, term:1] append key:0, index:67, last value:x 0 65 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [68-68]
+[id:4, term:1] append key:0, index:68, last value:x 0 66 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [69-69]
+[id:4, term:1] append key:0, index:69, last value:x 0 67 y
+[id:4, term:1] 日志commit [70-70]
+[id:4, term:1] append key:0, index:70, last value:x 0 68 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [71-71]
+[id:4, term:1] append key:0, index:71, last value:x 0 69 y
+[id:4, term:1] 日志commit [72-72]
+[id:4, term:1] append key:0, index:72, last value:x 0 70 y
+[id:4, term:1] 日志commit [73-73]
+[id:4, term:1] append key:0, index:73, last value:x 0 71 y
+[id:4, term:1] 日志commit [74-74]
+[id:4, term:1] append key:0, index:74, last value:x 0 72 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [75-75]
+[id:4, term:1] append key:0, index:75, last value:x 0 73 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [76-76]
+[id:4, term:1] append key:0, index:76, last value:x 0 74 y
+[id:4, term:1] 日志commit [77-77]
+[id:4, term:1] append key:0, index:77, last value:x 0 75 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [78-78]
+[id:4, term:1] append key:0, index:78, last value:x 0 76 y
+[id:4, term:1] 日志commit [79-79]
+[id:4, term:1] append key:0, index:79, last value:x 0 77 y
+[id:4, term:1] 日志commit [80-80]
+[id:4, term:1] append key:0, index:80, last value:x 0 78 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [81-81]
+[id:4, term:1] append key:0, index:81, last value:x 0 79 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [82-82]
+[id:4, term:1] append key:0, index:82, last value:x 0 80 y
+[id:4, term:1] 日志commit [83-83]
+[id:4, term:1] append key:0, index:83, last value:x 0 81 y
+[id:4, term:1] 日志commit [84-84]
+[id:4, term:1] append key:0, index:84, last value:x 0 82 y
+[id:4, term:1] 日志commit [85-85]
+[id:4, term:1] append key:0, index:85, last value:x 0 83 y
+[id:4, term:1] 日志commit [86-86]
+[id:4, term:1] append key:0, index:86, last value:x 0 84 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [87-87]
+[id:4, term:1] append key:0, index:87, last value:x 0 85 y
+[id:4, term:1] 日志commit [88-88]
+[id:4, term:1] append key:0, index:88, last value:x 0 86 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [89-89]
+[id:4, term:1] append key:0, index:89, last value:x 0 87 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [90-90]
+[id:4, term:1] append key:0, index:90, last value:x 0 88 y
+[id:4, term:1] 日志commit [91-91]
+[id:4, term:1] append key:0, index:91, last value:x 0 89 y
+[id:4, term:1] 日志commit [92-92]
+[id:4, term:1] append key:0, index:92, last value:x 0 90 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [93-93]
+[id:4, term:1] append key:0, index:93, last value:x 0 91 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [94-94]
+[id:4, term:1] append key:0, index:94, last value:x 0 92 y
+[id:4, term:1] 日志commit [95-95]
+[id:4, term:1] append key:0, index:95, last value:x 0 93 y
+[id:4, term:1] 日志commit [96-96]
+[id:4, term:1] append key:0, index:96, last value:x 0 94 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [97-97]
+[id:4, term:1] append key:0, index:97, last value:x 0 95 y
+[id:4, term:1] 日志commit [98-98]
+[id:4, term:1] append key:0, index:98, last value:x 0 96 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [99-99]
+[id:4, term:1] append key:0, index:99, last value:x 0 97 y
+[id:4, term:1] 日志commit [100-100]
+[id:4, term:1] append key:0, index:100, last value:x 0 98 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [101-101]
+[id:4, term:1] append key:0, index:101, last value:x 0 99 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [102-102]
+[id:4, term:1] append key:0, index:102, last value:x 0 100 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [103-103]
+[id:4, term:1] append key:0, index:103, last value:x 0 101 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [104-104]
+[id:4, term:1] append key:0, index:104, last value:x 0 102 y
+[id:4, term:1] 日志commit [105-105]
+[id:4, term:1] append key:0, index:105, last value:x 0 103 y
+[id:4, term:1] 日志commit [106-106]
+[id:4, term:1] append key:0, index:106, last value:x 0 104 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [107-107]
+[id:4, term:1] append key:0, index:107, last value:x 0 105 y
+[id:4, term:1] 日志commit [108-108]
+[id:4, term:1] append key:0, index:108, last value:x 0 106 y
+[id:4, term:1] 日志commit [109-109]
+[id:4, term:1] append key:0, index:109, last value:x 0 107 y
+[id:4, term:1] 日志commit [110-110]
+[id:4, term:1] append key:0, index:110, last value:x 0 108 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [111-111]
+[id:4, term:1] append key:0, index:111, last value:x 0 109 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [112-112]
+[id:4, term:1] append key:0, index:112, last value:x 0 110 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [113-113]
+[id:4, term:1] append key:0, index:113, last value:x 0 111 y
+[id:4, term:1] 日志commit [114-114]
+[id:4, term:1] append key:0, index:114, last value:x 0 112 y
+[id:4, term:1] 日志commit [115-115]
+[id:4, term:1] append key:0, index:115, last value:x 0 113 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [116-116]
+[id:4, term:1] append key:0, index:116, last value:x 0 114 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [117-117]
+[id:4, term:1] append key:0, index:117, last value:x 0 115 y
+[id:4, term:1] 日志commit [118-118]
+[id:4, term:1] append key:0, index:118, last value:x 0 116 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [119-119]
+[id:4, term:1] append key:0, index:119, last value:x 0 117 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [120-120]
+[id:4, term:1] append key:0, index:120, last value:x 0 118 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [121-121]
+[id:4, term:1] append key:0, index:121, last value:x 0 119 y
+[id:4, term:1] 日志commit [122-122]
+[id:4, term:1] append key:0, index:122, last value:x 0 120 y
+[id:4, term:1] 日志commit [123-123]
+[id:4, term:1] append key:0, index:123, last value:x 0 121 y
+[id:4, term:1] 日志commit [124-124]
+[id:4, term:1] append key:0, index:124, last value:x 0 122 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [125-125]
+[id:4, term:1] append key:0, index:125, last value:x 0 123 y
+[id:4, term:1] 日志commit [126-126]
+[id:4, term:1] append key:0, index:126, last value:x 0 124 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [127-127]
+[id:4, term:1] append key:0, index:127, last value:x 0 125 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [128-128]
+[id:4, term:1] append key:0, index:128, last value:x 0 126 y
+[id:4, term:1] 日志commit [129-129]
+[id:4, term:1] append key:0, index:129, last value:x 0 127 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [130-130]
+[id:4, term:1] append key:0, index:130, last value:x 0 128 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [131-131]
+[id:4, term:1] append key:0, index:131, last value:x 0 129 y
+[id:4, term:1] 日志commit [132-132]
+[id:4, term:1] append key:0, index:132, last value:x 0 130 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [133-133]
+[id:4, term:1] append key:0, index:133, last value:x 0 131 y
+[id:4, term:1] 日志commit [134-134]
+[id:4, term:1] append key:0, index:134, last value:x 0 132 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [135-135]
+[id:4, term:1] append key:0, index:135, last value:x 0 133 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [136-136]
+[id:4, term:1] append key:0, index:136, last value:x 0 134 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [137-137]
+[id:4, term:1] append key:0, index:137, last value:x 0 135 y
+[id:4, term:1] 日志commit [138-138]
+[id:4, term:1] append key:0, index:138, last value:x 0 136 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [139-139]
+[id:4, term:1] append key:0, index:139, last value:x 0 137 y
+[id:4, term:1] 日志commit [140-140]
+[id:4, term:1] append key:0, index:140, last value:x 0 138 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [141-141]
+[id:4, term:1] append key:0, index:141, last value:x 0 139 y
+[id:4, term:1] 日志commit [142-142]
+[id:4, term:1] append key:0, index:142, last value:x 0 140 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [143-143]
+[id:4, term:1] append key:0, index:143, last value:x 0 141 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [144-144]
+[id:4, term:1] append key:0, index:144, last value:x 0 142 y
+[id:4, term:1] 日志commit [145-145]
+[id:4, term:1] append key:0, index:145, last value:x 0 143 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [146-146]
+[id:4, term:1] append key:0, index:146, last value:x 0 144 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [147-147]
+[id:4, term:1] append key:0, index:147, last value:x 0 145 y
+[id:4, term:1] 日志commit [148-148]
+[id:4, term:1] append key:0, index:148, last value:x 0 146 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [149-149]
+[id:4, term:1] append key:0, index:149, last value:x 0 147 y
+[id:4, term:1] 日志commit [150-150]
+[id:4, term:1] append key:0, index:150, last value:x 0 148 y
+[id:4, term:1] 日志commit [151-151]
+[id:4, term:1] append key:0, index:151, last value:x 0 149 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [152-152]
+[id:4, term:1] append key:0, index:152, last value:x 0 150 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [153-153]
+[id:4, term:1] append key:0, index:153, last value:x 0 151 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [154-154]
+[id:4, term:1] append key:0, index:154, last value:x 0 152 y
+[id:4, term:1] 日志commit [155-155]
+[id:4, term:1] append key:0, index:155, last value:x 0 153 y
+[id:4, term:1] 日志commit [156-156]
+[id:4, term:1] append key:0, index:156, last value:x 0 154 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [157-157]
+[id:4, term:1] append key:0, index:157, last value:x 0 155 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [158-158]
+[id:4, term:1] append key:0, index:158, last value:x 0 156 y
+[id:4, term:1] 日志commit [159-159]
+[id:4, term:1] append key:0, index:159, last value:x 0 157 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [160-160]
+[id:4, term:1] append key:0, index:160, last value:x 0 158 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [161-161]
+[id:4, term:1] append key:0, index:161, last value:x 0 159 y
+[id:4, term:1] 日志commit [162-162]
+[id:4, term:1] append key:0, index:162, last value:x 0 160 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [163-163]
+[id:4, term:1] append key:0, index:163, last value:x 0 161 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [164-164]
+[id:4, term:1] append key:0, index:164, last value:x 0 162 y
+[id:4, term:1] 日志commit [165-165]
+[id:4, term:1] append key:0, index:165, last value:x 0 163 y
+[id:4, term:1] 日志commit [166-166]
+[id:4, term:1] append key:0, index:166, last value:x 0 164 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [167-167]
+[id:4, term:1] append key:0, index:167, last value:x 0 165 y
+[id:4, term:1] 日志commit [168-168]
+[id:4, term:1] append key:0, index:168, last value:x 0 166 y
+[id:4, term:1] 日志commit [169-169]
+[id:4, term:1] append key:0, index:169, last value:x 0 167 y
+[id:4, term:1] 日志commit [170-170]
+[id:4, term:1] append key:0, index:170, last value:x 0 168 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [171-171]
+[id:4, term:1] append key:0, index:171, last value:x 0 169 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [172-172]
+[id:4, term:1] append key:0, index:172, last value:x 0 170 y
+[id:4, term:1] 日志commit [173-173]
+[id:4, term:1] append key:0, index:173, last value:x 0 171 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [174-174]
+[id:4, term:1] append key:0, index:174, last value:x 0 172 y
+[id:4, term:1] 日志commit [175-175]
+[id:4, term:1] append key:0, index:175, last value:x 0 173 y
+[id:4, term:1] 日志commit [176-176]
+[id:4, term:1] append key:0, index:176, last value:x 0 174 y
+[id:4, term:1] 日志commit [177-177]
+[id:4, term:1] append key:0, index:177, last value:x 0 175 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [178-178]
+[id:4, term:1] append key:0, index:178, last value:x 0 176 y
+[id:4, term:1] 日志commit [179-179]
+[id:4, term:1] append key:0, index:179, last value:x 0 177 y
+[id:4, term:1] 日志commit [180-180]
+[id:4, term:1] append key:0, index:180, last value:x 0 178 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [181-181]
+[id:4, term:1] append key:0, index:181, last value:x 0 179 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [182-182]
+[id:4, term:1] append key:0, index:182, last value:x 0 180 y
+[id:4, term:1] 日志commit [183-183]
+[id:4, term:1] append key:0, index:183, last value:x 0 181 y
+[id:4, term:1] 日志commit [184-184]
+[id:4, term:1] append key:0, index:184, last value:x 0 182 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [185-185]
+[id:4, term:1] append key:0, index:185, last value:x 0 183 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [186-186]
+[id:4, term:1] append key:0, index:186, last value:x 0 184 y
+[id:4, term:1] 日志commit [187-187]
+[id:4, term:1] append key:0, index:187, last value:x 0 185 y
+[id:4, term:1] 日志commit [188-188]
+[id:4, term:1] append key:0, index:188, last value:x 0 186 y
+[id:4, term:1] 日志commit [189-189]
+[id:4, term:1] append key:0, index:189, last value:x 0 187 y
+[id:4, term:1] 日志commit [190-190]
+[id:4, term:1] append key:0, index:190, last value:x 0 188 y
+[id:4, term:1] 日志commit [191-191]
+[id:4, term:1] append key:0, index:191, last value:x 0 189 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [192-192]
+[id:4, term:1] append key:0, index:192, last value:x 0 190 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [193-193]
+[id:4, term:1] append key:0, index:193, last value:x 0 191 y
+[id:4, term:1] 日志commit [194-194]
+[id:4, term:1] append key:0, index:194, last value:x 0 192 y
+[id:4, term:1] 日志commit [195-195]
+[id:4, term:1] append key:0, index:195, last value:x 0 193 y
+[id:4, term:1] 日志commit [196-196]
+[id:4, term:1] append key:0, index:196, last value:x 0 194 y
+[id:4, term:1] 日志commit [197-197]
+[id:4, term:1] append key:0, index:197, last value:x 0 195 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [198-198]
+[id:4, term:1] append key:0, index:198, last value:x 0 196 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [199-199]
+[id:4, term:1] append key:0, index:199, last value:x 0 197 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [200-200]
+[id:4, term:1] append key:0, index:200, last value:x 0 198 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [201-201]
+[id:4, term:1] append key:0, index:201, last value:x 0 199 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+[id:4, term:1] 日志commit [202-202]
+[id:4, term:1] append key:0, index:202, last value:x 0 200 y
+[id:4, term:1] get key:0 OK
+[id:4, term:1] get key:0 OK
+term:5, 4 成为领导者
+[id:4, term:5] 日志commit [203-203]
+[id:4, term:5] append key:0, index: 203, last value:x 0 201 y
+[id:4, term:5] 日志commit [204-204]
+[id:4, term:5] append key:0, index:204, last value:x 0 202 y
+[id:4, term:5] 日志commit [205-205]
+[id:4, term:5] append key:0, index:205, last value:x 0 203 y
+[id:4, term:5] get key:0 OK
+[id:4, term:5] get key:0 OK
+[id:4, term:5] 日志commit [206-206]
+[id:4, term:5] append key:0, index:206, last value:x 0 204 y
+[id:4, term:5] get key:0 OK
+[id:4, term:5] 日志commit [207-207]
+[id:4, term:5] append key:0, index:207, last value:x 0 205 y
+[id:4, term:5] 日志commit [208-208]
+[id:4, term:5] append key:0, index:208, last value:x 0 206 y
+[id:4, term:5] get key:0 OK
+[id:4, term:5] 日志commit [209-209]
+[id:4, term:5] append key:0, index:209, last value:x 0 207 y
+[id:4, term:5] 日志commit [210-210]
+[id:4, term:5] append key:0, index:210, last value:x 0 208 y
+[id:4, term:5] get key:0 OK
+term:6, 0 成为领导者
+ap[id:0, term:6] put key:0, index:1, last value:
+ap[id:0, term:6] append key:0, index: 2, last value:x 0 0 y
+[id:0, term:6] 日志commit [3-210]
+ap[id:0, term:6] append key:0, index: 3, last value:x 0 1 y
+ap[id:0, term:6] append key:0, index: 4, last value:x 0 2 y
+ap[id:0, term:6] append key:0, index: 5, last value:x 0 3 y
+ap[id:0, term:6] append key:0, index: 6, last value:x 0 4 y
+ap[id:0, term:6] append key:0, index: 7, last value:x 0 5 y
+ap[id:0, term:6] append key:0, index: 8, last value:x 0 6 y
+ap[id:0, term:6] append key:0, index: 9, last value:x 0 7 y
+ap[id:0, term:6] append key:0, index: 10, last value:x 0 8 y
+ap[id:0, term:6] append key:0, index: 11, last value:x 0 9 y
+ap[id:0, term:6] append key:0, index: 12, last value:x 0 10 y
+ap[id:0, term:6] append key:0, index: 13, last value:x 0 11 y
+ap[id:0, term:6] append key:0, index: 14, last value:x 0 12 y
+ap[id:0, term:6] append key:0, index: 15, last value:x 0 13 y
+ap[id:0, term:6] append key:0, index: 16, last value:x 0 14 y
+ap[id:0, term:6] append key:0, index: 17, last value:x 0 15 y
+ap[id:0, term:6] append key:0, index: 18, last value:x 0 16 y
+ap[id:0, term:6] append key:0, index: 19, last value:x 0 17 y
+ap[id:0, term:6] append key:0, index: 20, last value:x 0 18 y
+ap[id:0, term:6] append key:0, index: 21, last value:x 0 19 y
+ap[id:0, term:6] append key:0, index: 22, last value:x 0 20 y
+ap[id:0, term:6] append key:0, index: 23, last value:x 0 21 y
+ap[id:0, term:6] append key:0, index: 24, last value:x 0 22 y
+ap[id:0, term:6] append key:0, index: 25, last value:x 0 23 y
+ap[id:0, term:6] append key:0, index: 26, last value:x 0 24 y
+ap[id:0, term:6] append key:0, index: 27, last value:x 0 25 y
+ap[id:0, term:6] append key:0, index: 28, last value:x 0 26 y
+ap[id:0, term:6] append key:0, index: 29, last value:x 0 27 y
+ap[id:0, term:6] append key:0, index: 30, last value:x 0 28 y
+ap[id:0, term:6] append key:0, index: 31, last value:x 0 29 y
+term:7, 4 成为领导者
+term:8, 3 成为领导者
+ap[id:0, term:6] append key:0, index: 32, last value:x 0 30 y
+ap[id:0, term:6] append key:0, index: 33, last value:x 0 31 y
+ap[id:0, term:6] append key:0, index: 34, last value:x 0 32 y
+ap[id:0, term:6] append key:0, index: 35, last value:x 0 33 y
+ap[id:0, term:6] append key:0, index: 36, last value:x 0 34 y
+ap[id:0, term:6] append key:0, index: 37, last value:x 0 35 y
+ap[id:0, term:6] append key:0, index: 38, last value:x 0 36 y
+ap[id:0, term:6] append key:0, index: 39, last value:x 0 37 y
+ap[id:0, term:6] append key:0, index: 40, last value:x 0 38 y
+ap[id:0, term:6] append key:0, index: 41, last value:x 0 39 y
+ap[id:0, term:6] append key:0, index: 42, last value:x 0 40 y
+ap[id:0, term:6] append key:0, index: 43, last value:x 0 41 y
+ap[id:0, term:6] append key:0, index: 44, last value:x 0 42 y
+ap[id:0, term:6] append key:0, index: 45, last value:x 0 43 y
+ap[id:0, term:6] append key:0, index: 46, last value:x 0 44 y
+ap[id:0, term:6] append key:0, index: 47, last value:x 0 45 y
+ap[id:0, term:6] append key:0, index: 48, last value:x 0 46 y
+ap[id:0, term:6] append key:0, index: 49, last value:x 0 47 y
+ap[id:0, term:6] append key:0, index: 50, last value:x 0 48 y
+ap[id:0, term:6] append key:0, index: 51, last value:x 0 49 y
+ap[id:0, term:6] append key:0, index: 52, last value:x 0 50 y
+ap[id:0, term:6] append key:0, index: 53, last value:x 0 51 y
+ap[id:0, term:6] append key:0, index: 54, last value:x 0 52 y
+ap[id:0, term:6] append key:0, index: 55, last value:x 0 53 y
+ap[id:0, term:6] append key:0, index: 56, last value:x 0 54 y
+ap[id:0, term:6] append key:0, index: 57, last value:x 0 55 y
+ap[id:0, term:6] append key:0, index: 58, last value:x 0 56 y
+ap[id:0, term:6] append key:0, index: 59, last value:x 0 57 y
+ap[id:0, term:6] append key:0, index: 60, last value:x 0 58 y
+ap[id:0, term:6] append key:0, index: 61, last value:x 0 59 y
+ap[id:0, term:6] append key:0, index: 62, last value:x 0 60 y
+ap[id:0, term:6] append key:0, index: 63, last value:x 0 61 y
+ap[id:0, term:6] append key:0, index: 64, last value:x 0 62 y
+ap[id:0, term:6] append key:0, index: 65, last value:x 0 63 y
+ap[id:0, term:6] append key:0, index: 66, last value:x 0 64 y
+ap[id:0, term:6] append key:0, index: 67, last value:x 0 65 y
+ap[id:0, term:6] append key:0, index: 68, last value:x 0 66 y
+ap[id:0, term:6] append key:0, index: 69, last value:x 0 67 y
+ap[id:0, term:6] append key:0, index: 70, last value:x 0 68 y
+ap[id:0, term:6] append key:0, index: 71, last value:x 0 69 y
+ap[id:0, term:6] append key:0, index: 72, last value:x 0 70 y
+ap[id:0, term:6] append key:0, index: 73, last value:x 0 71 y
+ap[id:0, term:6] append key:0, index: 74, last value:x 0 72 y
+ap[id:0, term:6] append key:0, index: 75, last value:x 0 73 y
+ap[id:0, term:6] append key:0, index: 76, last value:x 0 74 y
+ap[id:0, term:6] append key:0, index: 77, last value:x 0 75 y
+ap[id:0, term:6] append key:0, index: 78, last value:x 0 76 y
+ap[id:0, term:6] append key:0, index: 79, last value:x 0 77 y
+ap[id:0, term:6] append key:0, index: 80, last value:x 0 78 y
+ap[id:0, term:6] append key:0, index: 81, last value:x 0 79 y
+ap[id:0, term:6] append key:0, index: 82, last value:x 0 80 y
+ap[id:0, term:6] append key:0, index: 83, last value:x 0 81 y
+ap[id:0, term:6] append key:0, index: 84, last value:x 0 82 y
+ap[id:0, term:6] append key:0, index: 85, last value:x 0 83 y
+ap[id:0, term:6] append key:0, index: 86, last value:x 0 84 y
+ap[id:0, term:6] append key:0, index: 87, last value:x 0 85 y
+ap[id:0, term:6] append key:0, index: 88, last value:x 0 86 y
+ap[id:0, term:6] append key:0, index: 89, last value:x 0 87 y
+ap[id:0, term:6] append key:0, index: 90, last value:x 0 88 y
+ap[id:0, term:6] append key:0, index: 91, last value:x 0 89 y
+ap[id:0, term:6] append key:0, index: 92, last value:x 0 90 y
+ap[id:0, term:6] append key:0, index: 93, last value:x 0 91 y
+ap[id:0, term:6] append key:0, index: 94, last value:x 0 92 y
+ap[id:0, term:6] append key:0, index: 95, last value:x 0 93 y
+ap[id:0, term:6] append key:0, index: 96, last value:x 0 94 y
+ap[id:0, term:6] append key:0, index: 97, last value:x 0 95 y
+ap[id:0, term:6] append key:0, index: 98, last value:x 0 96 y
+ap[id:0, term:6] append key:0, index: 99, last value:x 0 97 y
+ap[id:0, term:6] append key:0, index: 100, last value:x 0 98 y
+ap[id:0, term:6] append key:0, index: 101, last value:x 0 99 y
+ap[id:0, term:6] append key:0, index: 102, last value:x 0 100 y
+ap[id:0, term:6] append key:0, index: 103, last value:x 0 101 y
+ap[id:0, term:6] append key:0, index: 104, last value:x 0 102 y
+ap[id:0, term:6] append key:0, index: 105, last value:x 0 103 y
+ap[id:0, term:6] append key:0, index: 106, last value:x 0 104 y
+ap[id:0, term:6] append key:0, index: 107, last value:x 0 105 y
+ap[id:0, term:6] append key:0, index: 108, last value:x 0 106 y
+ap[id:0, term:6] append key:0, index: 109, last value:x 0 107 y
+ap[id:0, term:6] append key:0, index: 110, last value:x 0 108 y
+ap[id:0, term:6] append key:0, index: 111, last value:x 0 109 y
+ap[id:0, term:6] append key:0, index: 112, last value:x 0 110 y
+ap[id:0, term:6] append key:0, index: 113, last value:x 0 111 y
+ap[id:0, term:6] append key:0, index: 114, last value:x 0 112 y
+ap[id:0, term:6] append key:0, index: 115, last value:x 0 113 y
+ap[id:0, term:6] append key:0, index: 116, last value:x 0 114 y
+ap[id:0, term:6] append key:0, index: 117, last value:x 0 115 y
+ap[id:0, term:6] append key:0, index: 118, last value:x 0 116 y
+ap[id:0, term:6] append key:0, index: 119, last value:x 0 117 y
+ap[id:0, term:6] append key:0, index: 120, last value:x 0 118 y
+ap[id:0, term:6] append key:0, index: 121, last value:x 0 119 y
+ap[id:0, term:6] append key:0, index: 122, last value:x 0 120 y
+ap[id:0, term:6] append key:0, index: 123, last value:x 0 121 y
+ap[id:0, term:6] append key:0, index: 124, last value:x 0 122 y
+ap[id:0, term:6] append key:0, index: 125, last value:x 0 123 y
+ap[id:0, term:6] append key:0, index: 126, last value:x 0 124 y
+ap[id:0, term:6] append key:0, index: 127, last value:x 0 125 y
+ap[id:0, term:6] append key:0, index: 128, last value:x 0 126 y
+ap[id:0, term:6] append key:0, index: 129, last value:x 0 127 y
+ap[id:0, term:6] append key:0, index: 130, last value:x 0 128 y
+ap[id:0, term:6] append key:0, index: 131, last value:x 0 129 y
+ap[id:0, term:6] append key:0, index: 132, last value:x 0 130 y
+ap[id:0, term:6] append key:0, index: 133, last value:x 0 131 y
+ap[id:0, term:6] append key:0, index: 134, last value:x 0 132 y
+ap[id:0, term:6] append key:0, index: 135, last value:x 0 133 y
+ap[id:0, term:6] append key:0, index: 136, last value:x 0 134 y
+ap[id:0, term:6] append key:0, index: 137, last value:x 0 135 y
+ap[id:0, term:6] append key:0, index: 138, last value:x 0 136 y
+ap[id:0, term:6] append key:0, index: 139, last value:x 0 137 y
+ap[id:0, term:6] append key:0, index: 140, last value:x 0 138 y
+ap[id:0, term:6] append key:0, index: 141, last value:x 0 139 y
+ap[id:0, term:6] append key:0, index: 142, last value:x 0 140 y
+ap[id:0, term:6] append key:0, index: 143, last value:x 0 141 y
+ap[id:0, term:6] append key:0, index: 144, last value:x 0 142 y
+ap[id:0, term:6] append key:0, index: 145, last value:x 0 143 y
+ap[id:0, term:6] append key:0, index: 146, last value:x 0 144 y
+ap[id:0, term:6] append key:0, index: 147, last value:x 0 145 y
+ap[id:0, term:6] append key:0, index: 148, last value:x 0 146 y
+term:10, 3 成为领导者
+ap[id:0, term:6] append key:0, index: 149, last value:x 0 147 y
+ap[id:0, term:6] append key:0, index: 150, last value:x 0 148 y
+ap[id:0, term:6] append key:0, index: 151, last value:x 0 149 y
+ap[id:0, term:6] append key:0, index: 152, last value:x 0 150 y
+ap[id:0, term:6] append key:0, index: 153, last value:x 0 151 y
+ap[id:0, term:6] append key:0, index: 154, last value:x 0 152 y
+ap[id:0, term:6] append key:0, index: 155, last value:x 0 153 y
+ap[id:0, term:6] append key:0, index: 156, last value:x 0 154 y
+ap[id:0, term:6] append key:0, index: 157, last value:x 0 155 y
+ap[id:0, term:6] append key:0, index: 158, last value:x 0 156 y
+ap[id:0, term:6] append key:0, index: 159, last value:x 0 157 y
+ap[id:0, term:6] append key:0, index: 160, last value:x 0 158 y
+ap[id:0, term:6] append key:0, index: 161, last value:x 0 159 y
+ap[id:0, term:6] append key:0, index: 162, last value:x 0 160 y
+ap[id:0, term:6] append key:0, index: 163, last value:x 0 161 y
+ap[id:0, term:6] append key:0, index: 164, last value:x 0 162 y
+ap[id:0, term:6] append key:0, index: 165, last value:x 0 163 y
+ap[id:0, term:6] append key:0, index: 166, last value:x 0 164 y
+ap[id:0, term:6] append key:0, index: 167, last value:x 0 165 y
+ap[id:0, term:6] append key:0, index: 168, last value:x 0 166 y
+ap[id:0, term:6] append key:0, index: 169, last value:x 0 167 y
+ap[id:0, term:6] append key:0, index: 170, last value:x 0 168 y
+ap[id:0, term:6] append key:0, index: 171, last value:x 0 169 y
+ap[id:0, term:6] append key:0, index: 172, last value:x 0 170 y
+ap[id:0, term:6] append key:0, index: 173, last value:x 0 171 y
+ap[id:0, term:6] append key:0, index: 174, last value:x 0 172 y
+ap[id:0, term:6] append key:0, index: 175, last value:x 0 173 y
+ap[id:0, term:6] append key:0, index: 176, last value:x 0 174 y
+ap[id:0, term:6] append key:0, index: 177, last value:x 0 175 y
+ap[id:0, term:6] append key:0, index: 178, last value:x 0 176 y
+ap[id:0, term:6] append key:0, index: 179, last value:x 0 177 y
+ap[id:0, term:6] append key:0, index: 180, last value:x 0 178 y
+ap[id:0, term:6] append key:0, index: 181, last value:x 0 179 y
+ap[id:0, term:6] append key:0, index: 182, last value:x 0 180 y
+ap[id:0, term:6] append key:0, index: 183, last value:x 0 181 y
+ap[id:0, term:6] append key:0, index: 184, last value:x 0 182 y
+ap[id:0, term:6] append key:0, index: 185, last value:x 0 183 y
+ap[id:0, term:6] append key:0, index: 186, last value:x 0 184 y
+ap[id:0, term:6] append key:0, index: 187, last value:x 0 185 y
+ap[id:0, term:6] append key:0, index: 188, last value:x 0 186 y
+ap[id:0, term:6] append key:0, index: 189, last value:x 0 187 y
+ap[id:0, term:6] append key:0, index: 190, last value:x 0 188 y
+ap[id:0, term:6] append key:0, index: 191, last value:x 0 189 y
+ap[id:0, term:6] append key:0, index: 192, last value:x 0 190 y
+ap[id:0, term:6] append key:0, index: 193, last value:x 0 191 y
+ap[id:0, term:6] append key:0, index: 194, last value:x 0 192 y
+ap[id:0, term:6] append key:0, index: 195, last value:x 0 193 y
+ap[id:0, term:6] append key:0, index: 196, last value:x 0 194 y
+ap[id:0, term:6] append key:0, index: 197, last value:x 0 195 y
+ap[id:0, term:6] append key:0, index: 198, last value:x 0 196 y
+ap[id:0, term:6] append key:0, index: 199, last value:x 0 197 y
+ap[id:0, term:6] append key:0, index: 200, last value:x 0 198 y
+ap[id:0, term:6] append key:0, index: 201, last value:x 0 199 y
+ap[id:0, term:6] append key:0, index: 202, last value:x 0 200 y
+ap[id:0, term:6] append key:0, index: 203, last value:x 0 201 y
+ap[id:0, term:6] append key:0, index: 204, last value:x 0 202 y
+ap[id:0, term:6] append key:0, index: 205, last value:x 0 203 y
+ap[id:0, term:6] append key:0, index: 206, last value:x 0 204 y
+ap[id:0, term:6] append key:0, index: 207, last value:x 0 205 y
+ap[id:0, term:6] append key:0, index: 208, last value:x 0 206 y
+ap[id:0, term:6] append key:0, index: 209, last value:x 0 207 y
+ap[id:0, term:6] append key:0, index: 210, last value:x 0 208 y
+[id:0, term:6] get key:0 OK
+ap[id:3, term:10] put key:0, index:1, last value:
+[id:3, term:10] 日志commit [2-210]
+ap[id:3, term:10] append key:0, index: 2, last value:x 0 0 y
+ap[id:3, term:10] append key:0, index: 3, last value:x 0 1 y
+ap[id:3, term:10] append key:0, index: 4, last value:x 0 2 y
+ap[id:3, term:10] append key:0, index: 5, last value:x 0 3 y
+ap[id:3, term:10] append key:0, index: 6, last value:x 0 4 y
+ap[id:3, term:10] append key:0, index: 7, last value:x 0 5 y
+ap[id:3, term:10] append key:0, index: 8, last value:x 0 6 y
+ap[id:3, term:10] append key:0, index: 9, last value:x 0 7 y
+ap[id:3, term:10] append key:0, index: 10, last value:x 0 8 y
+ap[id:3, term:10] append key:0, index: 11, last value:x 0 9 y
+ap[id:3, term:10] append key:0, index: 12, last value:x 0 10 y
+ap[id:3, term:10] append key:0, index: 13, last value:x 0 11 y
+ap[id:3, term:10] append key:0, index: 14, last value:x 0 12 y
+ap[id:3, term:10] append key:0, index: 15, last value:x 0 13 y
+ap[id:3, term:10] append key:0, index: 16, last value:x 0 14 y
+ap[id:3, term:10] append key:0, index: 17, last value:x 0 15 y
+ap[id:3, term:10] append key:0, index: 18, last value:x 0 16 y
+ap[id:3, term:10] append key:0, index: 19, last value:x 0 17 y
+ap[id:3, term:10] append key:0, index: 20, last value:x 0 18 y
+ap[id:3, term:10] append key:0, index: 21, last value:x 0 19 y
+ap[id:3, term:10] append key:0, index: 22, last value:x 0 20 y
+ap[id:3, term:10] append key:0, index: 23, last value:x 0 21 y
+ap[id:3, term:10] append key:0, index: 24, last value:x 0 22 y
+ap[id:3, term:10] append key:0, index: 25, last value:x 0 23 y
+ap[id:3, term:10] append key:0, index: 26, last value:x 0 24 y
+ap[id:3, term:10] append key:0, index: 27, last value:x 0 25 y
+ap[id:3, term:10] append key:0, index: 28, last value:x 0 26 y
+ap[id:3, term:10] append key:0, index: 29, last value:x 0 27 y
+ap[id:3, term:10] append key:0, index: 30, last value:x 0 28 y
+ap[id:3, term:10] append key:0, index: 31, last value:x 0 29 y
+ap[id:3, term:10] append key:0, index: 32, last value:x 0 30 y
+ap[id:3, term:10] append key:0, index: 33, last value:x 0 31 y
+ap[id:3, term:10] append key:0, index: 34, last value:x 0 32 y
+ap[id:3, term:10] append key:0, index: 35, last value:x 0 33 y
+ap[id:3, term:10] append key:0, index: 36, last value:x 0 34 y
+ap[id:3, term:10] append key:0, index: 37, last value:x 0 35 y
+ap[id:3, term:10] append key:0, index: 38, last value:x 0 36 y
+ap[id:3, term:10] append key:0, index: 39, last value:x 0 37 y
+ap[id:3, term:10] append key:0, index: 40, last value:x 0 38 y
+ap[id:3, term:10] append key:0, index: 41, last value:x 0 39 y
+ap[id:3, term:10] append key:0, index: 42, last value:x 0 40 y
+ap[id:3, term:10] append key:0, index: 43, last value:x 0 41 y
+ap[id:3, term:10] append key:0, index: 44, last value:x 0 42 y
+ap[id:3, term:10] append key:0, index: 45, last value:x 0 43 y
+ap[id:3, term:10] append key:0, index: 46, last value:x 0 44 y
+ap[id:3, term:10] append key:0, index: 47, last value:x 0 45 y
+ap[id:3, term:10] append key:0, index: 48, last value:x 0 46 y
+ap[id:3, term:10] append key:0, index: 49, last value:x 0 47 y
+ap[id:3, term:10] append key:0, index: 50, last value:x 0 48 y
+ap[id:3, term:10] append key:0, index: 51, last value:x 0 49 y
+ap[id:3, term:10] append key:0, index: 52, last value:x 0 50 y
+ap[id:3, term:10] append key:0, index: 53, last value:x 0 51 y
+ap[id:3, term:10] append key:0, index: 54, last value:x 0 52 y
+ap[id:3, term:10] append key:0, index: 55, last value:x 0 53 y
+ap[id:3, term:10] append key:0, index: 56, last value:x 0 54 y
+ap[id:3, term:10] append key:0, index: 57, last value:x 0 55 y
+ap[id:3, term:10] append key:0, index: 58, last value:x 0 56 y
+ap[id:3, term:10] append key:0, index: 59, last value:x 0 57 y
+ap[id:3, term:10] append key:0, index: 60, last value:x 0 58 y
+ap[id:3, term:10] append key:0, index: 61, last value:x 0 59 y
+ap[id:3, term:10] append key:0, index: 62, last value:x 0 60 y
+ap[id:3, term:10] append key:0, index: 63, last value:x 0 61 y
+ap[id:3, term:10] append key:0, index: 64, last value:x 0 62 y
+ap[id:3, term:10] append key:0, index: 65, last value:x 0 63 y
+ap[id:3, term:10] append key:0, index: 66, last value:x 0 64 y
+ap[id:3, term:10] append key:0, index: 67, last value:x 0 65 y
+ap[id:3, term:10] append key:0, index: 68, last value:x 0 66 y
+ap[id:3, term:10] append key:0, index: 69, last value:x 0 67 y
+ap[id:3, term:10] append key:0, index: 70, last value:x 0 68 y
+ap[id:3, term:10] append key:0, index: 71, last value:x 0 69 y
+ap[id:3, term:10] append key:0, index: 72, last value:x 0 70 y
+ap[id:3, term:10] append key:0, index: 73, last value:x 0 71 y
+ap[id:3, term:10] append key:0, index: 74, last value:x 0 72 y
+ap[id:3, term:10] append key:0, index: 75, last value:x 0 73 y
+ap[id:3, term:10] append key:0, index: 76, last value:x 0 74 y
+ap[id:3, term:10] append key:0, index: 77, last value:x 0 75 y
+ap[id:3, term:10] append key:0, index: 78, last value:x 0 76 y
+ap[id:3, term:10] append key:0, index: 79, last value:x 0 77 y
+ap[id:3, term:10] append key:0, index: 80, last value:x 0 78 y
+ap[id:3, term:10] append key:0, index: 81, last value:x 0 79 y
+ap[id:3, term:10] append key:0, index: 82, last value:x 0 80 y
+ap[id:3, term:10] append key:0, index: 83, last value:x 0 81 y
+ap[id:3, term:10] append key:0, index: 84, last value:x 0 82 y
+ap[id:3, term:10] append key:0, index: 85, last value:x 0 83 y
+ap[id:3, term:10] append key:0, index: 86, last value:x 0 84 y
+ap[id:3, term:10] append key:0, index: 87, last value:x 0 85 y
+ap[id:3, term:10] append key:0, index: 88, last value:x 0 86 y
+ap[id:3, term:10] append key:0, index: 89, last value:x 0 87 y
+ap[id:3, term:10] append key:0, index: 90, last value:x 0 88 y
+ap[id:3, term:10] append key:0, index: 91, last value:x 0 89 y
+ap[id:3, term:10] append key:0, index: 92, last value:x 0 90 y
+ap[id:3, term:10] append key:0, index: 93, last value:x 0 91 y
+ap[id:3, term:10] append key:0, index: 94, last value:x 0 92 y
+ap[id:3, term:10] append key:0, index: 95, last value:x 0 93 y
+ap[id:3, term:10] append key:0, index: 96, last value:x 0 94 y
+ap[id:3, term:10] append key:0, index: 97, last value:x 0 95 y
+ap[id:3, term:10] append key:0, index: 98, last value:x 0 96 y
+ap[id:3, term:10] append key:0, index: 99, last value:x 0 97 y
+ap[id:3, term:10] append key:0, index: 100, last value:x 0 98 y
+ap[id:3, term:10] append key:0, index: 101, last value:x 0 99 y
+ap[id:3, term:10] append key:0, index: 102, last value:x 0 100 y
+ap[id:3, term:10] append key:0, index: 103, last value:x 0 101 y
+ap[id:3, term:10] append key:0, index: 104, last value:x 0 102 y
+ap[id:3, term:10] append key:0, index: 105, last value:x 0 103 y
+ap[id:3, term:10] append key:0, index: 106, last value:x 0 104 y
+ap[id:3, term:10] append key:0, index: 107, last value:x 0 105 y
+ap[id:3, term:10] append key:0, index: 108, last value:x 0 106 y
+ap[id:3, term:10] append key:0, index: 109, last value:x 0 107 y
+ap[id:3, term:10] append key:0, index: 110, last value:x 0 108 y
+ap[id:3, term:10] append key:0, index: 111, last value:x 0 109 y
+ap[id:3, term:10] append key:0, index: 112, last value:x 0 110 y
+ap[id:3, term:10] append key:0, index: 113, last value:x 0 111 y
+ap[id:3, term:10] append key:0, index: 114, last value:x 0 112 y
+ap[id:3, term:10] append key:0, index: 115, last value:x 0 113 y
+ap[id:3, term:10] append key:0, index: 116, last value:x 0 114 y
+ap[id:3, term:10] append key:0, index: 117, last value:x 0 115 y
+ap[id:3, term:10] append key:0, index: 118, last value:x 0 116 y
+ap[id:3, term:10] append key:0, index: 119, last value:x 0 117 y
+ap[id:3, term:10] append key:0, index: 120, last value:x 0 118 y
+ap[id:3, term:10] append key:0, index: 121, last value:x 0 119 y
+ap[id:3, term:10] append key:0, index: 122, last value:x 0 120 y
+ap[id:3, term:10] append key:0, index: 123, last value:x 0 121 y
+ap[id:3, term:10] append key:0, index: 124, last value:x 0 122 y
+ap[id:3, term:10] append key:0, index: 125, last value:x 0 123 y
+ap[id:3, term:10] append key:0, index: 126, last value:x 0 124 y
+ap[id:3, term:10] append key:0, index: 127, last value:x 0 125 y
+ap[id:3, term:10] append key:0, index: 128, last value:x 0 126 y
+ap[id:3, term:10] append key:0, index: 129, last value:x 0 127 y
+ap[id:3, term:10] append key:0, index: 130, last value:x 0 128 y
+ap[id:3, term:10] append key:0, index: 131, last value:x 0 129 y
+ap[id:3, term:10] append key:0, index: 132, last value:x 0 130 y
+ap[id:3, term:10] append key:0, index: 133, last value:x 0 131 y
+ap[id:3, term:10] append key:0, index: 134, last value:x 0 132 y
+ap[id:3, term:10] append key:0, index: 135, last value:x 0 133 y
+ap[id:3, term:10] append key:0, index: 136, last value:x 0 134 y
+ap[id:3, term:10] append key:0, index: 137, last value:x 0 135 y
+ap[id:3, term:10] append key:0, index: 138, last value:x 0 136 y
+ap[id:3, term:10] append key:0, index: 139, last value:x 0 137 y
+ap[id:3, term:10] append key:0, index: 140, last value:x 0 138 y
+ap[id:3, term:10] append key:0, index: 141, last value:x 0 139 y
+ap[id:3, term:10] append key:0, index: 142, last value:x 0 140 y
+ap[id:3, term:10] append key:0, index: 143, last value:x 0 141 y
+ap[id:3, term:10] append key:0, index: 144, last value:x 0 142 y
+ap[id:3, term:10] append key:0, index: 145, last value:x 0 143 y
+ap[id:3, term:10] append key:0, index: 146, last value:x 0 144 y
+ap[id:3, term:10] append key:0, index: 147, last value:x 0 145 y
+ap[id:3, term:10] append key:0, index: 148, last value:x 0 146 y
+ap[id:3, term:10] append key:0, index: 149, last value:x 0 147 y
+ap[id:3, term:10] append key:0, index: 150, last value:x 0 148 y
+ap[id:3, term:10] append key:0, index: 151, last value:x 0 149 y
+ap[id:3, term:10] append key:0, index: 152, last value:x 0 150 y
+ap[id:3, term:10] append key:0, index: 153, last value:x 0 151 y
+ap[id:3, term:10] append key:0, index: 154, last value:x 0 152 y
+ap[id:3, term:10] append key:0, index: 155, last value:x 0 153 y
+ap[id:3, term:10] append key:0, index: 156, last value:x 0 154 y
+ap[id:3, term:10] append key:0, index: 157, last value:x 0 155 y
+ap[id:3, term:10] append key:0, index: 158, last value:x 0 156 y
+ap[id:3, term:10] append key:0, index: 159, last value:x 0 157 y
+ap[id:3, term:10] append key:0, index: 160, last value:x 0 158 y
+ap[id:3, term:10] append key:0, index: 161, last value:x 0 159 y
+ap[id:3, term:10] append key:0, index: 162, last value:x 0 160 y
+ap[id:3, term:10] append key:0, index: 163, last value:x 0 161 y
+ap[id:3, term:10] append key:0, index: 164, last value:x 0 162 y
+ap[id:3, term:10] append key:0, index: 165, last value:x 0 163 y
+ap[id:3, term:10] append key:0, index: 166, last value:x 0 164 y
+ap[id:3, term:10] append key:0, index: 167, last value:x 0 165 y
+ap[id:3, term:10] append key:0, index: 168, last value:x 0 166 y
+ap[id:3, term:10] append key:0, index: 169, last value:x 0 167 y
+ap[id:3, term:10] append key:0, index: 170, last value:x 0 168 y
+ap[id:3, term:10] append key:0, index: 171, last value:x 0 169 y
+ap[id:3, term:10] append key:0, index: 172, last value:x 0 170 y
+ap[id:3, term:10] append key:0, index: 173, last value:x 0 171 y
+ap[id:3, term:10] append key:0, index: 174, last value:x 0 172 y
+ap[id:3, term:10] append key:0, index: 175, last value:x 0 173 y
+ap[id:3, term:10] append key:0, index: 176, last value:x 0 174 y
+ap[id:3, term:10] append key:0, index: 177, last value:x 0 175 y
+ap[id:3, term:10] append key:0, index: 178, last value:x 0 176 y
+ap[id:3, term:10] append key:0, index: 179, last value:x 0 177 y
+ap[id:3, term:10] append key:0, index: 180, last value:x 0 178 y
+ap[id:3, term:10] append key:0, index: 181, last value:x 0 179 y
+ap[id:3, term:10] append key:0, index: 182, last value:x 0 180 y
+ap[id:3, term:10] append key:0, index: 183, last value:x 0 181 y
+ap[id:3, term:10] append key:0, index: 184, last value:x 0 182 y
+ap[id:3, term:10] append key:0, index: 185, last value:x 0 183 y
+ap[id:3, term:10] append key:0, index: 186, last value:x 0 184 y
+ap[id:3, term:10] append key:0, index: 187, last value:x 0 185 y
+ap[id:3, term:10] append key:0, index: 188, last value:x 0 186 y
+ap[id:3, term:10] append key:0, index: 189, last value:x 0 187 y
+ap[id:3, term:10] append key:0, index: 190, last value:x 0 188 y
+ap[id:3, term:10] append key:0, index: 191, last value:x 0 189 y
+ap[id:3, term:10] append key:0, index: 192, last value:x 0 190 y
+ap[id:3, term:10] append key:0, index: 193, last value:x 0 191 y
+ap[id:3, term:10] append key:0, index: 194, last value:x 0 192 y
+ap[id:3, term:10] append key:0, index: 195, last value:x 0 193 y
+ap[id:3, term:10] append key:0, index: 196, last value:x 0 194 y
+ap[id:3, term:10] append key:0, index: 197, last value:x 0 195 y
+ap[id:3, term:10] append key:0, index: 198, last value:x 0 196 y
+ap[id:3, term:10] append key:0, index: 199, last value:x 0 197 y
+ap[id:3, term:10] append key:0, index: 200, last value:x 0 198 y
+ap[id:3, term:10] append key:0, index: 201, last value:x 0 199 y
+ap[id:3, term:10] append key:0, index: 202, last value:x 0 200 y
+ap[id:3, term:10] append key:0, index: 203, last value:x 0 201 y
+ap[id:3, term:10] append key:0, index: 204, last value:x 0 202 y
+ap[id:3, term:10] append key:0, index: 205, last value:x 0 203 y
+ap[id:3, term:10] append key:0, index: 206, last value:x 0 204 y
+ap[id:3, term:10] append key:0, index: 207, last value:x 0 205 y
+ap[id:3, term:10] append key:0, index: 208, last value:x 0 206 y
+ap[id:3, term:10] append key:0, index: 209, last value:x 0 207 y
+ap[id:3, term:10] append key:0, index: 210, last value:x 0 208 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [211-211]
+[id:3, term:10] put key:0, index:211, last value:
+[id:3, term:10] 日志commit [212-212]
+[id:3, term:10] append key:0, index:212, last value:x 0 0 y
+[id:0, term:10] 日志commit [211-211]
+[id:3, term:10] get key:0 OK
+[id:4, term:10] 日志commit [211-211]
+[id:3, term:10] 日志commit [213-213]
+[id:3, term:10] append key:0, index:213, last value:x 0 1 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [214-214]
+[id:3, term:10] append key:0, index:214, last value:x 0 2 y
+[id:3, term:10] 日志commit [215-215]
+[id:3, term:10] append key:0, index:215, last value:x 0 3 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [216-216]
+[id:3, term:10] append key:0, index:216, last value:x 0 4 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [217-217]
+[id:3, term:10] append key:0, index:217, last value:x 0 5 y
+[id:3, term:10] 日志commit [218-218]
+[id:3, term:10] append key:0, index:218, last value:x 0 6 y
+[id:3, term:10] 日志commit [219-219]
+[id:3, term:10] append key:0, index:219, last value:x 0 7 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [220-220]
+[id:3, term:10] append key:0, index:220, last value:x 0 8 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [221-221]
+[id:3, term:10] append key:0, index:221, last value:x 0 9 y
+[id:3, term:10] 日志commit [222-222]
+[id:3, term:10] append key:0, index:222, last value:x 0 10 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [223-223]
+[id:3, term:10] append key:0, index:223, last value:x 0 11 y
+[id:3, term:10] 日志commit [224-224]
+[id:3, term:10] append key:0, index:224, last value:x 0 12 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [225-225]
+[id:3, term:10] append key:0, index:225, last value:x 0 13 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [226-226]
+[id:3, term:10] append key:0, index:226, last value:x 0 14 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [227-227]
+[id:3, term:10] append key:0, index:227, last value:x 0 15 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [228-228]
+[id:3, term:10] append key:0, index:228, last value:x 0 16 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [229-229]
+[id:3, term:10] append key:0, index:229, last value:x 0 17 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [230-230]
+[id:3, term:10] append key:0, index:230, last value:x 0 18 y
+[id:3, term:10] 日志commit [231-231]
+[id:3, term:10] append key:0, index:231, last value:x 0 19 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [232-232]
+[id:3, term:10] append key:0, index:232, last value:x 0 20 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [233-233]
+[id:3, term:10] append key:0, index:233, last value:x 0 21 y
+[id:3, term:10] 日志commit [234-234]
+[id:3, term:10] append key:0, index:234, last value:x 0 22 y
+[id:3, term:10] 日志commit [235-235]
+[id:3, term:10] append key:0, index:235, last value:x 0 23 y
+[id:3, term:10] 日志commit [236-236]
+[id:3, term:10] append key:0, index:236, last value:x 0 24 y
+[id:3, term:10] 日志commit [237-237]
+[id:3, term:10] append key:0, index:237, last value:x 0 25 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [238-238]
+[id:3, term:10] append key:0, index:238, last value:x 0 26 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [239-239]
+[id:3, term:10] append key:0, index:239, last value:x 0 27 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [240-240]
+[id:3, term:10] append key:0, index:240, last value:x 0 28 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [241-241]
+[id:3, term:10] append key:0, index:241, last value:x 0 29 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [242-242]
+[id:3, term:10] append key:0, index:242, last value:x 0 30 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [243-243]
+[id:3, term:10] append key:0, index:243, last value:x 0 31 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [244-244]
+[id:3, term:10] append key:0, index:244, last value:x 0 32 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [245-245]
+[id:3, term:10] append key:0, index:245, last value:x 0 33 y
+[id:3, term:10] 日志commit [246-246]
+[id:3, term:10] append key:0, index:246, last value:x 0 34 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [247-247]
+[id:3, term:10] append key:0, index:247, last value:x 0 35 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [248-248]
+[id:3, term:10] append key:0, index:248, last value:x 0 36 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [249-249]
+[id:3, term:10] append key:0, index:249, last value:x 0 37 y
+[id:3, term:10] 日志commit [250-250]
+[id:3, term:10] append key:0, index:250, last value:x 0 38 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [251-251]
+[id:3, term:10] append key:0, index:251, last value:x 0 39 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [252-252]
+[id:3, term:10] append key:0, index:252, last value:x 0 40 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [253-253]
+[id:3, term:10] append key:0, index:253, last value:x 0 41 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [254-254]
+[id:3, term:10] append key:0, index:254, last value:x 0 42 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [255-255]
+[id:3, term:10] append key:0, index:255, last value:x 0 43 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [256-256]
+[id:3, term:10] append key:0, index:256, last value:x 0 44 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [257-257]
+[id:3, term:10] append key:0, index:257, last value:x 0 45 y
+[id:3, term:10] 日志commit [258-258]
+[id:3, term:10] append key:0, index:258, last value:x 0 46 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [259-259]
+[id:3, term:10] append key:0, index:259, last value:x 0 47 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [260-260]
+[id:3, term:10] append key:0, index:260, last value:x 0 48 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [261-261]
+[id:3, term:10] append key:0, index:261, last value:x 0 49 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [262-262]
+[id:3, term:10] append key:0, index:262, last value:x 0 50 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [263-263]
+[id:3, term:10] append key:0, index:263, last value:x 0 51 y
+[id:3, term:10] 日志commit [264-264]
+[id:3, term:10] append key:0, index:264, last value:x 0 52 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [265-265]
+[id:3, term:10] append key:0, index:265, last value:x 0 53 y
+[id:3, term:10] 日志commit [266-266]
+[id:3, term:10] append key:0, index:266, last value:x 0 54 y
+[id:3, term:10] 日志commit [267-267]
+[id:3, term:10] append key:0, index:267, last value:x 0 55 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [268-268]
+[id:3, term:10] append key:0, index:268, last value:x 0 56 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [269-269]
+[id:3, term:10] append key:0, index:269, last value:x 0 57 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [270-270]
+[id:3, term:10] append key:0, index:270, last value:x 0 58 y
+[id:3, term:10] 日志commit [271-271]
+[id:3, term:10] append key:0, index:271, last value:x 0 59 y
+[id:3, term:10] 日志commit [272-272]
+[id:3, term:10] append key:0, index:272, last value:x 0 60 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [273-273]
+[id:3, term:10] append key:0, index:273, last value:x 0 61 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [274-274]
+[id:3, term:10] append key:0, index:274, last value:x 0 62 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [275-275]
+[id:3, term:10] append key:0, index:275, last value:x 0 63 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [276-276]
+[id:3, term:10] append key:0, index:276, last value:x 0 64 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [277-277]
+[id:3, term:10] append key:0, index:277, last value:x 0 65 y
+[id:3, term:10] 日志commit [278-278]
+[id:3, term:10] append key:0, index:278, last value:x 0 66 y
+[id:3, term:10] 日志commit [279-279]
+[id:3, term:10] append key:0, index:279, last value:x 0 67 y
+[id:3, term:10] 日志commit [280-280]
+[id:3, term:10] append key:0, index:280, last value:x 0 68 y
+[id:3, term:10] 日志commit [281-281]
+[id:3, term:10] append key:0, index:281, last value:x 0 69 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [282-282]
+[id:3, term:10] append key:0, index:282, last value:x 0 70 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [283-283]
+[id:3, term:10] append key:0, index:283, last value:x 0 71 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [284-284]
+[id:3, term:10] append key:0, index:284, last value:x 0 72 y
+[id:3, term:10] 日志commit [285-285]
+[id:3, term:10] append key:0, index:285, last value:x 0 73 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [286-286]
+[id:3, term:10] append key:0, index:286, last value:x 0 74 y
+[id:3, term:10] 日志commit [287-287]
+[id:3, term:10] append key:0, index:287, last value:x 0 75 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [288-288]
+[id:3, term:10] append key:0, index:288, last value:x 0 76 y
+[id:3, term:10] 日志commit [289-289]
+[id:3, term:10] append key:0, index:289, last value:x 0 77 y
+[id:3, term:10] 日志commit [290-290]
+[id:3, term:10] append key:0, index:290, last value:x 0 78 y
+[id:3, term:10] 日志commit [291-291]
+[id:3, term:10] append key:0, index:291, last value:x 0 79 y
+[id:3, term:10] 日志commit [292-292]
+[id:3, term:10] append key:0, index:292, last value:x 0 80 y
+[id:3, term:10] 日志commit [293-293]
+[id:3, term:10] append key:0, index:293, last value:x 0 81 y
+[id:3, term:10] 日志commit [294-294]
+[id:3, term:10] append key:0, index:294, last value:x 0 82 y
+[id:3, term:10] 日志commit [295-295]
+[id:3, term:10] append key:0, index:295, last value:x 0 83 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [296-296]
+[id:3, term:10] append key:0, index:296, last value:x 0 84 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [297-297]
+[id:3, term:10] append key:0, index:297, last value:x 0 85 y
+[id:3, term:10] 日志commit [298-298]
+[id:3, term:10] append key:0, index:298, last value:x 0 86 y
+[id:3, term:10] 日志commit [299-299]
+[id:3, term:10] append key:0, index:299, last value:x 0 87 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [300-300]
+[id:3, term:10] append key:0, index:300, last value:x 0 88 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [301-301]
+[id:3, term:10] append key:0, index:301, last value:x 0 89 y
+[id:3, term:10] 日志commit [302-302]
+[id:3, term:10] append key:0, index:302, last value:x 0 90 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [303-303]
+[id:3, term:10] append key:0, index:303, last value:x 0 91 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [304-304]
+[id:3, term:10] append key:0, index:304, last value:x 0 92 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [305-305]
+[id:3, term:10] append key:0, index:305, last value:x 0 93 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [306-306]
+[id:3, term:10] append key:0, index:306, last value:x 0 94 y
+[id:3, term:10] 日志commit [307-307]
+[id:3, term:10] append key:0, index:307, last value:x 0 95 y
+[id:3, term:10] 日志commit [308-308]
+[id:3, term:10] append key:0, index:308, last value:x 0 96 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [309-309]
+[id:3, term:10] append key:0, index:309, last value:x 0 97 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [310-310]
+[id:3, term:10] append key:0, index:310, last value:x 0 98 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [311-311]
+[id:3, term:10] append key:0, index:311, last value:x 0 99 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [312-312]
+[id:3, term:10] append key:0, index:312, last value:x 0 100 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [313-313]
+[id:3, term:10] append key:0, index:313, last value:x 0 101 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [314-314]
+[id:3, term:10] append key:0, index:314, last value:x 0 102 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [315-315]
+[id:3, term:10] append key:0, index:315, last value:x 0 103 y
+[id:3, term:10] 日志commit [316-316]
+[id:3, term:10] append key:0, index:316, last value:x 0 104 y
+[id:3, term:10] 日志commit [317-317]
+[id:3, term:10] append key:0, index:317, last value:x 0 105 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [318-318]
+[id:3, term:10] append key:0, index:318, last value:x 0 106 y
+[id:3, term:10] 日志commit [319-319]
+[id:3, term:10] append key:0, index:319, last value:x 0 107 y
+[id:3, term:10] 日志commit [320-320]
+[id:3, term:10] append key:0, index:320, last value:x 0 108 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [321-321]
+[id:3, term:10] append key:0, index:321, last value:x 0 109 y
+[id:3, term:10] 日志commit [322-322]
+[id:3, term:10] append key:0, index:322, last value:x 0 110 y
+[id:3, term:10] 日志commit [323-323]
+[id:3, term:10] append key:0, index:323, last value:x 0 111 y
+[id:3, term:10] 日志commit [324-324]
+[id:3, term:10] append key:0, index:324, last value:x 0 112 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [325-325]
+[id:3, term:10] append key:0, index:325, last value:x 0 113 y
+[id:3, term:10] 日志commit [326-326]
+[id:3, term:10] append key:0, index:326, last value:x 0 114 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [327-327]
+[id:3, term:10] append key:0, index:327, last value:x 0 115 y
+[id:3, term:10] 日志commit [328-328]
+[id:3, term:10] append key:0, index:328, last value:x 0 116 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [329-329]
+[id:3, term:10] append key:0, index:329, last value:x 0 117 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [330-330]
+[id:3, term:10] append key:0, index:330, last value:x 0 118 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [331-331]
+[id:3, term:10] append key:0, index:331, last value:x 0 119 y
+[id:3, term:10] 日志commit [332-332]
+[id:3, term:10] append key:0, index:332, last value:x 0 120 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [333-333]
+[id:3, term:10] append key:0, index:333, last value:x 0 121 y
+[id:3, term:10] 日志commit [334-334]
+[id:3, term:10] append key:0, index:334, last value:x 0 122 y
+[id:3, term:10] 日志commit [335-335]
+[id:3, term:10] append key:0, index:335, last value:x 0 123 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [336-336]
+[id:3, term:10] append key:0, index:336, last value:x 0 124 y
+[id:3, term:10] 日志commit [337-337]
+[id:3, term:10] append key:0, index:337, last value:x 0 125 y
+[id:3, term:10] 日志commit [338-338]
+[id:3, term:10] append key:0, index:338, last value:x 0 126 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [339-339]
+[id:3, term:10] append key:0, index:339, last value:x 0 127 y
+[id:3, term:10] 日志commit [340-340]
+[id:3, term:10] append key:0, index:340, last value:x 0 128 y
+[id:3, term:10] 日志commit [341-341]
+[id:3, term:10] append key:0, index:341, last value:x 0 129 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [342-342]
+[id:3, term:10] append key:0, index:342, last value:x 0 130 y
+[id:3, term:10] 日志commit [343-343]
+[id:3, term:10] append key:0, index:343, last value:x 0 131 y
+[id:3, term:10] 日志commit [344-344]
+[id:3, term:10] append key:0, index:344, last value:x 0 132 y
+[id:3, term:10] 日志commit [345-345]
+[id:3, term:10] append key:0, index:345, last value:x 0 133 y
+[id:3, term:10] 日志commit [346-346]
+[id:3, term:10] append key:0, index:346, last value:x 0 134 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [347-347]
+[id:3, term:10] append key:0, index:347, last value:x 0 135 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [348-348]
+[id:3, term:10] append key:0, index:348, last value:x 0 136 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [349-349]
+[id:3, term:10] append key:0, index:349, last value:x 0 137 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [350-350]
+[id:3, term:10] append key:0, index:350, last value:x 0 138 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [351-351]
+[id:3, term:10] append key:0, index:351, last value:x 0 139 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [352-352]
+[id:3, term:10] append key:0, index:352, last value:x 0 140 y
+[id:3, term:10] 日志commit [353-353]
+[id:3, term:10] append key:0, index:353, last value:x 0 141 y
+[id:3, term:10] 日志commit [354-354]
+[id:3, term:10] append key:0, index:354, last value:x 0 142 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [355-355]
+[id:3, term:10] append key:0, index:355, last value:x 0 143 y
+[id:3, term:10] 日志commit [356-356]
+[id:3, term:10] append key:0, index:356, last value:x 0 144 y
+[id:3, term:10] 日志commit [357-357]
+[id:3, term:10] append key:0, index:357, last value:x 0 145 y
+[id:3, term:10] 日志commit [358-358]
+[id:3, term:10] append key:0, index:358, last value:x 0 146 y
+[id:3, term:10] 日志commit [359-359]
+[id:3, term:10] append key:0, index:359, last value:x 0 147 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [360-360]
+[id:3, term:10] append key:0, index:360, last value:x 0 148 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [361-361]
+[id:3, term:10] append key:0, index:361, last value:x 0 149 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [362-362]
+[id:3, term:10] append key:0, index:362, last value:x 0 150 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+[id:3, term:10] 日志commit [363-363]
+[id:3, term:10] append key:0, index:363, last value:x 0 151 y
+[id:3, term:10] get key:0 OK
+[id:3, term:10] get key:0 OK
+term:12, 3 成为领导者
+[id:3, term:12] get key:0 OK
+[id:3, term:12] get key:0 OK
+[id:3, term:12] get key:0 OK
+term:14, 3 成为领导者
+[id:3, term:14] 日志commit [364-364]
+[id:3, term:14] append key:0, index: 364, last value:x 0 152 y
+[id:3, term:14] 日志commit [365-365]
+[id:3, term:14] append key:0, index:365, last value:x 0 153 y
+[id:3, term:14] 日志commit [366-366]
+[id:3, term:14] append key:0, index:366, last value:x 0 154 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [367-367]
+[id:3, term:14] append key:0, index:367, last value:x 0 155 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [368-368]
+[id:3, term:14] append key:0, index:368, last value:x 0 156 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [369-369]
+[id:3, term:14] append key:0, index:369, last value:x 0 157 y
+[id:3, term:14] 日志commit [370-370]
+[id:3, term:14] append key:0, index:370, last value:x 0 158 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [371-371]
+[id:3, term:14] append key:0, index:371, last value:x 0 159 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [372-372]
+[id:3, term:14] append key:0, index:372, last value:x 0 160 y
+[id:3, term:14] 日志commit [373-373]
+[id:3, term:14] append key:0, index:373, last value:x 0 161 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [374-374]
+[id:3, term:14] append key:0, index:374, last value:x 0 162 y
+[id:3, term:14] 日志commit [375-375]
+[id:3, term:14] append key:0, index:375, last value:x 0 163 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [376-376]
+[id:3, term:14] append key:0, index:376, last value:x 0 164 y
+[id:3, term:14] 日志commit [377-377]
+[id:3, term:14] append key:0, index:377, last value:x 0 165 y
+[id:3, term:14] 日志commit [378-378]
+[id:3, term:14] append key:0, index:378, last value:x 0 166 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [379-379]
+[id:3, term:14] append key:0, index:379, last value:x 0 167 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [380-380]
+[id:3, term:14] append key:0, index:380, last value:x 0 168 y
+[id:3, term:14] 日志commit [381-381]
+[id:3, term:14] append key:0, index:381, last value:x 0 169 y
+[id:3, term:14] 日志commit [382-382]
+[id:3, term:14] append key:0, index:382, last value:x 0 170 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [383-383]
+[id:3, term:14] append key:0, index:383, last value:x 0 171 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [384-384]
+[id:3, term:14] append key:0, index:384, last value:x 0 172 y
+[id:3, term:14] 日志commit [385-385]
+[id:3, term:14] append key:0, index:385, last value:x 0 173 y
+[id:3, term:14] 日志commit [386-386]
+[id:3, term:14] append key:0, index:386, last value:x 0 174 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [387-387]
+[id:3, term:14] append key:0, index:387, last value:x 0 175 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [388-388]
+[id:3, term:14] append key:0, index:388, last value:x 0 176 y
+[id:3, term:14] 日志commit [389-389]
+[id:3, term:14] append key:0, index:389, last value:x 0 177 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [390-390]
+[id:3, term:14] append key:0, index:390, last value:x 0 178 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [391-391]
+[id:3, term:14] append key:0, index:391, last value:x 0 179 y
+[id:3, term:14] 日志commit [392-392]
+[id:3, term:14] append key:0, index:392, last value:x 0 180 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [393-393]
+[id:3, term:14] append key:0, index:393, last value:x 0 181 y
+[id:3, term:14] 日志commit [394-394]
+[id:3, term:14] append key:0, index:394, last value:x 0 182 y
+[id:3, term:14] 日志commit [395-395]
+[id:3, term:14] append key:0, index:395, last value:x 0 183 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [396-396]
+[id:3, term:14] append key:0, index:396, last value:x 0 184 y
+[id:3, term:14] 日志commit [397-397]
+[id:3, term:14] append key:0, index:397, last value:x 0 185 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [398-398]
+[id:3, term:14] append key:0, index:398, last value:x 0 186 y
+[id:3, term:14] 日志commit [399-399]
+[id:3, term:14] append key:0, index:399, last value:x 0 187 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [400-400]
+[id:3, term:14] append key:0, index:400, last value:x 0 188 y
+[id:3, term:14] 日志commit [401-401]
+[id:3, term:14] append key:0, index:401, last value:x 0 189 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [402-402]
+[id:3, term:14] append key:0, index:402, last value:x 0 190 y
+[id:3, term:14] 日志commit [403-403]
+[id:3, term:14] append key:0, index:403, last value:x 0 191 y
+[id:3, term:14] 日志commit [404-404]
+[id:3, term:14] append key:0, index:404, last value:x 0 192 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [405-405]
+[id:3, term:14] append key:0, index:405, last value:x 0 193 y
+[id:3, term:14] 日志commit [406-406]
+[id:3, term:14] append key:0, index:406, last value:x 0 194 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [407-407]
+[id:3, term:14] append key:0, index:407, last value:x 0 195 y
+[id:3, term:14] 日志commit [408-408]
+[id:3, term:14] append key:0, index:408, last value:x 0 196 y
+[id:3, term:14] 日志commit [409-409]
+[id:3, term:14] append key:0, index:409, last value:x 0 197 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [410-410]
+[id:3, term:14] append key:0, index:410, last value:x 0 198 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [411-411]
+[id:3, term:14] append key:0, index:411, last value:x 0 199 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [412-412]
+[id:3, term:14] append key:0, index:412, last value:x 0 200 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [413-413]
+[id:3, term:14] append key:0, index:413, last value:x 0 201 y
+[id:3, term:14] 日志commit [414-414]
+[id:3, term:14] append key:0, index:414, last value:x 0 202 y
+[id:3, term:14] 日志commit [415-415]
+[id:3, term:14] append key:0, index:415, last value:x 0 203 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [416-416]
+[id:3, term:14] append key:0, index:416, last value:x 0 204 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [417-417]
+[id:3, term:14] append key:0, index:417, last value:x 0 205 y
+[id:3, term:14] 日志commit [418-418]
+[id:3, term:14] append key:0, index:418, last value:x 0 206 y
+[id:3, term:14] 日志commit [419-419]
+[id:3, term:14] append key:0, index:419, last value:x 0 207 y
+[id:3, term:14] 日志commit [420-420]
+[id:3, term:14] append key:0, index:420, last value:x 0 208 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [421-421]
+[id:3, term:14] append key:0, index:421, last value:x 0 209 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [422-422]
+[id:3, term:14] append key:0, index:422, last value:x 0 210 y
+[id:3, term:14] 日志commit [423-423]
+[id:3, term:14] append key:0, index:423, last value:x 0 211 y
+[id:3, term:14] 日志commit [424-424]
+[id:3, term:14] append key:0, index:424, last value:x 0 212 y
+[id:3, term:14] 日志commit [425-425]
+[id:3, term:14] append key:0, index:425, last value:x 0 213 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [426-426]
+[id:3, term:14] append key:0, index:426, last value:x 0 214 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [427-427]
+[id:3, term:14] append key:0, index:427, last value:x 0 215 y
+[id:3, term:14] 日志commit [428-428]
+[id:3, term:14] append key:0, index:428, last value:x 0 216 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [429-429]
+[id:3, term:14] append key:0, index:429, last value:x 0 217 y
+[id:3, term:14] 日志commit [430-430]
+[id:3, term:14] append key:0, index:430, last value:x 0 218 y
+[id:3, term:14] 日志commit [431-431]
+[id:3, term:14] append key:0, index:431, last value:x 0 219 y
+[id:3, term:14] 日志commit [432-432]
+[id:3, term:14] append key:0, index:432, last value:x 0 220 y
+[id:3, term:14] 日志commit [433-433]
+[id:3, term:14] append key:0, index:433, last value:x 0 221 y
+[id:3, term:14] 日志commit [434-434]
+[id:3, term:14] append key:0, index:434, last value:x 0 222 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [435-435]
+[id:3, term:14] append key:0, index:435, last value:x 0 223 y
+[id:3, term:14] 日志commit [436-436]
+[id:3, term:14] append key:0, index:436, last value:x 0 224 y
+[id:3, term:14] 日志commit [437-437]
+[id:3, term:14] append key:0, index:437, last value:x 0 225 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [438-438]
+[id:3, term:14] append key:0, index:438, last value:x 0 226 y
+[id:3, term:14] 日志commit [439-439]
+[id:3, term:14] append key:0, index:439, last value:x 0 227 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [440-440]
+[id:3, term:14] append key:0, index:440, last value:x 0 228 y
+[id:3, term:14] 日志commit [441-441]
+[id:3, term:14] append key:0, index:441, last value:x 0 229 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [442-442]
+[id:3, term:14] append key:0, index:442, last value:x 0 230 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [443-443]
+[id:3, term:14] append key:0, index:443, last value:x 0 231 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [444-444]
+[id:3, term:14] append key:0, index:444, last value:x 0 232 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [445-445]
+[id:3, term:14] append key:0, index:445, last value:x 0 233 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [446-446]
+[id:3, term:14] append key:0, index:446, last value:x 0 234 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [447-447]
+[id:3, term:14] append key:0, index:447, last value:x 0 235 y
+[id:3, term:14] 日志commit [448-448]
+[id:3, term:14] append key:0, index:448, last value:x 0 236 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [449-449]
+[id:3, term:14] append key:0, index:449, last value:x 0 237 y
+[id:3, term:14] 日志commit [450-450]
+[id:3, term:14] append key:0, index:450, last value:x 0 238 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [451-451]
+[id:3, term:14] append key:0, index:451, last value:x 0 239 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [452-452]
+[id:3, term:14] append key:0, index:452, last value:x 0 240 y
+[id:3, term:14] 日志commit [453-453]
+[id:3, term:14] append key:0, index:453, last value:x 0 241 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [454-454]
+[id:3, term:14] append key:0, index:454, last value:x 0 242 y
+[id:3, term:14] 日志commit [455-455]
+[id:3, term:14] append key:0, index:455, last value:x 0 243 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [456-456]
+[id:3, term:14] append key:0, index:456, last value:x 0 244 y
+[id:3, term:14] 日志commit [457-457]
+[id:3, term:14] append key:0, index:457, last value:x 0 245 y
+[id:3, term:14] 日志commit [458-458]
+[id:3, term:14] append key:0, index:458, last value:x 0 246 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [459-459]
+[id:3, term:14] append key:0, index:459, last value:x 0 247 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [460-460]
+[id:3, term:14] append key:0, index:460, last value:x 0 248 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [461-461]
+[id:3, term:14] append key:0, index:461, last value:x 0 249 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [462-462]
+[id:3, term:14] append key:0, index:462, last value:x 0 250 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [463-463]
+[id:3, term:14] append key:0, index:463, last value:x 0 251 y
+[id:3, term:14] 日志commit [464-464]
+[id:3, term:14] append key:0, index:464, last value:x 0 252 y
+[id:3, term:14] 日志commit [465-465]
+[id:3, term:14] append key:0, index:465, last value:x 0 253 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [466-466]
+[id:3, term:14] append key:0, index:466, last value:x 0 254 y
+[id:3, term:14] 日志commit [467-467]
+[id:3, term:14] append key:0, index:467, last value:x 0 255 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [468-468]
+[id:3, term:14] append key:0, index:468, last value:x 0 256 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [469-469]
+[id:3, term:14] append key:0, index:469, last value:x 0 257 y
+[id:3, term:14] 日志commit [470-470]
+[id:3, term:14] append key:0, index:470, last value:x 0 258 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [471-471]
+[id:3, term:14] append key:0, index:471, last value:x 0 259 y
+[id:3, term:14] 日志commit [472-472]
+[id:3, term:14] append key:0, index:472, last value:x 0 260 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [473-473]
+[id:3, term:14] append key:0, index:473, last value:x 0 261 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [474-474]
+[id:3, term:14] append key:0, index:474, last value:x 0 262 y
+[id:3, term:14] 日志commit [475-475]
+[id:3, term:14] append key:0, index:475, last value:x 0 263 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [476-476]
+[id:3, term:14] append key:0, index:476, last value:x 0 264 y
+[id:3, term:14] 日志commit [477-477]
+[id:3, term:14] append key:0, index:477, last value:x 0 265 y
+[id:3, term:14] 日志commit [478-478]
+[id:3, term:14] append key:0, index:478, last value:x 0 266 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [479-479]
+[id:3, term:14] append key:0, index:479, last value:x 0 267 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [480-480]
+[id:3, term:14] append key:0, index:480, last value:x 0 268 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [481-481]
+[id:3, term:14] append key:0, index:481, last value:x 0 269 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [482-482]
+[id:3, term:14] append key:0, index:482, last value:x 0 270 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [483-483]
+[id:3, term:14] append key:0, index:483, last value:x 0 271 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [484-484]
+[id:3, term:14] append key:0, index:484, last value:x 0 272 y
+[id:3, term:14] 日志commit [485-485]
+[id:3, term:14] append key:0, index:485, last value:x 0 273 y
+[id:3, term:14] 日志commit [486-486]
+[id:3, term:14] append key:0, index:486, last value:x 0 274 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [487-487]
+[id:3, term:14] append key:0, index:487, last value:x 0 275 y
+[id:3, term:14] 日志commit [488-488]
+[id:3, term:14] append key:0, index:488, last value:x 0 276 y
+[id:3, term:14] 日志commit [489-489]
+[id:3, term:14] append key:0, index:489, last value:x 0 277 y
+[id:3, term:14] 日志commit [490-490]
+[id:3, term:14] append key:0, index:490, last value:x 0 278 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [491-491]
+[id:3, term:14] append key:0, index:491, last value:x 0 279 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [492-492]
+[id:3, term:14] append key:0, index:492, last value:x 0 280 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [493-493]
+[id:3, term:14] append key:0, index:493, last value:x 0 281 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [494-494]
+[id:3, term:14] append key:0, index:494, last value:x 0 282 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [495-495]
+[id:3, term:14] append key:0, index:495, last value:x 0 283 y
+[id:3, term:14] 日志commit [496-496]
+[id:3, term:14] append key:0, index:496, last value:x 0 284 y
+[id:3, term:14] 日志commit [497-497]
+[id:3, term:14] append key:0, index:497, last value:x 0 285 y
+[id:3, term:14] 日志commit [498-498]
+[id:3, term:14] append key:0, index:498, last value:x 0 286 y
+[id:3, term:14] 日志commit [499-499]
+[id:3, term:14] append key:0, index:499, last value:x 0 287 y
+[id:3, term:14] 日志commit [500-500]
+[id:3, term:14] append key:0, index:500, last value:x 0 288 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [501-501]
+[id:3, term:14] append key:0, index:501, last value:x 0 289 y
+[id:3, term:14] 日志commit [502-502]
+[id:3, term:14] append key:0, index:502, last value:x 0 290 y
+[id:3, term:14] 日志commit [503-503]
+[id:3, term:14] append key:0, index:503, last value:x 0 291 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [504-504]
+[id:3, term:14] append key:0, index:504, last value:x 0 292 y
+[id:3, term:14] 日志commit [505-505]
+[id:3, term:14] append key:0, index:505, last value:x 0 293 y
+[id:3, term:14] 日志commit [506-506]
+[id:3, term:14] append key:0, index:506, last value:x 0 294 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [507-507]
+[id:3, term:14] append key:0, index:507, last value:x 0 295 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [508-508]
+[id:3, term:14] append key:0, index:508, last value:x 0 296 y
+[id:3, term:14] 日志commit [509-509]
+[id:3, term:14] append key:0, index:509, last value:x 0 297 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [510-510]
+[id:3, term:14] append key:0, index:510, last value:x 0 298 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [511-511]
+[id:3, term:14] append key:0, index:511, last value:x 0 299 y
+[id:3, term:14] 日志commit [512-512]
+[id:3, term:14] append key:0, index:512, last value:x 0 300 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [513-513]
+[id:3, term:14] append key:0, index:513, last value:x 0 301 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [514-514]
+[id:3, term:14] append key:0, index:514, last value:x 0 302 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [515-515]
+[id:3, term:14] append key:0, index:515, last value:x 0 303 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [516-516]
+[id:3, term:14] append key:0, index:516, last value:x 0 304 y
+[id:3, term:14] 日志commit [517-517]
+[id:3, term:14] append key:0, index:517, last value:x 0 305 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [518-518]
+[id:3, term:14] append key:0, index:518, last value:x 0 306 y
+[id:3, term:14] 日志commit [519-519]
+[id:3, term:14] append key:0, index:519, last value:x 0 307 y
+[id:3, term:14] 日志commit [520-520]
+[id:3, term:14] append key:0, index:520, last value:x 0 308 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [521-521]
+[id:3, term:14] append key:0, index:521, last value:x 0 309 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [522-522]
+[id:3, term:14] append key:0, index:522, last value:x 0 310 y
+[id:3, term:14] 日志commit [523-523]
+[id:3, term:14] append key:0, index:523, last value:x 0 311 y
+[id:3, term:14] 日志commit [524-524]
+[id:3, term:14] append key:0, index:524, last value:x 0 312 y
+[id:3, term:14] 日志commit [525-525]
+[id:3, term:14] append key:0, index:525, last value:x 0 313 y
+[id:3, term:14] 日志commit [526-526]
+[id:3, term:14] append key:0, index:526, last value:x 0 314 y
+[id:3, term:14] 日志commit [527-527]
+[id:3, term:14] append key:0, index:527, last value:x 0 315 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [528-528]
+[id:3, term:14] append key:0, index:528, last value:x 0 316 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [529-529]
+[id:3, term:14] append key:0, index:529, last value:x 0 317 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [530-530]
+[id:3, term:14] append key:0, index:530, last value:x 0 318 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [531-531]
+[id:3, term:14] append key:0, index:531, last value:x 0 319 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [532-532]
+[id:3, term:14] append key:0, index:532, last value:x 0 320 y
+[id:3, term:14] 日志commit [533-533]
+[id:3, term:14] append key:0, index:533, last value:x 0 321 y
+[id:3, term:14] 日志commit [534-534]
+[id:3, term:14] append key:0, index:534, last value:x 0 322 y
+[id:3, term:14] 日志commit [535-535]
+[id:3, term:14] append key:0, index:535, last value:x 0 323 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [536-536]
+[id:3, term:14] append key:0, index:536, last value:x 0 324 y
+[id:3, term:14] 日志commit [537-537]
+[id:3, term:14] append key:0, index:537, last value:x 0 325 y
+[id:3, term:14] 日志commit [538-538]
+[id:3, term:14] append key:0, index:538, last value:x 0 326 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [539-539]
+[id:3, term:14] append key:0, index:539, last value:x 0 327 y
+[id:3, term:14] get key:0 OK
+[id:3, term:14] get key:0 OK
+[id:3, term:14] 日志commit [540-540]
+[id:3, term:14] append key:0, index:540, last value:x 0 328 y
+term:18, 3 成为领导者
+[id:3, term:18] get key:0 OK
+[id:3, term:18] 日志commit [541-541]
+[id:3, term:18] append key:0, index:541, last value:x 0 329 y
+[id:3, term:18] get key:0 OK
+[id:3, term:18] get key:0 OK
+[id:3, term:18] get key:0 OK
+[id:3, term:18] get key:0 OK
+[id:3, term:18] 日志commit [542-542]
+[id:3, term:18] append key:0, index:542, last value:x 0 330 y
+[id:3, term:18] get key:0 OK
+[id:3, term:18] get key:0 OK
+[id:3, term:18] get key:0 OK
+[id:3, term:18] 日志commit [543-543]
+[id:3, term:18] append key:0, index:543, last value:x 0 331 y
+[id:3, term:18] 日志commit [544-544]
+[id:3, term:18] append key:0, index:544, last value:x 0 332 y
+[id:3, term:18] get key:0 OK
+[id:3, term:18] 日志commit [545-545]
+[id:3, term:18] append key:0, index:545, last value:x 0 333 y
+term:19, 4 成为领导者
+[id:4, term:19] put key:0, index:211, last value:
+[id:4, term:19] 日志commit [212-546]
+[id:4, term:19] append key:0, index: 212, last value:x 0 0 y
+[id:4, term:19] append key:0, index: 213, last value:x 0 1 y
+[id:4, term:19] append key:0, index: 214, last value:x 0 2 y
+[id:4, term:19] append key:0, index: 215, last value:x 0 3 y
+[id:4, term:19] append key:0, index: 216, last value:x 0 4 y
+[id:4, term:19] append key:0, index: 217, last value:x 0 5 y
+[id:4, term:19] append key:0, index: 218, last value:x 0 6 y
+[id:4, term:19] append key:0, index: 219, last value:x 0 7 y
+[id:4, term:19] append key:0, index: 220, last value:x 0 8 y
+[id:4, term:19] append key:0, index: 221, last value:x 0 9 y
+[id:4, term:19] append key:0, index: 222, last value:x 0 10 y
+[id:4, term:19] append key:0, index: 223, last value:x 0 11 y
+[id:4, term:19] append key:0, index: 224, last value:x 0 12 y
+[id:4, term:19] append key:0, index: 225, last value:x 0 13 y
+[id:4, term:19] append key:0, index: 226, last value:x 0 14 y
+[id:4, term:19] append key:0, index: 227, last value:x 0 15 y
+[id:4, term:19] append key:0, index: 228, last value:x 0 16 y
+[id:4, term:19] append key:0, index: 229, last value:x 0 17 y
+[id:4, term:19] append key:0, index: 230, last value:x 0 18 y
+[id:4, term:19] append key:0, index: 231, last value:x 0 19 y
+[id:4, term:19] append key:0, index: 232, last value:x 0 20 y
+[id:4, term:19] append key:0, index: 233, last value:x 0 21 y
+[id:4, term:19] append key:0, index: 234, last value:x 0 22 y
+[id:4, term:19] append key:0, index: 235, last value:x 0 23 y
+[id:4, term:19] append key:0, index: 236, last value:x 0 24 y
+[id:4, term:19] append key:0, index: 237, last value:x 0 25 y
+[id:4, term:19] append key:0, index: 238, last value:x 0 26 y
+[id:4, term:19] append key:0, index: 239, last value:x 0 27 y
+[id:4, term:19] append key:0, index: 240, last value:x 0 28 y
+[id:4, term:19] append key:0, index: 241, last value:x 0 29 y
+[id:4, term:19] append key:0, index: 242, last value:x 0 30 y
+[id:4, term:19] append key:0, index: 243, last value:x 0 31 y
+[id:4, term:19] append key:0, index: 244, last value:x 0 32 y
+[id:4, term:19] append key:0, index: 245, last value:x 0 33 y
+[id:4, term:19] append key:0, index: 246, last value:x 0 34 y
+[id:4, term:19] append key:0, index: 247, last value:x 0 35 y
+[id:4, term:19] append key:0, index: 248, last value:x 0 36 y
+[id:4, term:19] append key:0, index: 249, last value:x 0 37 y
+[id:4, term:19] append key:0, index: 250, last value:x 0 38 y
+[id:4, term:19] append key:0, index: 251, last value:x 0 39 y
+[id:4, term:19] append key:0, index: 252, last value:x 0 40 y
+[id:4, term:19] append key:0, index: 253, last value:x 0 41 y
+[id:4, term:19] append key:0, index: 254, last value:x 0 42 y
+[id:4, term:19] append key:0, index: 255, last value:x 0 43 y
+[id:4, term:19] append key:0, index: 256, last value:x 0 44 y
+[id:4, term:19] append key:0, index: 257, last value:x 0 45 y
+[id:4, term:19] append key:0, index: 258, last value:x 0 46 y
+[id:4, term:19] append key:0, index: 259, last value:x 0 47 y
+[id:4, term:19] append key:0, index: 260, last value:x 0 48 y
+[id:4, term:19] append key:0, index: 261, last value:x 0 49 y
+[id:4, term:19] append key:0, index: 262, last value:x 0 50 y
+[id:4, term:19] append key:0, index: 263, last value:x 0 51 y
+[id:4, term:19] append key:0, index: 264, last value:x 0 52 y
+[id:4, term:19] append key:0, index: 265, last value:x 0 53 y
+[id:4, term:19] append key:0, index: 266, last value:x 0 54 y
+[id:4, term:19] append key:0, index: 267, last value:x 0 55 y
+[id:4, term:19] append key:0, index: 268, last value:x 0 56 y
+[id:4, term:19] append key:0, index: 269, last value:x 0 57 y
+[id:4, term:19] append key:0, index: 270, last value:x 0 58 y
+[id:4, term:19] append key:0, index: 271, last value:x 0 59 y
+[id:4, term:19] append key:0, index: 272, last value:x 0 60 y
+[id:4, term:19] append key:0, index: 273, last value:x 0 61 y
+[id:4, term:19] append key:0, index: 274, last value:x 0 62 y
+[id:4, term:19] append key:0, index: 275, last value:x 0 63 y
+[id:4, term:19] append key:0, index: 276, last value:x 0 64 y
+[id:4, term:19] append key:0, index: 277, last value:x 0 65 y
+[id:4, term:19] append key:0, index: 278, last value:x 0 66 y
+[id:4, term:19] append key:0, index: 279, last value:x 0 67 y
+[id:4, term:19] append key:0, index: 280, last value:x 0 68 y
+[id:4, term:19] append key:0, index: 281, last value:x 0 69 y
+[id:4, term:19] append key:0, index: 282, last value:x 0 70 y
+[id:4, term:19] append key:0, index: 283, last value:x 0 71 y
+[id:4, term:19] append key:0, index: 284, last value:x 0 72 y
+[id:4, term:19] append key:0, index: 285, last value:x 0 73 y
+[id:4, term:19] append key:0, index: 286, last value:x 0 74 y
+[id:4, term:19] append key:0, index: 287, last value:x 0 75 y
+[id:4, term:19] append key:0, index: 288, last value:x 0 76 y
+[id:4, term:19] append key:0, index: 289, last value:x 0 77 y
+[id:4, term:19] append key:0, index: 290, last value:x 0 78 y
+[id:4, term:19] append key:0, index: 291, last value:x 0 79 y
+[id:4, term:19] append key:0, index: 292, last value:x 0 80 y
+[id:4, term:19] append key:0, index: 293, last value:x 0 81 y
+[id:4, term:19] append key:0, index: 294, last value:x 0 82 y
+[id:4, term:19] append key:0, index: 295, last value:x 0 83 y
+[id:4, term:19] append key:0, index: 296, last value:x 0 84 y
+[id:4, term:19] append key:0, index: 297, last value:x 0 85 y
+[id:4, term:19] append key:0, index: 298, last value:x 0 86 y
+[id:4, term:19] append key:0, index: 299, last value:x 0 87 y
+[id:4, term:19] append key:0, index: 300, last value:x 0 88 y
+[id:4, term:19] append key:0, index: 301, last value:x 0 89 y
+[id:4, term:19] append key:0, index: 302, last value:x 0 90 y
+[id:4, term:19] append key:0, index: 303, last value:x 0 91 y
+[id:4, term:19] append key:0, index: 304, last value:x 0 92 y
+[id:4, term:19] append key:0, index: 305, last value:x 0 93 y
+[id:4, term:19] append key:0, index: 306, last value:x 0 94 y
+[id:4, term:19] append key:0, index: 307, last value:x 0 95 y
+[id:4, term:19] append key:0, index: 308, last value:x 0 96 y
+[id:4, term:19] append key:0, index: 309, last value:x 0 97 y
+[id:4, term:19] append key:0, index: 310, last value:x 0 98 y
+[id:4, term:19] append key:0, index: 311, last value:x 0 99 y
+[id:4, term:19] append key:0, index: 312, last value:x 0 100 y
+[id:4, term:19] append key:0, index: 313, last value:x 0 101 y
+[id:4, term:19] append key:0, index: 314, last value:x 0 102 y
+[id:4, term:19] append key:0, index: 315, last value:x 0 103 y
+[id:4, term:19] append key:0, index: 316, last value:x 0 104 y
+[id:4, term:19] append key:0, index: 317, last value:x 0 105 y
+[id:4, term:19] append key:0, index: 318, last value:x 0 106 y
+[id:4, term:19] append key:0, index: 319, last value:x 0 107 y
+[id:4, term:19] append key:0, index: 320, last value:x 0 108 y
+[id:4, term:19] append key:0, index: 321, last value:x 0 109 y
+[id:4, term:19] append key:0, index: 322, last value:x 0 110 y
+[id:4, term:19] append key:0, index: 323, last value:x 0 111 y
+[id:4, term:19] append key:0, index: 324, last value:x 0 112 y
+[id:4, term:19] append key:0, index: 325, last value:x 0 113 y
+[id:4, term:19] append key:0, index: 326, last value:x 0 114 y
+[id:4, term:19] append key:0, index: 327, last value:x 0 115 y
+[id:4, term:19] append key:0, index: 328, last value:x 0 116 y
+[id:4, term:19] append key:0, index: 329, last value:x 0 117 y
+[id:4, term:19] append key:0, index: 330, last value:x 0 118 y
+[id:4, term:19] append key:0, index: 331, last value:x 0 119 y
+[id:4, term:19] append key:0, index: 332, last value:x 0 120 y
+[id:4, term:19] append key:0, index: 333, last value:x 0 121 y
+[id:4, term:19] append key:0, index: 334, last value:x 0 122 y
+[id:4, term:19] append key:0, index: 335, last value:x 0 123 y
+[id:4, term:19] append key:0, index: 336, last value:x 0 124 y
+[id:4, term:19] append key:0, index: 337, last value:x 0 125 y
+[id:4, term:19] append key:0, index: 338, last value:x 0 126 y
+[id:4, term:19] append key:0, index: 339, last value:x 0 127 y
+[id:4, term:19] append key:0, index: 340, last value:x 0 128 y
+[id:4, term:19] append key:0, index: 341, last value:x 0 129 y
+[id:4, term:19] append key:0, index: 342, last value:x 0 130 y
+[id:4, term:19] append key:0, index: 343, last value:x 0 131 y
+[id:4, term:19] append key:0, index: 344, last value:x 0 132 y
+[id:4, term:19] append key:0, index: 345, last value:x 0 133 y
+[id:4, term:19] append key:0, index: 346, last value:x 0 134 y
+[id:4, term:19] append key:0, index: 347, last value:x 0 135 y
+[id:4, term:19] append key:0, index: 348, last value:x 0 136 y
+[id:4, term:19] append key:0, index: 349, last value:x 0 137 y
+[id:4, term:19] append key:0, index: 350, last value:x 0 138 y
+[id:4, term:19] append key:0, index: 351, last value:x 0 139 y
+[id:4, term:19] append key:0, index: 352, last value:x 0 140 y
+[id:4, term:19] append key:0, index: 353, last value:x 0 141 y
+[id:4, term:19] append key:0, index: 354, last value:x 0 142 y
+[id:4, term:19] append key:0, index: 355, last value:x 0 143 y
+[id:4, term:19] append key:0, index: 356, last value:x 0 144 y
+[id:4, term:19] append key:0, index: 357, last value:x 0 145 y
+[id:4, term:19] append key:0, index: 358, last value:x 0 146 y
+[id:4, term:19] append key:0, index: 359, last value:x 0 147 y
+[id:4, term:19] append key:0, index: 360, last value:x 0 148 y
+[id:4, term:19] append key:0, index: 361, last value:x 0 149 y
+[id:4, term:19] append key:0, index: 362, last value:x 0 150 y
+[id:4, term:19] append key:0, index: 363, last value:x 0 151 y
+[id:4, term:19] append key:0, index: 364, last value:x 0 152 y
+[id:4, term:19] append key:0, index: 365, last value:x 0 153 y
+[id:4, term:19] append key:0, index: 366, last value:x 0 154 y
+[id:4, term:19] append key:0, index: 367, last value:x 0 155 y
+[id:4, term:19] append key:0, index: 368, last value:x 0 156 y
+[id:4, term:19] append key:0, index: 369, last value:x 0 157 y
+[id:4, term:19] append key:0, index: 370, last value:x 0 158 y
+[id:4, term:19] append key:0, index: 371, last value:x 0 159 y
+[id:4, term:19] append key:0, index: 372, last value:x 0 160 y
+[id:4, term:19] append key:0, index: 373, last value:x 0 161 y
+[id:4, term:19] append key:0, index: 374, last value:x 0 162 y
+[id:4, term:19] append key:0, index: 375, last value:x 0 163 y
+[id:4, term:19] append key:0, index: 376, last value:x 0 164 y
+[id:4, term:19] append key:0, index: 377, last value:x 0 165 y
+[id:4, term:19] append key:0, index: 378, last value:x 0 166 y
+[id:4, term:19] append key:0, index: 379, last value:x 0 167 y
+[id:4, term:19] append key:0, index: 380, last value:x 0 168 y
+[id:4, term:19] append key:0, index: 381, last value:x 0 169 y
+[id:4, term:19] append key:0, index: 382, last value:x 0 170 y
+[id:4, term:19] append key:0, index: 383, last value:x 0 171 y
+[id:4, term:19] append key:0, index: 384, last value:x 0 172 y
+[id:4, term:19] append key:0, index: 385, last value:x 0 173 y
+[id:4, term:19] append key:0, index: 386, last value:x 0 174 y
+[id:4, term:19] append key:0, index: 387, last value:x 0 175 y
+[id:4, term:19] append key:0, index: 388, last value:x 0 176 y
+[id:4, term:19] append key:0, index: 389, last value:x 0 177 y
+[id:4, term:19] append key:0, index: 390, last value:x 0 178 y
+[id:4, term:19] append key:0, index: 391, last value:x 0 179 y
+[id:4, term:19] append key:0, index: 392, last value:x 0 180 y
+[id:4, term:19] append key:0, index: 393, last value:x 0 181 y
+[id:4, term:19] append key:0, index: 394, last value:x 0 182 y
+[id:4, term:19] append key:0, index: 395, last value:x 0 183 y
+[id:4, term:19] append key:0, index: 396, last value:x 0 184 y
+[id:4, term:19] append key:0, index: 397, last value:x 0 185 y
+[id:4, term:19] append key:0, index: 398, last value:x 0 186 y
+[id:4, term:19] append key:0, index: 399, last value:x 0 187 y
+[id:4, term:19] append key:0, index: 400, last value:x 0 188 y
+[id:4, term:19] append key:0, index: 401, last value:x 0 189 y
+[id:4, term:19] append key:0, index: 402, last value:x 0 190 y
+[id:4, term:19] append key:0, index: 403, last value:x 0 191 y
+[id:4, term:19] append key:0, index: 404, last value:x 0 192 y
+[id:4, term:19] append key:0, index: 405, last value:x 0 193 y
+[id:4, term:19] append key:0, index: 406, last value:x 0 194 y
+[id:4, term:19] append key:0, index: 407, last value:x 0 195 y
+[id:4, term:19] append key:0, index: 408, last value:x 0 196 y
+[id:4, term:19] append key:0, index: 409, last value:x 0 197 y
+[id:4, term:19] append key:0, index: 410, last value:x 0 198 y
+[id:4, term:19] append key:0, index: 411, last value:x 0 199 y
+[id:4, term:19] append key:0, index: 412, last value:x 0 200 y
+[id:4, term:19] append key:0, index: 413, last value:x 0 201 y
+[id:4, term:19] append key:0, index: 414, last value:x 0 202 y
+[id:4, term:19] append key:0, index: 415, last value:x 0 203 y
+[id:4, term:19] append key:0, index: 416, last value:x 0 204 y
+[id:4, term:19] append key:0, index: 417, last value:x 0 205 y
+[id:4, term:19] append key:0, index: 418, last value:x 0 206 y
+[id:4, term:19] append key:0, index: 419, last value:x 0 207 y
+[id:4, term:19] append key:0, index: 420, last value:x 0 208 y
+[id:4, term:19] append key:0, index: 421, last value:x 0 209 y
+[id:4, term:19] append key:0, index: 422, last value:x 0 210 y
+[id:4, term:19] append key:0, index: 423, last value:x 0 211 y
+[id:4, term:19] append key:0, index: 424, last value:x 0 212 y
+[id:4, term:19] append key:0, index: 425, last value:x 0 213 y
+[id:4, term:19] append key:0, index: 426, last value:x 0 214 y
+[id:4, term:19] append key:0, index: 427, last value:x 0 215 y
+[id:4, term:19] append key:0, index: 428, last value:x 0 216 y
+[id:4, term:19] append key:0, index: 429, last value:x 0 217 y
+[id:4, term:19] append key:0, index: 430, last value:x 0 218 y
+[id:4, term:19] append key:0, index: 431, last value:x 0 219 y
+[id:4, term:19] append key:0, index: 432, last value:x 0 220 y
+[id:4, term:19] append key:0, index: 433, last value:x 0 221 y
+[id:4, term:19] append key:0, index: 434, last value:x 0 222 y
+[id:4, term:19] append key:0, index: 435, last value:x 0 223 y
+[id:4, term:19] append key:0, index: 436, last value:x 0 224 y
+[id:4, term:19] append key:0, index: 437, last value:x 0 225 y
+[id:4, term:19] append key:0, index: 438, last value:x 0 226 y
+[id:4, term:19] append key:0, index: 439, last value:x 0 227 y
+[id:4, term:19] append key:0, index: 440, last value:x 0 228 y
+[id:4, term:19] append key:0, index: 441, last value:x 0 229 y
+[id:4, term:19] append key:0, index: 442, last value:x 0 230 y
+[id:4, term:19] append key:0, index: 443, last value:x 0 231 y
+[id:4, term:19] append key:0, index: 444, last value:x 0 232 y
+[id:4, term:19] append key:0, index: 445, last value:x 0 233 y
+[id:4, term:19] append key:0, index: 446, last value:x 0 234 y
+[id:4, term:19] append key:0, index: 447, last value:x 0 235 y
+[id:4, term:19] append key:0, index: 448, last value:x 0 236 y
+[id:4, term:19] append key:0, index: 449, last value:x 0 237 y
+[id:4, term:19] append key:0, index: 450, last value:x 0 238 y
+[id:4, term:19] append key:0, index: 451, last value:x 0 239 y
+[id:4, term:19] append key:0, index: 452, last value:x 0 240 y
+[id:4, term:19] append key:0, index: 453, last value:x 0 241 y
+[id:4, term:19] append key:0, index: 454, last value:x 0 242 y
+[id:4, term:19] append key:0, index: 455, last value:x 0 243 y
+[id:4, term:19] append key:0, index: 456, last value:x 0 244 y
+[id:4, term:19] append key:0, index: 457, last value:x 0 245 y
+[id:4, term:19] append key:0, index: 458, last value:x 0 246 y
+[id:4, term:19] append key:0, index: 459, last value:x 0 247 y
+[id:4, term:19] append key:0, index: 460, last value:x 0 248 y
+[id:4, term:19] append key:0, index: 461, last value:x 0 249 y
+[id:4, term:19] append key:0, index: 462, last value:x 0 250 y
+[id:4, term:19] append key:0, index: 463, last value:x 0 251 y
+[id:4, term:19] append key:0, index: 464, last value:x 0 252 y
+[id:4, term:19] append key:0, index: 465, last value:x 0 253 y
+[id:4, term:19] append key:0, index: 466, last value:x 0 254 y
+[id:4, term:19] append key:0, index: 467, last value:x 0 255 y
+[id:4, term:19] append key:0, index: 468, last value:x 0 256 y
+[id:4, term:19] append key:0, index: 469, last value:x 0 257 y
+[id:4, term:19] append key:0, index: 470, last value:x 0 258 y
+[id:4, term:19] append key:0, index: 471, last value:x 0 259 y
+[id:4, term:19] append key:0, index: 472, last value:x 0 260 y
+[id:4, term:19] append key:0, index: 473, last value:x 0 261 y
+[id:4, term:19] append key:0, index: 474, last value:x 0 262 y
+[id:4, term:19] append key:0, index: 475, last value:x 0 263 y
+[id:4, term:19] append key:0, index: 476, last value:x 0 264 y
+[id:4, term:19] append key:0, index: 477, last value:x 0 265 y
+[id:4, term:19] append key:0, index: 478, last value:x 0 266 y
+[id:4, term:19] append key:0, index: 479, last value:x 0 267 y
+[id:4, term:19] append key:0, index: 480, last value:x 0 268 y
+[id:4, term:19] append key:0, index: 481, last value:x 0 269 y
+[id:4, term:19] append key:0, index: 482, last value:x 0 270 y
+[id:4, term:19] append key:0, index: 483, last value:x 0 271 y
+[id:4, term:19] append key:0, index: 484, last value:x 0 272 y
+[id:4, term:19] append key:0, index: 485, last value:x 0 273 y
+[id:4, term:19] append key:0, index: 486, last value:x 0 274 y
+[id:4, term:19] append key:0, index: 487, last value:x 0 275 y
+[id:4, term:19] append key:0, index: 488, last value:x 0 276 y
+[id:4, term:19] append key:0, index: 489, last value:x 0 277 y
+[id:4, term:19] append key:0, index: 490, last value:x 0 278 y
+[id:4, term:19] append key:0, index: 491, last value:x 0 279 y
+[id:4, term:19] append key:0, index: 492, last value:x 0 280 y
+[id:4, term:19] append key:0, index: 493, last value:x 0 281 y
+[id:4, term:19] append key:0, index: 494, last value:x 0 282 y
+[id:4, term:19] append key:0, index: 495, last value:x 0 283 y
+[id:4, term:19] append key:0, index: 496, last value:x 0 284 y
+[id:4, term:19] append key:0, index: 497, last value:x 0 285 y
+[id:4, term:19] append key:0, index: 498, last value:x 0 286 y
+[id:4, term:19] append key:0, index: 499, last value:x 0 287 y
+[id:4, term:19] append key:0, index: 500, last value:x 0 288 y
+[id:4, term:19] append key:0, index: 501, last value:x 0 289 y
+[id:4, term:19] append key:0, index: 502, last value:x 0 290 y
+[id:4, term:19] append key:0, index: 503, last value:x 0 291 y
+[id:4, term:19] append key:0, index: 504, last value:x 0 292 y
+[id:4, term:19] append key:0, index: 505, last value:x 0 293 y
+[id:4, term:19] append key:0, index: 506, last value:x 0 294 y
+[id:4, term:19] append key:0, index: 507, last value:x 0 295 y
+[id:4, term:19] append key:0, index: 508, last value:x 0 296 y
+[id:4, term:19] append key:0, index: 509, last value:x 0 297 y
+[id:4, term:19] append key:0, index: 510, last value:x 0 298 y
+[id:4, term:19] append key:0, index: 511, last value:x 0 299 y
+[id:4, term:19] append key:0, index: 512, last value:x 0 300 y
+[id:4, term:19] append key:0, index: 513, last value:x 0 301 y
+[id:4, term:19] append key:0, index: 514, last value:x 0 302 y
+[id:4, term:19] append key:0, index: 515, last value:x 0 303 y
+[id:4, term:19] append key:0, index: 516, last value:x 0 304 y
+[id:4, term:19] append key:0, index: 517, last value:x 0 305 y
+[id:4, term:19] append key:0, index: 518, last value:x 0 306 y
+[id:4, term:19] append key:0, index: 519, last value:x 0 307 y
+[id:4, term:19] append key:0, index: 520, last value:x 0 308 y
+[id:4, term:19] append key:0, index: 521, last value:x 0 309 y
+[id:4, term:19] append key:0, index: 522, last value:x 0 310 y
+[id:4, term:19] append key:0, index: 523, last value:x 0 311 y
+[id:4, term:19] append key:0, index: 524, last value:x 0 312 y
+[id:4, term:19] append key:0, index: 525, last value:x 0 313 y
+[id:4, term:19] append key:0, index: 526, last value:x 0 314 y
+[id:4, term:19] append key:0, index: 527, last value:x 0 315 y
+[id:4, term:19] append key:0, index: 528, last value:x 0 316 y
+[id:4, term:19] append key:0, index: 529, last value:x 0 317 y
+[id:4, term:19] append key:0, index: 530, last value:x 0 318 y
+[id:4, term:19] append key:0, index: 531, last value:x 0 319 y
+[id:4, term:19] append key:0, index: 532, last value:x 0 320 y
+[id:4, term:19] append key:0, index: 533, last value:x 0 321 y
+[id:4, term:19] append key:0, index: 534, last value:x 0 322 y
+[id:4, term:19] append key:0, index: 535, last value:x 0 323 y
+[id:4, term:19] append key:0, index: 536, last value:x 0 324 y
+[id:4, term:19] append key:0, index: 537, last value:x 0 325 y
+[id:4, term:19] append key:0, index: 538, last value:x 0 326 y
+[id:4, term:19] append key:0, index: 539, last value:x 0 327 y
+[id:4, term:19] append key:0, index: 540, last value:x 0 328 y
+[id:4, term:19] append key:0, index: 541, last value:x 0 329 y
+[id:4, term:19] append key:0, index: 542, last value:x 0 330 y
+[id:4, term:19] append key:0, index: 543, last value:x 0 331 y
+[id:4, term:19] append key:0, index: 544, last value:x 0 332 y
+[id:4, term:19] append key:0, index: 545, last value:x 0 333 y
+[id:4, term:19] append key:0, index: 546, last value:x 0 334 y
+[id:4, term:19] 日志commit [547-547]
+[id:4, term:19] append key:0, index:547, last value:x 0 335 y
+[id:4, term:19] 日志commit [548-548]
+[id:4, term:19] append key:0, index:548, last value:x 0 336 y
+[id:4, term:19] 日志commit [549-549]
+[id:4, term:19] append key:0, index:549, last value:x 0 337 y
+[id:4, term:19] 日志commit [550-550]
+[id:4, term:19] append key:0, index:550, last value:x 0 338 y
+[id:4, term:19] get key:0 OK
+[id:4, term:19] get key:0 OK
+[id:4, term:19] 日志commit [551-551]
+[id:4, term:19] append key:0, index:551, last value:x 0 339 y
+[id:4, term:19] 日志commit [552-552]
+[id:4, term:19] append key:0, index:552, last value:x 0 340 y
+[id:4, term:19] 日志commit [553-553]
+[id:4, term:19] append key:0, index:553, last value:x 0 341 y
+[id:4, term:19] 日志commit [554-554]
+[id:4, term:19] append key:0, index:554, last value:x 0 342 y
+[id:4, term:19] 日志commit [555-555]
+[id:4, term:19] append key:0, index:555, last value:x 0 343 y
+[id:4, term:19] get key:0 OK
+[id:4, term:19] get key:0 OK
+[id:4, term:19] get key:0 OK
+term:25, 4 成为领导者
+[id:3, term:25] 日志commit [546-555]
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [556-556]
+[id:4, term:25] put key:0, index:556, last value:
+[id:4, term:25] 日志commit [557-557]
+[id:4, term:25] append key:0, index:557, last value:x 0 0 y
+[id:4, term:25] 日志commit [558-558]
+[id:4, term:25] append key:0, index:558, last value:x 0 1 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [559-559]
+[id:4, term:25] append key:0, index:559, last value:x 0 2 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [560-560]
+[id:4, term:25] append key:0, index:560, last value:x 0 3 y
+[id:4, term:25] 日志commit [561-561]
+[id:4, term:25] append key:0, index:561, last value:x 0 4 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [562-562]
+[id:4, term:25] append key:0, index:562, last value:x 0 5 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [563-563]
+[id:4, term:25] append key:0, index:563, last value:x 0 6 y
+[id:4, term:25] 日志commit [564-564]
+[id:4, term:25] append key:0, index:564, last value:x 0 7 y
+[id:4, term:25] 日志commit [565-565]
+[id:4, term:25] append key:0, index:565, last value:x 0 8 y
+[id:4, term:25] 日志commit [566-566]
+[id:4, term:25] append key:0, index:566, last value:x 0 9 y
+[id:4, term:25] 日志commit [567-567]
+[id:4, term:25] append key:0, index:567, last value:x 0 10 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [568-568]
+[id:4, term:25] append key:0, index:568, last value:x 0 11 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [569-569]
+[id:4, term:25] append key:0, index:569, last value:x 0 12 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [570-570]
+[id:4, term:25] append key:0, index:570, last value:x 0 13 y
+[id:4, term:25] 日志commit [571-571]
+[id:4, term:25] append key:0, index:571, last value:x 0 14 y
+[id:4, term:25] 日志commit [572-572]
+[id:4, term:25] append key:0, index:572, last value:x 0 15 y
+[id:4, term:25] 日志commit [573-573]
+[id:4, term:25] append key:0, index:573, last value:x 0 16 y
+[id:4, term:25] 日志commit [574-574]
+[id:4, term:25] append key:0, index:574, last value:x 0 17 y
+[id:4, term:25] 日志commit [575-575]
+[id:4, term:25] append key:0, index:575, last value:x 0 18 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [576-576]
+[id:4, term:25] append key:0, index:576, last value:x 0 19 y
+[id:4, term:25] 日志commit [577-577]
+[id:4, term:25] append key:0, index:577, last value:x 0 20 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [578-578]
+[id:4, term:25] append key:0, index:578, last value:x 0 21 y
+[id:4, term:25] 日志commit [579-579]
+[id:4, term:25] append key:0, index:579, last value:x 0 22 y
+[id:4, term:25] 日志commit [580-580]
+[id:4, term:25] append key:0, index:580, last value:x 0 23 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [581-581]
+[id:4, term:25] append key:0, index:581, last value:x 0 24 y
+[id:4, term:25] 日志commit [582-582]
+[id:4, term:25] append key:0, index:582, last value:x 0 25 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [583-583]
+[id:4, term:25] append key:0, index:583, last value:x 0 26 y
+[id:4, term:25] 日志commit [584-584]
+[id:4, term:25] append key:0, index:584, last value:x 0 27 y
+[id:4, term:25] 日志commit [585-585]
+[id:4, term:25] append key:0, index:585, last value:x 0 28 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [586-586]
+[id:4, term:25] append key:0, index:586, last value:x 0 29 y
+[id:4, term:25] 日志commit [587-587]
+[id:4, term:25] append key:0, index:587, last value:x 0 30 y
+[id:4, term:25] 日志commit [588-588]
+[id:4, term:25] append key:0, index:588, last value:x 0 31 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [589-589]
+[id:4, term:25] append key:0, index:589, last value:x 0 32 y
+[id:4, term:25] 日志commit [590-590]
+[id:4, term:25] append key:0, index:590, last value:x 0 33 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [591-591]
+[id:4, term:25] append key:0, index:591, last value:x 0 34 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [592-592]
+[id:4, term:25] append key:0, index:592, last value:x 0 35 y
+[id:4, term:25] 日志commit [593-593]
+[id:4, term:25] append key:0, index:593, last value:x 0 36 y
+[id:4, term:25] 日志commit [594-594]
+[id:4, term:25] append key:0, index:594, last value:x 0 37 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [595-595]
+[id:4, term:25] append key:0, index:595, last value:x 0 38 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [596-596]
+[id:4, term:25] append key:0, index:596, last value:x 0 39 y
+[id:4, term:25] 日志commit [597-597]
+[id:4, term:25] append key:0, index:597, last value:x 0 40 y
+[id:4, term:25] 日志commit [598-598]
+[id:4, term:25] append key:0, index:598, last value:x 0 41 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [599-599]
+[id:4, term:25] append key:0, index:599, last value:x 0 42 y
+[id:4, term:25] 日志commit [600-600]
+[id:4, term:25] append key:0, index:600, last value:x 0 43 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [601-601]
+[id:4, term:25] append key:0, index:601, last value:x 0 44 y
+[id:4, term:25] 日志commit [602-602]
+[id:4, term:25] append key:0, index:602, last value:x 0 45 y
+[id:4, term:25] 日志commit [603-603]
+[id:4, term:25] append key:0, index:603, last value:x 0 46 y
+[id:4, term:25] 日志commit [604-604]
+[id:4, term:25] append key:0, index:604, last value:x 0 47 y
+[id:4, term:25] 日志commit [605-605]
+[id:4, term:25] append key:0, index:605, last value:x 0 48 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [606-606]
+[id:4, term:25] append key:0, index:606, last value:x 0 49 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [607-607]
+[id:4, term:25] append key:0, index:607, last value:x 0 50 y
+[id:4, term:25] 日志commit [608-608]
+[id:4, term:25] append key:0, index:608, last value:x 0 51 y
+[id:4, term:25] 日志commit [609-609]
+[id:4, term:25] append key:0, index:609, last value:x 0 52 y
+[id:4, term:25] 日志commit [610-610]
+[id:4, term:25] append key:0, index:610, last value:x 0 53 y
+[id:4, term:25] 日志commit [611-611]
+[id:4, term:25] append key:0, index:611, last value:x 0 54 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [612-612]
+[id:4, term:25] append key:0, index:612, last value:x 0 55 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [613-613]
+[id:4, term:25] append key:0, index:613, last value:x 0 56 y
+[id:4, term:25] 日志commit [614-614]
+[id:4, term:25] append key:0, index:614, last value:x 0 57 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [615-615]
+[id:4, term:25] append key:0, index:615, last value:x 0 58 y
+[id:4, term:25] 日志commit [616-616]
+[id:4, term:25] append key:0, index:616, last value:x 0 59 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [617-617]
+[id:4, term:25] append key:0, index:617, last value:x 0 60 y
+[id:4, term:25] 日志commit [618-618]
+[id:4, term:25] append key:0, index:618, last value:x 0 61 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [619-619]
+[id:4, term:25] append key:0, index:619, last value:x 0 62 y
+[id:4, term:25] 日志commit [620-620]
+[id:4, term:25] append key:0, index:620, last value:x 0 63 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [621-621]
+[id:4, term:25] append key:0, index:621, last value:x 0 64 y
+[id:4, term:25] 日志commit [622-622]
+[id:4, term:25] append key:0, index:622, last value:x 0 65 y
+[id:4, term:25] 日志commit [623-623]
+[id:4, term:25] append key:0, index:623, last value:x 0 66 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [624-624]
+[id:4, term:25] append key:0, index:624, last value:x 0 67 y
+[id:4, term:25] 日志commit [625-625]
+[id:4, term:25] append key:0, index:625, last value:x 0 68 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [626-626]
+[id:4, term:25] append key:0, index:626, last value:x 0 69 y
+[id:4, term:25] 日志commit [627-627]
+[id:4, term:25] append key:0, index:627, last value:x 0 70 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [628-628]
+[id:4, term:25] append key:0, index:628, last value:x 0 71 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [629-629]
+[id:4, term:25] append key:0, index:629, last value:x 0 72 y
+[id:4, term:25] 日志commit [630-630]
+[id:4, term:25] append key:0, index:630, last value:x 0 73 y
+[id:4, term:25] 日志commit [631-631]
+[id:4, term:25] append key:0, index:631, last value:x 0 74 y
+[id:4, term:25] 日志commit [632-632]
+[id:4, term:25] append key:0, index:632, last value:x 0 75 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [633-633]
+[id:4, term:25] append key:0, index:633, last value:x 0 76 y
+[id:4, term:25] 日志commit [634-634]
+[id:4, term:25] append key:0, index:634, last value:x 0 77 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [635-635]
+[id:4, term:25] append key:0, index:635, last value:x 0 78 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [636-636]
+[id:4, term:25] append key:0, index:636, last value:x 0 79 y
+[id:4, term:25] 日志commit [637-637]
+[id:4, term:25] append key:0, index:637, last value:x 0 80 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [638-638]
+[id:4, term:25] append key:0, index:638, last value:x 0 81 y
+[id:4, term:25] 日志commit [639-639]
+[id:4, term:25] append key:0, index:639, last value:x 0 82 y
+[id:4, term:25] 日志commit [640-640]
+[id:4, term:25] append key:0, index:640, last value:x 0 83 y
+[id:4, term:25] 日志commit [641-641]
+[id:4, term:25] append key:0, index:641, last value:x 0 84 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [642-642]
+[id:4, term:25] append key:0, index:642, last value:x 0 85 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [643-643]
+[id:4, term:25] append key:0, index:643, last value:x 0 86 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [644-644]
+[id:4, term:25] append key:0, index:644, last value:x 0 87 y
+[id:4, term:25] 日志commit [645-645]
+[id:4, term:25] append key:0, index:645, last value:x 0 88 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [646-646]
+[id:4, term:25] append key:0, index:646, last value:x 0 89 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [647-647]
+[id:4, term:25] append key:0, index:647, last value:x 0 90 y
+[id:4, term:25] 日志commit [648-648]
+[id:4, term:25] append key:0, index:648, last value:x 0 91 y
+[id:4, term:25] 日志commit [649-649]
+[id:4, term:25] append key:0, index:649, last value:x 0 92 y
+[id:4, term:25] 日志commit [650-650]
+[id:4, term:25] append key:0, index:650, last value:x 0 93 y
+[id:4, term:25] 日志commit [651-651]
+[id:4, term:25] append key:0, index:651, last value:x 0 94 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [652-652]
+[id:4, term:25] append key:0, index:652, last value:x 0 95 y
+[id:4, term:25] 日志commit [653-653]
+[id:4, term:25] append key:0, index:653, last value:x 0 96 y
+[id:4, term:25] 日志commit [654-654]
+[id:4, term:25] append key:0, index:654, last value:x 0 97 y
+[id:4, term:25] 日志commit [655-655]
+[id:4, term:25] append key:0, index:655, last value:x 0 98 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [656-656]
+[id:4, term:25] append key:0, index:656, last value:x 0 99 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [657-657]
+[id:4, term:25] append key:0, index:657, last value:x 0 100 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [658-658]
+[id:4, term:25] append key:0, index:658, last value:x 0 101 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [659-659]
+[id:4, term:25] append key:0, index:659, last value:x 0 102 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [660-660]
+[id:4, term:25] append key:0, index:660, last value:x 0 103 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [661-661]
+[id:4, term:25] append key:0, index:661, last value:x 0 104 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [662-662]
+[id:4, term:25] append key:0, index:662, last value:x 0 105 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [663-663]
+[id:4, term:25] append key:0, index:663, last value:x 0 106 y
+[id:4, term:25] 日志commit [664-664]
+[id:4, term:25] append key:0, index:664, last value:x 0 107 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [665-665]
+[id:4, term:25] append key:0, index:665, last value:x 0 108 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [666-666]
+[id:4, term:25] append key:0, index:666, last value:x 0 109 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [667-667]
+[id:4, term:25] append key:0, index:667, last value:x 0 110 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [668-668]
+[id:4, term:25] append key:0, index:668, last value:x 0 111 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [669-669]
+[id:4, term:25] append key:0, index:669, last value:x 0 112 y
+[id:4, term:25] 日志commit [670-670]
+[id:4, term:25] append key:0, index:670, last value:x 0 113 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [671-671]
+[id:4, term:25] append key:0, index:671, last value:x 0 114 y
+[id:4, term:25] 日志commit [672-672]
+[id:4, term:25] append key:0, index:672, last value:x 0 115 y
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] get key:0 OK
+[id:4, term:25] 日志commit [673-673]
+[id:4, term:25] append key:0, index:673, last value:x 0 116 y
+term:26, 3 成为领导者
+term:30, 2 成为领导者
+term:31, 4 成为领导者
+[id:4, term:31] 日志commit [674-675]
+[id:4, term:31] append key:0, index: 674, last value:x 0 117 y
+[id:4, term:31] append key:0, index: 675, last value:x 0 117 y
+[id:4, term:31] 日志commit [676-676]
+[id:4, term:31] append key:0, index:676, last value:x 0 118 y
+[id:4, term:31] 日志commit [677-677]
+[id:4, term:31] append key:0, index:677, last value:x 0 119 y
+[id:4, term:31] 日志commit [678-678]
+[id:4, term:31] append key:0, index:678, last value:x 0 120 y
+[id:4, term:31] get key:0 OK
+term:36, 4 成为领导者
+[id:4, term:36] get key:0 OK
+--- FAIL: TestManyPartitionsOneClient3A (24.61s)
+    test_test.go:296: get wrong value, key 0, wanted:
+        x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 yx 0 26 yx 0 27 yx 0 28 yx 0 29 yx 0 30 yx 0 31 yx 0 32 yx 0 33 yx 0 34 yx 0 35 yx 0 36 yx 0 37 yx 0 38 yx 0 39 yx 0 40 yx 0 41 yx 0 42 yx 0 43 yx 0 44 yx 0 45 yx 0 46 yx 0 47 yx 0 48 yx 0 49 yx 0 50 yx 0 51 yx 0 52 yx 0 53 yx 0 54 yx 0 55 yx 0 56 yx 0 57 yx 0 58 yx 0 59 yx 0 60 yx 0 61 yx 0 62 yx 0 63 yx 0 64 yx 0 65 yx 0 66 yx 0 67 yx 0 68 yx 0 69 yx 0 70 yx 0 71 yx 0 72 yx 0 73 yx 0 74 yx 0 75 yx 0 76 yx 0 77 yx 0 78 yx 0 79 yx 0 80 yx 0 81 yx 0 82 yx 0 83 yx 0 84 yx 0 85 yx 0 86 yx 0 87 yx 0 88 yx 0 89 yx 0 90 yx 0 91 yx 0 92 yx 0 93 yx 0 94 yx 0 95 yx 0 96 yx 0 97 yx 0 98 yx 0 99 yx 0 100 yx 0 101 yx 0 102 yx 0 103 yx 0 104 yx 0 105 yx 0 106 yx 0 107 yx 0 108 yx 0 109 yx 0 110 yx 0 111 yx 0 112 yx 0 113 yx 0 114 yx 0 115 yx 0 116 yx 0 117 yx 0 118 yx 0 119 yx 0 120 y
+        , got
+        x 0 0 yx 0 1 yx 0 2 yx 0 3 yx 0 4 yx 0 5 yx 0 6 yx 0 7 yx 0 8 yx 0 9 yx 0 10 yx 0 11 yx 0 12 yx 0 13 yx 0 14 yx 0 15 yx 0 16 yx 0 17 yx 0 18 yx 0 19 yx 0 20 yx 0 21 yx 0 22 yx 0 23 yx 0 24 yx 0 25 yx 0 26 yx 0 27 yx 0 28 yx 0 29 yx 0 30 yx 0 31 yx 0 32 yx 0 33 yx 0 34 yx 0 35 yx 0 36 yx 0 37 yx 0 38 yx 0 39 yx 0 40 yx 0 41 yx 0 42 yx 0 43 yx 0 44 yx 0 45 yx 0 46 yx 0 47 yx 0 48 yx 0 49 yx 0 50 yx 0 51 yx 0 52 yx 0 53 yx 0 54 yx 0 55 yx 0 56 yx 0 57 yx 0 58 yx 0 59 yx 0 60 yx 0 61 yx 0 62 yx 0 63 yx 0 64 yx 0 65 yx 0 66 yx 0 67 yx 0 68 yx 0 69 yx 0 70 yx 0 71 yx 0 72 yx 0 73 yx 0 74 yx 0 75 yx 0 76 yx 0 77 yx 0 78 yx 0 79 yx 0 80 yx 0 81 yx 0 82 yx 0 83 yx 0 84 yx 0 85 yx 0 86 yx 0 87 yx 0 88 yx 0 89 yx 0 90 yx 0 91 yx 0 92 yx 0 93 yx 0 94 yx 0 95 yx 0 96 yx 0 97 yx 0 98 yx 0 99 yx 0 100 yx 0 101 yx 0 102 yx 0 103 yx 0 104 yx 0 105 yx 0 106 yx 0 107 yx 0 108 yx 0 109 yx 0 110 yx 0 111 yx 0 112 yx 0 113 yx 0 114 yx 0 115 yx 0 116 yx 0 117 yx 0 117 yx 0 118 yx 0 119 yx 0 120 y
+    test_test.go:151: duplicate element x 0 117 y in Append result
+FAIL
+exit status 1
+FAIL	6.5840/kvraft	24.614s

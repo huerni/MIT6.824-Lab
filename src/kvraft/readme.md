@@ -1,5 +1,20 @@
 ## Lab3A
 
+### 没有网络故障和Leader替换
+
+
+### 存在网络故障的情况下
+
+如果领导者在将条目提交到 Raft 日志后失败，则 Clerk 可能不会收到回复，因此可能会将请求重新发送到另一个领导者。每次调用 Clerk.Put() 或 Clerk.Append() 应该只有一次执行，因此你需要确保重新发送不会导致服务器执行请求两次。  
+
+您的解决方案需要处理一个已经调用了Start()来处理Clerk的RPC的leader，在请求被提交到日志之前失去了领导权的情况。  
+
+**一种方法是让服务器检测它是否已经失去了领导地位，通过注意到在Start()返回的索引处出现了不同的请求，或者Raft的term已经改变。**  
+> Your scheme for duplicate detection should free server memory quickly, for example by having each RPC imply that the client has seen the reply for its previous RPC. It's OK to assume that a client will make only one call into a Clerk at a time.   
+
+
+
+
 客户端怎么找到Leader  
 1. 不断的随机，直到找到leader
 2. 当客户端请求non-Leader时，该结点提供Leader的信息，使客户端转向Leader请求

@@ -1,10 +1,10 @@
 package kvraft
 
 import (
-	"fmt"
 	"log"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"6.5840/labgob"
 	"6.5840/labrpc"
@@ -25,10 +25,11 @@ type Op struct {
 	// Your definitions here.
 	// Field names must start with capital letters,
 	// otherwise RPC will break.
-	Key       string
-	Value     string
-	Opera     string
-	SerialNum string
+	Key      string
+	Value    string
+	Opera    string
+	ClientId int64
+	SerialId int
 }
 
 type KVServer struct {
@@ -41,70 +42,88 @@ type KVServer struct {
 	maxraftstate int // snapshot if log grows this big
 
 	// Your definitions here.
-	kvdata      map[string]string
-	serialCache map[string]string
-	currentTerm int
+	kvdata       map[string]string
+	notifyCh     map[int]chan Op
+	lastSerialId map[int64]int
 }
 
 // 直接从map中查询？？ 会查询到过时的数据  需要判断数据是否过期
-// FIXME:频繁更换Leader，导致get到过期数据
+// 频繁更换Leader，导致get到过期数据  此时没有commit？？
 func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	// Your code here.
 	if kv.killed() == false {
 		reply.Value = ""
 		reply.Err = ErrWrongLeader
+		op := Op{Key: args.Key, Opera: "Get", ClientId: args.ClientId, SerialId: args.SerialId}
 
 		kv.mu.Lock()
-		defer kv.mu.Unlock()
-
-		if val, ok := kv.serialCache[args.SerialNum]; ok {
-			reply.Value = val
-			reply.Err = OK
-			return
-		}
-
 		// 需要判断数据是否过期后，再从日志中找
-		_, isLeader := kv.rf.GetState()
+		index, _, isLeader := kv.rf.Start(op)
 		if !isLeader {
+			kv.mu.Unlock()
 			return
 		}
 
 		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
 		// Leader不断变换时，刚换leader就get，有的状态机apply完，导致数据是过时的
 		if kv.rf.SendGetBeforeHeartBeat() == false {
+			kv.mu.Unlock()
 			return
 		}
-		// applyMsg
-		//kv.applyMsg()
+
 		reply.LeaderId = kv.me
 
+		kv.notifyCh[index] = make(chan Op, 1)
+		kv.mu.Unlock()
+		select {
+		case val := <-kv.notifyCh[index]:
+			kv.mu.Lock()
+			delete(kv.notifyCh, index)
+			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
+				reply.Err = OK
+			}
+
+			kv.mu.Unlock()
+		case <-time.After(400 * time.Millisecond):
+		}
+
+		kv.mu.Lock()
 		if val, ok := kv.kvdata[args.Key]; ok {
 			reply.Err = OK
 			reply.Value = val
+			//fmt.Printf("[id:%v, term:%v] get key:%v OK\n", kv.me, kv.currentTerm, args.Key)
 		} else {
+			//fmt.Printf("[id:%v, term:%v] get key:%v noKey\n", kv.me, kv.currentTerm, args.Key)
 			reply.Err = ErrNoKey
 		}
-		kv.serialCache[args.SerialNum] = reply.Value
+		kv.mu.Unlock()
 	}
 }
 
+// 应该将所有commit的日志全部apply
 func (kv *KVServer) applyMsg() {
-	for {
-		select {
-		case msg := <-kv.applyCh:
-			if msg.CommandValid {
-				op := msg.Command.(Op)
-				kv.serialCache[op.SerialNum] = op.Value
+	for msg := range kv.applyCh {
+		if msg.CommandValid {
+			op := msg.Command.(Op)
+			kv.mu.Lock()
+			// 判断是否重复提交
+			lastid, ok := kv.lastSerialId[op.ClientId]
+			if !ok || op.SerialId > lastid {
+				kv.lastSerialId[op.ClientId] = op.SerialId
 				if op.Opera == "Put" {
 					kv.kvdata[op.Key] = op.Value
-					fmt.Printf("[]put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
+					//fmt.Printf("[id:%v, term:%v] put key:%v, index:%v, last value:%v\n", kv.me, kv.currentTerm, op.Key, msg.CommandIndex, op.Value)
 				} else if op.Opera == "Append" {
 					kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
-					fmt.Printf("[]append %v\n", kv.kvdata[op.Key])
+					//fmt.Printf("[id:%v, term:%v] append key:%v, index: %v, last value:%v\n", kv.me, kv.currentTerm, op.Key, msg.CommandIndex, op.Value)
 				}
 			}
-		default:
-			return
+			// 通知
+			val, ok := kv.notifyCh[msg.CommandIndex]
+			kv.mu.Unlock()
+			if ok {
+				val <- op
+			}
 		}
 	}
 }
@@ -115,75 +134,34 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	if kv.killed() == false {
 		kv.mu.Lock()
 
-		op := Op{Key: args.Key, Value: args.Value, Opera: args.Op, SerialNum: args.SerialNum}
+		op := Op{Key: args.Key, Value: args.Value, Opera: args.Op, ClientId: args.ClientId, SerialId: args.SerialId}
+
 		reply.Err = ErrWrongLeader
 
-		if _, ok := kv.serialCache[args.SerialNum]; ok {
-			reply.Err = OK
-			reply.LeaderId = kv.me
-			kv.mu.Unlock()
-			return
-		}
-		currentTerm := kv.currentTerm
-		kv.mu.Unlock()
-
-		// 判断leader不在小分区的办法
-		if kv.rf.SendGetBeforeHeartBeat() == false {
-			return
-		}
-
-		index, term, isLeader := kv.rf.Start(op)
+		// 在commit之后，没有存入map之前，可能多次重复提交
+		// 重发机制
+		index, _, isLeader := kv.rf.Start(op)
 
 		if !isLeader {
+			kv.mu.Unlock()
 			return
 		}
 		reply.LeaderId = kv.me
 
+		kv.notifyCh[index] = make(chan Op, 1)
+		kv.mu.Unlock()
+
 		// 换leader时，新leader里面的msg没有读取出来，应该在成为leader之后，将chan里面的信息读取出来到non-op  只在切换Leader时，可用term判断是否切换了leader
-		fmt.Printf("term:%v, currentTerm:%v\n", term, currentTerm)
-		if term > currentTerm {
+		//fmt.Printf("before [id:%v, term:%v] put key:%v, index:%v, last value:%v\n", kv.me, kv.currentTerm, op.Key, index, op.Value)
+		select {
+		case val := <-kv.notifyCh[index]:
 			kv.mu.Lock()
-			kv.currentTerm = term
+			delete(kv.notifyCh, index)
 			kv.mu.Unlock()
-			for msg := range kv.applyCh {
-				//fmt.Printf("commandIndex:%v, index:%v\n", msg.CommandIndex, index)
-				if msg.CommandValid {
-					op = msg.Command.(Op)
-					kv.mu.Lock()
-					kv.serialCache[op.SerialNum] = op.Value
-					if op.Opera == "Put" {
-						kv.kvdata[op.Key] = op.Value
-						//fmt.Printf("put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
-					} else if op.Opera == "Append" {
-						kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
-						//fmt.Printf("append %v\n", kv.kvdata[op.Key])
-					}
-					kv.mu.Unlock()
-					if msg.CommandIndex == index {
-						reply.Err = OK
-						break
-					}
-				}
-			}
-		} else {
-			// FIXME: chan中没数据，卡死
-			msg := <-kv.applyCh
-			// fmt.Printf("commandIndex:%v, index:%v\n", msg.CommandIndex, index)
-			// msg.CommandIndex == index  多客户端并行发送，状态顺序错了或者缺少最后一个apply，提交时确保提交本次操作的日志
-			if msg.CommandValid && msg.CommandIndex == index {
-				op = msg.Command.(Op)
-				kv.mu.Lock()
-				kv.serialCache[op.SerialNum] = op.Value
-				if op.Opera == "Put" {
-					kv.kvdata[op.Key] = op.Value
-					//fmt.Printf("[]put key:%v, value:%v\n", op.Key, kv.kvdata[op.Key])
-				} else if op.Opera == "Append" {
-					kv.kvdata[op.Key] = kv.kvdata[op.Key] + op.Value
-					//fmt.Printf("[]append %v\n", kv.kvdata[op.Key])
-				}
+			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
-				kv.mu.Unlock()
 			}
+		case <-time.After(400 * time.Millisecond):
 		}
 	}
 }
@@ -227,16 +205,17 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv := new(KVServer)
 	kv.me = me
 	kv.maxraftstate = maxraftstate
-	kv.currentTerm = 0
 
 	// You may need initialization code here.
 	kv.kvdata = make(map[string]string)
-	kv.serialCache = make(map[string]string)
 
 	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
 
 	// You may need initialization code here.
+	kv.notifyCh = make(map[int]chan Op)
+	kv.lastSerialId = make(map[int64]int)
+	go kv.applyMsg()
 
 	return kv
 }

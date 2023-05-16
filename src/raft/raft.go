@@ -18,7 +18,6 @@ package raft
 //
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 
@@ -466,6 +465,7 @@ func (rf *Raft) SendGetBeforeHeartBeat() bool {
 	args := HeartBeatArgs{}
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+
 	if rf.state != Leader {
 		return false
 	}
@@ -611,6 +611,7 @@ func (rf *Raft) appendEntries() {
 						}
 					}(id, args)
 				}
+
 				rf.mu.Lock()
 				args := AppendEntriesArgs{}
 				args.Term = rf.currentTerm
@@ -723,9 +724,9 @@ func (rf *Raft) processMsg() {
 			msgs = append(msgs, msg)
 		}
 
+		// fmt.Printf("[id:%v, term:%v] 日志commit [%v-%v]\n", rf.me, rf.currentTerm, rf.lastApplied+1, rf.commitIndex)
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
-		log.Printf("%v 日志commit到 %v", rf.me, rf.commitIndex)
 		for _, msg := range msgs {
 			rf.applyCh <- msg
 		}
@@ -846,7 +847,7 @@ func (rf *Raft) startElection() {
 					atomic.AddInt32(&voteCount, 1)
 					if int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
 						// 成为领导者，立马发送心跳
-						fmt.Printf("term:%v, %v 成为领导者\n", rf.currentTerm, rf.me)
+						// fmt.Printf("term:%v, %v 成为领导者\n", rf.currentTerm, rf.me)
 						//To find out, it needs to commit an entry from its term. Raft handles this by having each leader commit a blank no-op entry into the log at the start of its term.
 						rf.state = Leader
 						//go func() {
