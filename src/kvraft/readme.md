@@ -30,7 +30,12 @@
 
 Leader切换时，msg怎么处理？？
 
+## 添加日志压缩
+
+什么时候进行日志压缩？？在什么地方进行日志压缩？
+
 ## submit
 ```
 go test -run 3A
+go test -run 3B
 ```

@@ -183,13 +183,8 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 		return
 	}
 
-	//fmt.Printf("Snapshot timestamp[%v] id: %v, index:%v, rfindex:%v\n", rf.timestamp, rf.me, index, rf.logEntries[len(rf.logEntries)-1].Index)
 	preIndex := rf.logEntries[0].Index
 	rf.logEntries = rf.logEntries[index-preIndex:]
-	//for _, val := range rf.logEntries {
-	//	fmt.Printf("[%v, %v], ", val.Index, val.Term)
-	//}
-	//fmt.Printf("\n")
 	rf.snapshot = snapshot
 	rf.persist()
 
@@ -618,8 +613,10 @@ func (rf *Raft) appendEntries() {
 				args.LeaderId = rf.me
 				args.LeaderCommit = rf.commitIndex
 				args.PrevLogIndex = nextIndex - 1
-
+				prevIndex = rf.logEntries[0].Index
 				if nextIndex > prevIndex {
+					// 超出logEntries的长度
+					//fmt.Printf("len: %v, preindex: %v, nextIndex: %v\n", len(rf.logEntries), prevIndex, args.PrevLogIndex)
 					args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-prevIndex].Term
 					// 需要同步的logEntries  切片应该是深拷贝
 					if nextIndex <= rf.logEntries[len(rf.logEntries)-1].Index {
@@ -649,10 +646,6 @@ func (rf *Raft) appendEntries() {
 					if reply.Success == true {
 						// Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
 						// 更新nextIndex和matchIndex
-						//rf.nextIndex[id] += reply.XLen
-						//fmt.Printf("timestamp[%v] reply %v next:%v\n", curr, id, rf.nextIndex[id])
-						//rf.matchIndex[id] = rf.nextIndex[id] - 1
-						// PASS unreliable agreement
 						rf.matchIndex[id] = args.PrevLogIndex + len(args.Entries)
 						rf.nextIndex[id] = rf.matchIndex[id] + 1
 

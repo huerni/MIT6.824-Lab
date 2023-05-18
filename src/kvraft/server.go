@@ -1,6 +1,7 @@
 package kvraft
 
 import (
+	"bytes"
 	"log"
 	"sync"
 	"sync/atomic"
@@ -11,7 +12,7 @@ import (
 	"6.5840/raft"
 )
 
-const Debug = false
+const Debug = true
 
 func DPrintf(format string, a ...interface{}) (n int, err error) {
 	if Debug {
@@ -33,11 +34,12 @@ type Op struct {
 }
 
 type KVServer struct {
-	mu      sync.Mutex
-	me      int
-	rf      *raft.Raft
-	applyCh chan raft.ApplyMsg
-	dead    int32 // set by Kill()
+	mu        sync.Mutex
+	me        int
+	rf        *raft.Raft
+	applyCh   chan raft.ApplyMsg
+	dead      int32 // set by Kill()
+	persister *raft.Persister
 
 	maxraftstate int // snapshot if log grows this big
 
@@ -45,6 +47,7 @@ type KVServer struct {
 	kvdata       map[string]string
 	notifyCh     map[int]chan Op
 	lastSerialId map[int64]int
+	lastIndex    int
 }
 
 // 直接从map中查询？？ 会查询到过时的数据  需要判断数据是否过期
@@ -75,6 +78,7 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 
 		kv.notifyCh[index] = make(chan Op, 1)
 		kv.mu.Unlock()
+
 		select {
 		case val := <-kv.notifyCh[index]:
 			kv.mu.Lock()
@@ -82,8 +86,8 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
 			}
-
 			kv.mu.Unlock()
+
 		case <-time.After(400 * time.Millisecond):
 		}
 
@@ -100,8 +104,45 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	}
 }
 
+// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小  少了一种snapshot情况？？
+func (kv *KVServer) snapshot() {
+	if kv.maxraftstate != -1 && kv.persister.RaftStateSize() >= kv.maxraftstate {
+		// 找到已经应用到状态机的日志条目index
+		w := new(bytes.Buffer)
+		e := labgob.NewEncoder(w)
+		e.Encode(kv.lastIndex)
+		e.Encode(kv.kvdata)
+		e.Encode(kv.lastSerialId)
+		kv.rf.Snapshot(kv.lastIndex, w.Bytes())
+		//DPrintf("[%v] snap: %v", kv.me, kv.lastIndex)
+	}
+}
+
+func (kv *KVServer) readSnapshot(data []byte) {
+	if data == nil || len(data) < 1 { // bootstrap without any state?
+		return
+	}
+
+	r := bytes.NewBuffer(data)
+	d := labgob.NewDecoder(r)
+
+	var lastIndex int
+	var kvdata map[string]string
+	var lastSerialId map[int64]int
+	if d.Decode(&lastIndex) != nil || d.Decode(&kvdata) != nil || d.Decode(&lastSerialId) != nil {
+		log.Fatal("error")
+	} else {
+		kv.mu.Lock()
+		kv.lastIndex = lastIndex
+		kv.kvdata = kvdata
+		kv.lastSerialId = lastSerialId
+		kv.mu.Unlock()
+	}
+}
+
 // 应该将所有commit的日志全部apply
 func (kv *KVServer) applyMsg() {
+	// 日志压缩：生成快照，找到已经应用到状态机的日志条目进行删除
 	for msg := range kv.applyCh {
 		if msg.CommandValid {
 			op := msg.Command.(Op)
@@ -120,11 +161,21 @@ func (kv *KVServer) applyMsg() {
 			}
 			// 通知
 			val, ok := kv.notifyCh[msg.CommandIndex]
+			if ok {
+				if msg.CommandIndex > kv.lastIndex {
+					kv.lastIndex = msg.CommandIndex
+				}
+			}
+			kv.snapshot()
 			kv.mu.Unlock()
 			if ok {
 				val <- op
 			}
+		} else if msg.SnapshotValid {
+			kv.readSnapshot(kv.persister.ReadSnapshot())
+			//kv.snapshot()
 		}
+
 	}
 }
 
@@ -151,7 +202,6 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		kv.notifyCh[index] = make(chan Op, 1)
 		kv.mu.Unlock()
 
-		// 换leader时，新leader里面的msg没有读取出来，应该在成为leader之后，将chan里面的信息读取出来到non-op  只在切换Leader时，可用term判断是否切换了leader
 		//fmt.Printf("before [id:%v, term:%v] put key:%v, index:%v, last value:%v\n", kv.me, kv.currentTerm, op.Key, index, op.Value)
 		select {
 		case val := <-kv.notifyCh[index]:
@@ -161,7 +211,7 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
 			}
-		case <-time.After(400 * time.Millisecond):
+		case <-time.After(800 * time.Millisecond):
 		}
 	}
 }
@@ -207,15 +257,21 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.maxraftstate = maxraftstate
 
 	// You may need initialization code here.
-	kv.kvdata = make(map[string]string)
-
+	kv.persister = persister
 	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)
 
 	// You may need initialization code here.
+	kv.kvdata = make(map[string]string)
 	kv.notifyCh = make(map[int]chan Op)
 	kv.lastSerialId = make(map[int64]int)
+	kv.lastIndex = 0
+	kv.readSnapshot(persister.ReadSnapshot())
+	//DPrintf("[%v] start %v", kv.me, kv.lastIndex)
 	go kv.applyMsg()
+	//if maxraftstate != -1 {
+	//	go kv.snapshot()
+	//}
 
 	return kv
 }
