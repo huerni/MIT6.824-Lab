@@ -185,10 +185,14 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 
 	preIndex := rf.logEntries[0].Index
 	rf.logEntries = rf.logEntries[index-preIndex:]
+	if index > rf.commitIndex {
+		rf.commitIndex = index
+	}
+	if index > rf.lastApplied {
+		rf.lastApplied = index
+	}
 	rf.snapshot = snapshot
 	rf.persist()
-
-	// 是否需要提交Snapshot到ApplyChan??  不需要
 
 }
 
@@ -521,6 +525,10 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 		return
 	}
 
+	if args.Term > rf.currentTerm {
+		rf.currentTerm = args.Term
+	}
+
 	// 丢弃 lastIncludeIndex以前的log
 	preIndex := rf.logEntries[0].Index
 	if args.LastIncludedIndex <= preIndex {
@@ -570,12 +578,12 @@ func (rf *Raft) appendEntries() {
 				if nextIndex <= prevIndex {
 					// InstallSnapshot
 					rf.mu.Lock()
-					args := InstallSnapshotArgs{}
-					args.LastIncludedIndex = rf.logEntries[0].Index
-					args.LastIncludedTerm = rf.logEntries[0].Term
-					args.Term = rf.currentTerm
-					args.Data = rf.snapshot
-					args.LeaderId = rf.me
+					snapargs := InstallSnapshotArgs{}
+					snapargs.LastIncludedIndex = rf.logEntries[0].Index
+					snapargs.LastIncludedTerm = rf.logEntries[0].Term
+					snapargs.Term = rf.currentTerm
+					snapargs.Data = rf.snapshot
+					snapargs.LeaderId = rf.me
 					rf.mu.Unlock()
 
 					go func(id int, args InstallSnapshotArgs) {
@@ -597,17 +605,14 @@ func (rf *Raft) appendEntries() {
 								return
 							}
 
-							if rf.nextIndex[id] <= args.LastIncludedIndex {
-								rf.nextIndex[id] = args.LastIncludedIndex + 1
-							}
-							if rf.matchIndex[id] < args.LastIncludedIndex {
-								rf.matchIndex[id] = args.LastIncludedIndex
-							}
+							rf.nextIndex[id] = args.LastIncludedIndex + 1
+							rf.matchIndex[id] = args.LastIncludedIndex
 						}
-					}(id, args)
+					}(id, snapargs)
 				}
 
 				rf.mu.Lock()
+				nextIndex = rf.nextIndex[id]
 				args := AppendEntriesArgs{}
 				args.Term = rf.currentTerm
 				args.LeaderId = rf.me
@@ -712,7 +717,7 @@ func (rf *Raft) processMsg() {
 			rf.mu.Unlock()
 			continue
 		}
-		for k := rf.lastApplied - preIndex + 1; k <= rf.commitIndex-preIndex; k++ {
+		for k := rf.lastApplied - preIndex + 1; k <= rf.commitIndex-preIndex && k < len(rf.logEntries); k++ {
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
 			msgs = append(msgs, msg)
 		}

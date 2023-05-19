@@ -68,30 +68,25 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		}
 
 		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
-		// Leader不断变换时，刚换leader就get，有的状态机apply完，导致数据是过时的
-		if kv.rf.SendGetBeforeHeartBeat() == false {
-			kv.mu.Unlock()
-			return
-		}
+		//if kv.rf.SendGetBeforeHeartBeat() == false {
+		//	kv.mu.Unlock()
+		//	return
+		//}
 
 		reply.LeaderId = kv.me
-
 		kv.notifyCh[index] = make(chan Op, 1)
 		kv.mu.Unlock()
 
 		select {
 		case val := <-kv.notifyCh[index]:
-			kv.mu.Lock()
-			delete(kv.notifyCh, index)
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
 			}
-			kv.mu.Unlock()
-
 		case <-time.After(400 * time.Millisecond):
 		}
 
 		kv.mu.Lock()
+		delete(kv.notifyCh, index)
 		if val, ok := kv.kvdata[args.Key]; ok {
 			reply.Err = OK
 			reply.Value = val
@@ -104,7 +99,8 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 	}
 }
 
-// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小  少了一种snapshot情况？？
+// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小   Raft问题
+// TODO:
 func (kv *KVServer) snapshot() {
 	if kv.maxraftstate != -1 && kv.persister.RaftStateSize() >= kv.maxraftstate {
 		// 找到已经应用到状态机的日志条目index
@@ -166,16 +162,16 @@ func (kv *KVServer) applyMsg() {
 					kv.lastIndex = msg.CommandIndex
 				}
 			}
-			kv.snapshot()
 			kv.mu.Unlock()
 			if ok {
 				val <- op
 			}
 		} else if msg.SnapshotValid {
 			kv.readSnapshot(kv.persister.ReadSnapshot())
-			//kv.snapshot()
 		}
-
+		kv.mu.Lock()
+		kv.snapshot()
+		kv.mu.Unlock()
 	}
 }
 
@@ -184,7 +180,6 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 	// Your code here.
 	if kv.killed() == false {
 		kv.mu.Lock()
-
 		op := Op{Key: args.Key, Value: args.Value, Opera: args.Op, ClientId: args.ClientId, SerialId: args.SerialId}
 
 		reply.Err = ErrWrongLeader
@@ -203,16 +198,18 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 		kv.mu.Unlock()
 
 		//fmt.Printf("before [id:%v, term:%v] put key:%v, index:%v, last value:%v\n", kv.me, kv.currentTerm, op.Key, index, op.Value)
+		// 只等待对应的index
 		select {
 		case val := <-kv.notifyCh[index]:
-			kv.mu.Lock()
-			delete(kv.notifyCh, index)
-			kv.mu.Unlock()
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
 			}
-		case <-time.After(800 * time.Millisecond):
+		case <-time.After(400 * time.Millisecond):
 		}
+
+		kv.mu.Lock()
+		delete(kv.notifyCh, index)
+		kv.mu.Unlock()
 	}
 }
 
