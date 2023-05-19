@@ -68,10 +68,10 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		}
 
 		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
-		//if kv.rf.SendGetBeforeHeartBeat() == false {
-		//	kv.mu.Unlock()
-		//	return
-		//}
+		if kv.rf.SendGetBeforeHeartBeat() == false {
+			kv.mu.Unlock()
+			return
+		}
 
 		reply.LeaderId = kv.me
 		kv.notifyCh[index] = make(chan Op, 1)
@@ -100,7 +100,6 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 }
 
 // FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小   Raft问题
-// TODO:
 func (kv *KVServer) snapshot() {
 	if kv.maxraftstate != -1 && kv.persister.RaftStateSize() >= kv.maxraftstate {
 		// 找到已经应用到状态机的日志条目index

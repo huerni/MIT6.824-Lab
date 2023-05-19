@@ -322,7 +322,7 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 
 	rf.state = Follower
 	rf.electionTime.Reset(time.Duration((rand.Int()%150)+300) * time.Millisecond)
-	rf.MyLeader = args.LeaderId
+
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
 		rf.votedFor = args.LeaderId
@@ -525,8 +525,13 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 		return
 	}
 
+	rf.state = Follower
+	rf.electionTime.Reset(time.Duration((rand.Int()%150)+300) * time.Millisecond)
+
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
+		rf.votedFor = args.LeaderId
+		rf.persist()
 	}
 
 	// 丢弃 lastIncludeIndex以前的log
@@ -575,20 +580,19 @@ func (rf *Raft) appendEntries() {
 				prevIndex := rf.logEntries[0].Index
 				rf.mu.Unlock()
 
-				if nextIndex <= prevIndex {
+				if nextIndex-1 < prevIndex {
 					// InstallSnapshot
-					rf.mu.Lock()
-					snapargs := InstallSnapshotArgs{}
-					snapargs.LastIncludedIndex = rf.logEntries[0].Index
-					snapargs.LastIncludedTerm = rf.logEntries[0].Term
-					snapargs.Term = rf.currentTerm
-					snapargs.Data = rf.snapshot
-					snapargs.LeaderId = rf.me
-					rf.mu.Unlock()
-
-					go func(id int, args InstallSnapshotArgs) {
+					go func(id int) {
+						rf.mu.Lock()
+						snapargs := InstallSnapshotArgs{}
+						snapargs.LastIncludedIndex = rf.logEntries[0].Index
+						snapargs.LastIncludedTerm = rf.logEntries[0].Term
+						snapargs.Term = rf.currentTerm
+						snapargs.Data = rf.snapshot
+						snapargs.LeaderId = rf.me
+						rf.mu.Unlock()
 						reply := InstallSnapshotReplys{}
-						ok := rf.peers[id].Call("Raft.InstallSnapshot", &args, &reply)
+						ok := rf.peers[id].Call("Raft.InstallSnapshot", &snapargs, &reply)
 						if ok {
 							rf.mu.Lock()
 							defer rf.mu.Unlock()
@@ -601,14 +605,14 @@ func (rf *Raft) appendEntries() {
 								return
 							}
 
-							if rf.currentTerm != args.Term || rf.state != Leader {
+							if rf.currentTerm != snapargs.Term || rf.state != Leader {
 								return
 							}
 
-							rf.nextIndex[id] = args.LastIncludedIndex + 1
-							rf.matchIndex[id] = args.LastIncludedIndex
+							rf.nextIndex[id] = snapargs.LastIncludedIndex + 1
+							rf.matchIndex[id] = snapargs.LastIncludedIndex
 						}
-					}(id, snapargs)
+					}(id)
 				}
 
 				rf.mu.Lock()
