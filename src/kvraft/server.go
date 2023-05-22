@@ -158,6 +158,7 @@ func (kv *KVServer) applyMsg() {
 			val, ok := kv.notifyCh[msg.CommandIndex]
 			if ok {
 				if msg.CommandIndex > kv.lastIndex {
+					kv.snapshot()
 					kv.lastIndex = msg.CommandIndex
 				}
 			}
@@ -166,11 +167,12 @@ func (kv *KVServer) applyMsg() {
 				val <- op
 			}
 		} else if msg.SnapshotValid {
-			kv.readSnapshot(kv.persister.ReadSnapshot())
+			if msg.SnapshotIndex > kv.lastIndex {
+				kv.readSnapshot(msg.Snapshot)
+				kv.lastIndex = msg.SnapshotIndex
+			}
+
 		}
-		kv.mu.Lock()
-		kv.snapshot()
-		kv.mu.Unlock()
 	}
 }
 
