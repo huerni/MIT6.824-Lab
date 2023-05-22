@@ -134,7 +134,7 @@ func (rf *Raft) persist() {
 	e.Encode(rf.logEntries)
 
 	raftstate := w.Bytes()
-	rf.persister.Save(raftstate, rf.snapshot)
+	rf.persister.Save(raftstate, rf.persister.ReadSnapshot())
 }
 
 // restore previously persisted state.
@@ -191,8 +191,15 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	if index > rf.lastApplied {
 		rf.lastApplied = index
 	}
-	rf.snapshot = snapshot
-	rf.persist()
+
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.votedFor)
+	e.Encode(rf.logEntries)
+
+	raftstate := w.Bytes()
+	rf.persister.Save(raftstate, snapshot)
 
 }
 
@@ -527,7 +534,6 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 
 	rf.state = Follower
 	rf.electionTime.Reset(time.Duration((rand.Int()%150)+300) * time.Millisecond)
-
 	if args.Term > rf.currentTerm {
 		rf.currentTerm = args.Term
 		rf.votedFor = args.LeaderId
@@ -541,8 +547,8 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 		return
 	}
 
-	if args.LastIncludedIndex <= rf.logEntries[len(rf.logEntries)-1].Index && rf.logEntries[args.LastIncludedIndex-preIndex].Term == args.LastIncludedTerm {
-		rf.logEntries = rf.logEntries[args.LastIncludedIndex-preIndex:]
+	if args.LastIncludedIndex <= rf.logEntries[len(rf.logEntries)-1].Index {
+		rf.logEntries = append([]LogEntrie{}, rf.logEntries[args.LastIncludedIndex-preIndex:]...)
 	} else {
 		rf.logEntries = append([]LogEntrie{}, LogEntrie{Term: args.LastIncludedTerm, Index: args.LastIncludedIndex})
 	}
@@ -554,8 +560,14 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 	if rf.lastApplied < args.LastIncludedIndex {
 		rf.lastApplied = args.LastIncludedIndex
 	}
-	rf.snapshot = args.Data
-	rf.persist()
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.votedFor)
+	e.Encode(rf.logEntries)
+
+	raftstate := w.Bytes()
+	rf.persister.Save(raftstate, args.Data)
 	rf.mu.Unlock()
 
 	msg := ApplyMsg{
@@ -567,146 +579,151 @@ func (rf *Raft) InstallSnapshot(args *InstallSnapshotArgs, replys *InstallSnapsh
 	rf.applyCh <- msg
 }
 
+func (rf *Raft) CallInstallSnapshot(server int, args *InstallSnapshotArgs) {
+	reply := InstallSnapshotReplys{}
+	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, &reply)
+	if ok {
+		rf.mu.Lock()
+		defer rf.mu.Unlock()
+
+		if rf.currentTerm < reply.Term {
+			rf.currentTerm = reply.Term
+			rf.votedFor = -1
+			rf.state = Follower
+			rf.persist()
+			return
+		}
+
+		if rf.currentTerm != args.Term || rf.state != Leader {
+			return
+		}
+
+		rf.nextIndex[server] = args.LastIncludedIndex + 1
+		rf.matchIndex[server] = args.LastIncludedIndex
+	}
+}
+
+func (rf *Raft) CallReceiveEntries(server int, args *AppendEntriesArgs) {
+
+	reply := AppendEntriesReply{}
+	ok := rf.peers[server].Call("Raft.ReceiveEntries", args, &reply)
+	if ok {
+		rf.mu.Lock()
+		defer rf.mu.Unlock()
+
+		if rf.currentTerm < reply.Term {
+			rf.currentTerm = reply.Term
+			rf.votedFor = -1
+			rf.state = Follower
+			rf.persist()
+			return
+		}
+
+		if rf.currentTerm != args.Term || rf.state != Leader {
+			return
+		}
+
+		if reply.Success == true {
+			// Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
+			// 更新nextIndex和matchIndex
+			rf.matchIndex[server] = args.PrevLogIndex + len(args.Entries)
+			rf.nextIndex[server] = rf.matchIndex[server] + 1
+
+			mapcount := make(map[int]int)
+			for index, val := range rf.matchIndex {
+				if index == rf.me {
+					continue
+				}
+				mapcount[val]++
+				// 不包括自己的matchIndex
+				if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val-rf.logEntries[0].Index].Term == rf.currentTerm {
+					rf.commitIndex = val
+					//fmt.Printf("commit:%v\n", val)
+					rf.applyCond.Broadcast()
+					break
+				}
+			}
+		} else {
+			/**
+			  Case 1: leader doesn't have XTerm:
+			    nextIndex = XIndex
+			  Case 2: leader has XTerm:
+			    nextIndex = leader's last entry for XTerm ??
+			  Case 3: follower's log is too short:
+			    nextIndex = XLen
+			**/
+			if reply.XLen != -1 {
+				rf.nextIndex[server] = reply.XLen
+			} else if reply.XTerm != -1 {
+				hasTerm := false
+				for i := len(rf.logEntries) - 1; i >= 0; i-- {
+					if rf.logEntries[i].Term == reply.XTerm {
+						rf.nextIndex[server] = rf.logEntries[0].Index + i + 1
+						hasTerm = true
+						break
+					} else if rf.logEntries[i].Term < reply.XTerm {
+						break
+					}
+				}
+				if hasTerm == false {
+					rf.nextIndex[server] = reply.XIndex
+				}
+			}
+		}
+		if rf.nextIndex[server]-1 < rf.logEntries[0].Index {
+			snapargs := InstallSnapshotArgs{}
+			snapargs.LastIncludedIndex = rf.logEntries[0].Index
+			snapargs.LastIncludedTerm = rf.logEntries[0].Term
+			snapargs.Term = rf.currentTerm
+			snapargs.Data = rf.persister.ReadSnapshot()
+			snapargs.LeaderId = rf.me
+
+			go rf.CallInstallSnapshot(server, &snapargs)
+		}
+	}
+}
+
 func (rf *Raft) appendEntries() {
 	rf.mu.Lock()
 	rf.timestamp++
-	rf.mu.Unlock()
 	// 修改成异步发送
 	for index, _ := range rf.peers {
-		if index != rf.me {
-			go func(id int) {
-				rf.mu.Lock()
-				nextIndex := rf.nextIndex[id]
-				prevIndex := rf.logEntries[0].Index
-				rf.mu.Unlock()
+		if index == rf.me {
+			continue
+		}
 
-				if nextIndex-1 < prevIndex {
-					// InstallSnapshot
-					go func(id int) {
-						rf.mu.Lock()
-						snapargs := InstallSnapshotArgs{}
-						snapargs.LastIncludedIndex = rf.logEntries[0].Index
-						snapargs.LastIncludedTerm = rf.logEntries[0].Term
-						snapargs.Term = rf.currentTerm
-						snapargs.Data = rf.snapshot
-						snapargs.LeaderId = rf.me
-						rf.mu.Unlock()
-						reply := InstallSnapshotReplys{}
-						ok := rf.peers[id].Call("Raft.InstallSnapshot", &snapargs, &reply)
-						if ok {
-							rf.mu.Lock()
-							defer rf.mu.Unlock()
+		nextIndex := rf.nextIndex[index]
+		prevIndex := rf.logEntries[0].Index
 
-							if rf.currentTerm < reply.Term {
-								rf.currentTerm = reply.Term
-								rf.votedFor = -1
-								rf.state = Follower
-								rf.persist()
-								return
-							}
+		if nextIndex-1 < prevIndex {
+			// InstallSnapshot
+			snapargs := InstallSnapshotArgs{}
+			snapargs.LastIncludedIndex = rf.logEntries[0].Index
+			snapargs.LastIncludedTerm = rf.logEntries[0].Term
+			snapargs.Term = rf.currentTerm
+			snapargs.Data = rf.persister.ReadSnapshot()
+			snapargs.LeaderId = rf.me
 
-							if rf.currentTerm != snapargs.Term || rf.state != Leader {
-								return
-							}
+			go rf.CallInstallSnapshot(index, &snapargs)
 
-							rf.nextIndex[id] = snapargs.LastIncludedIndex + 1
-							rf.matchIndex[id] = snapargs.LastIncludedIndex
-						}
-					}(id)
+		} else {
+			args := AppendEntriesArgs{}
+			args.Term = rf.currentTerm
+			args.LeaderId = rf.me
+			args.LeaderCommit = rf.commitIndex
+			args.PrevLogIndex = nextIndex - 1
+			if nextIndex > prevIndex {
+				// 超出logEntries的长度
+				args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-prevIndex].Term
+				// 需要同步的logEntries  切片应该是深拷贝
+				if nextIndex <= rf.logEntries[len(rf.logEntries)-1].Index {
+					args.Entries = append([]LogEntrie{}, rf.logEntries[(nextIndex-prevIndex):]...)
 				}
-
-				rf.mu.Lock()
-				nextIndex = rf.nextIndex[id]
-				args := AppendEntriesArgs{}
-				args.Term = rf.currentTerm
-				args.LeaderId = rf.me
-				args.LeaderCommit = rf.commitIndex
-				args.PrevLogIndex = nextIndex - 1
-				prevIndex = rf.logEntries[0].Index
-				if nextIndex > prevIndex {
-					// 超出logEntries的长度
-					//fmt.Printf("len: %v, preindex: %v, nextIndex: %v\n", len(rf.logEntries), prevIndex, args.PrevLogIndex)
-					args.PrevLogTerm = rf.logEntries[args.PrevLogIndex-prevIndex].Term
-					// 需要同步的logEntries  切片应该是深拷贝
-					if nextIndex <= rf.logEntries[len(rf.logEntries)-1].Index {
-						args.Entries = append([]LogEntrie{}, rf.logEntries[(nextIndex-prevIndex):]...)
-					}
-				}
-				rf.mu.Unlock()
-
-				reply := AppendEntriesReply{}
-				ok := rf.peers[id].Call("Raft.ReceiveEntries", &args, &reply)
-				if ok {
-					rf.mu.Lock()
-					defer rf.mu.Unlock()
-
-					if rf.currentTerm < reply.Term {
-						rf.currentTerm = reply.Term
-						rf.votedFor = -1
-						rf.state = Follower
-						rf.persist()
-						return
-					}
-
-					if rf.currentTerm != args.Term || rf.state != Leader {
-						return
-					}
-
-					if reply.Success == true {
-						// Leader通过检查matchIndex中的信息从前到后统计哪个记录已经保存在大多数服务器上了，找到后将此记录前面还没提交的记录全部提交。但在这里要增加一个限制条件，Leader只能提交自己Term里面添加的记录(为了防止论文Figure 8的问题)。
-						// 更新nextIndex和matchIndex
-						rf.matchIndex[id] = args.PrevLogIndex + len(args.Entries)
-						rf.nextIndex[id] = rf.matchIndex[id] + 1
-
-						mapcount := make(map[int]int)
-						for index, val := range rf.matchIndex {
-							if index == rf.me {
-								continue
-							}
-							mapcount[val]++
-							// 不包括自己的matchIndex
-							if val > rf.commitIndex && mapcount[val] >= len(rf.peers)/2 && rf.logEntries[val-rf.logEntries[0].Index].Term == rf.currentTerm {
-								rf.commitIndex = val
-								//fmt.Printf("commit:%v\n", val)
-								rf.applyCond.Broadcast()
-								break
-							}
-						}
-					} else {
-						/**
-						  Case 1: leader doesn't have XTerm:
-						    nextIndex = XIndex
-						  Case 2: leader has XTerm:
-						    nextIndex = leader's last entry for XTerm ??
-						  Case 3: follower's log is too short:
-						    nextIndex = XLen
-						**/
-						if reply.XLen != -1 {
-							rf.nextIndex[id] = reply.XLen
-						} else if reply.XTerm != -1 {
-							hasTerm := false
-							for i := len(rf.logEntries) - 1; i >= 0; i-- {
-								if rf.logEntries[i].Term == reply.XTerm {
-									rf.nextIndex[id] = rf.logEntries[0].Index + i + 1
-									hasTerm = true
-									break
-								} else if rf.logEntries[i].Term < reply.XTerm {
-									break
-								}
-							}
-							if hasTerm == false {
-								rf.nextIndex[id] = reply.XIndex
-							}
-						}
-
-						if rf.nextIndex[id] < 0 {
-							rf.nextIndex[id] = 1
-						}
-					}
-				}
-			}(index)
+			}
+			go rf.CallReceiveEntries(index, &args)
 		}
 	}
+	rf.mu.Unlock()
 }
 
 func (rf *Raft) processMsg() {
@@ -717,18 +734,23 @@ func (rf *Raft) processMsg() {
 		}
 		msgs := []ApplyMsg{}
 		preIndex := rf.logEntries[0].Index
-		if rf.lastApplied < preIndex {
+		if rf.commitIndex < preIndex {
+			rf.commitIndex = preIndex
+			rf.lastApplied = preIndex
 			rf.mu.Unlock()
 			continue
+		}
+		if rf.lastApplied < preIndex {
+			rf.lastApplied = preIndex
 		}
 		for k := rf.lastApplied - preIndex + 1; k <= rf.commitIndex-preIndex && k < len(rf.logEntries); k++ {
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
 			msgs = append(msgs, msg)
 		}
 
-		// fmt.Printf("[id:%v, term:%v] 日志commit [%v-%v]\n", rf.me, rf.currentTerm, rf.lastApplied+1, rf.commitIndex)
 		rf.lastApplied = rf.commitIndex
 		rf.mu.Unlock()
+
 		for _, msg := range msgs {
 			rf.applyCh <- msg
 		}
