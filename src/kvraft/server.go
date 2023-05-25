@@ -68,10 +68,12 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		}
 
 		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
-		if kv.rf.SendGetBeforeHeartBeat() == false {
-			kv.mu.Unlock()
-			return
-		}
+		// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小  超时
+		// TODO: 去除了还是有问题
+		//if kv.rf.SendGetBeforeHeartBeat() == false {
+		//	kv.mu.Unlock()
+		//	return
+		//}
 
 		reply.LeaderId = kv.me
 		kv.notifyCh[index] = make(chan Op, 1)
@@ -81,26 +83,27 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		case val := <-kv.notifyCh[index]:
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
+				kv.mu.Lock()
+				if val, ok := kv.kvdata[args.Key]; ok {
+					reply.Err = OK
+					reply.Value = val
+					//fmt.Printf("[id:%v, term:%v] get key:%v OK\n", kv.me, kv.currentTerm, args.Key)
+				} else {
+					//fmt.Printf("[id:%v, term:%v] get key:%v noKey\n", kv.me, kv.currentTerm, args.Key)
+					reply.Err = ErrNoKey
+				}
+				kv.mu.Unlock()
 			}
-		case <-time.After(400 * time.Millisecond):
+		case <-time.After(350 * time.Millisecond):
 		}
 
 		kv.mu.Lock()
 		delete(kv.notifyCh, index)
-		if val, ok := kv.kvdata[args.Key]; ok {
-			reply.Err = OK
-			reply.Value = val
-			//fmt.Printf("[id:%v, term:%v] get key:%v OK\n", kv.me, kv.currentTerm, args.Key)
-		} else {
-			//fmt.Printf("[id:%v, term:%v] get key:%v noKey\n", kv.me, kv.currentTerm, args.Key)
-			reply.Err = ErrNoKey
-		}
 		kv.mu.Unlock()
 	}
 }
 
-// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小   Raft问题
-func (kv *KVServer) snapshot() {
+func (kv *KVServer) snapshot(index int) {
 	if kv.maxraftstate != -1 && kv.persister.RaftStateSize() >= kv.maxraftstate {
 		// 找到已经应用到状态机的日志条目index
 		w := new(bytes.Buffer)
@@ -108,7 +111,7 @@ func (kv *KVServer) snapshot() {
 		e.Encode(kv.lastIndex)
 		e.Encode(kv.kvdata)
 		e.Encode(kv.lastSerialId)
-		kv.rf.Snapshot(kv.lastIndex, w.Bytes())
+		kv.rf.Snapshot(index, w.Bytes())
 		//DPrintf("[%v] snap: %v", kv.me, kv.lastIndex)
 	}
 }
@@ -156,12 +159,10 @@ func (kv *KVServer) applyMsg() {
 			}
 			// 通知
 			val, ok := kv.notifyCh[msg.CommandIndex]
-			if ok {
-				if msg.CommandIndex > kv.lastIndex {
-					kv.snapshot()
-					kv.lastIndex = msg.CommandIndex
-				}
+			if msg.CommandIndex > kv.lastIndex {
+				kv.lastIndex = msg.CommandIndex
 			}
+			kv.snapshot(msg.CommandIndex)
 			kv.mu.Unlock()
 			if ok {
 				val <- op
@@ -205,7 +206,7 @@ func (kv *KVServer) PutAppend(args *PutAppendArgs, reply *PutAppendReply) {
 			if val.ClientId == args.ClientId && val.SerialId == args.SerialId {
 				reply.Err = OK
 			}
-		case <-time.After(400 * time.Millisecond):
+		case <-time.After(350 * time.Millisecond):
 		}
 
 		kv.mu.Lock()
@@ -264,12 +265,11 @@ func StartKVServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persiste
 	kv.notifyCh = make(map[int]chan Op)
 	kv.lastSerialId = make(map[int64]int)
 	kv.lastIndex = 0
-	kv.readSnapshot(persister.ReadSnapshot())
-	//DPrintf("[%v] start %v", kv.me, kv.lastIndex)
+	if persister.SnapshotSize() > 0 {
+		kv.readSnapshot(persister.ReadSnapshot())
+	}
+
 	go kv.applyMsg()
-	//if maxraftstate != -1 {
-	//	go kv.snapshot()
-	//}
 
 	return kv
 }

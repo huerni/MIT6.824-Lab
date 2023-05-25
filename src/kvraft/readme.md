@@ -34,6 +34,8 @@ Leader切换时，msg怎么处理？？
 
 什么时候进行日志压缩？？在什么地方进行日志压缩？
 
+TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小
+
 ## submit
 ```
 go test -run 3A

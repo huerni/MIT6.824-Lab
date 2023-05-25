@@ -421,13 +421,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 	if insertIndex < len(args.Entries) {
 		rf.logEntries = append(rf.logEntries, args.Entries[insertIndex:]...)
 		rf.persist()
-		//fmt.Printf("After: timestamp[%v] %v: len:%v, next:%v ", curr, rf.me, len(args.Entries)-insertIndex, args.Entries[0].Index)
-		//for _, val := range rf.logEntries {
-		//	fmt.Printf("[%v, %v], ", val.Index, val.Term)
-		//}
-		//fmt.Printf("\n")
-	} else {
-		//fmt.Printf("timestamp[%v] %v:len is 0\n", curr, rf.me)
 	}
 
 	// fmt.Printf("%v 日志添加到 %v\n", rf.me, rf.logEntries[len(rf.logEntries)-1].Index)
@@ -442,72 +435,6 @@ func (rf *Raft) ReceiveEntries(args *AppendEntriesArgs, reply *AppendEntriesRepl
 		rf.persist()
 		rf.applyCond.Broadcast()
 	}
-}
-
-type HeartBeatArgs struct {
-	Term int
-}
-
-type HeartBeatReply struct {
-	Success bool
-	Term    int
-}
-
-func (rf *Raft) GetBeforeHeartBeat(args *HeartBeatArgs, reply *HeartBeatReply) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
-	reply.Success = false
-	reply.Term = rf.currentTerm
-
-	if args.Term < rf.currentTerm {
-		return
-	}
-
-	reply.Success = true
-}
-
-func (rf *Raft) SendGetBeforeHeartBeat() bool {
-	args := HeartBeatArgs{}
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
-	if rf.state != Leader {
-		return false
-	}
-	args.Term = rf.currentTerm
-	var voteCount int32 = 0
-	atomic.AddInt32(&voteCount, 1)
-	for index, _ := range rf.peers {
-		if index == rf.me {
-			continue
-		}
-		reply := HeartBeatReply{}
-		ok := rf.peers[index].Call("Raft.GetBeforeHeartBeat", &args, &reply)
-		if ok {
-			if rf.currentTerm < reply.Term {
-				rf.currentTerm = reply.Term
-				rf.votedFor = -1
-				rf.state = Follower
-				rf.persist()
-				return false
-			}
-			if rf.currentTerm != args.Term || rf.state != Leader {
-				return false
-			}
-			if reply.Success {
-				atomic.AddInt32(&voteCount, 1)
-				if int(atomic.LoadInt32(&voteCount)) > len(rf.peers)/2 {
-					return true
-				}
-			}
-		}
-		if rf.state != Leader {
-			return false
-		}
-	}
-
-	return false
 }
 
 type InstallSnapshotArgs struct {
@@ -742,6 +669,8 @@ func (rf *Raft) processMsg() {
 		}
 		if rf.lastApplied < preIndex {
 			rf.lastApplied = preIndex
+			rf.mu.Unlock()
+			continue
 		}
 		for k := rf.lastApplied - preIndex + 1; k <= rf.commitIndex-preIndex && k < len(rf.logEntries); k++ {
 			msg := ApplyMsg{CommandValid: true, Command: rf.logEntries[k].Command, CommandIndex: rf.logEntries[k].Index}
@@ -894,6 +823,7 @@ func (rf *Raft) startElection() {
 }
 
 func (rf *Raft) ticker() {
+	go rf.processMsg()
 	for rf.killed() == false {
 		// Your code here (2A)
 		// Check if a leader election should be started.
@@ -963,7 +893,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.timestamp = 0
 	// start ticker goroutine to start elections
 	go rf.ticker()
-	go rf.processMsg()
 
 	return rf
 }
