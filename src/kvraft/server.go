@@ -68,8 +68,8 @@ func (kv *KVServer) Get(args *GetArgs, reply *GetReply) {
 		}
 
 		// 当为小分区leader时，get不应该返回数据，需要判断是否为小分区leader
-		// FIXME:TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小  超时
-		// TODO: 去除了还是有问题
+		// TestSnapshotRecoverManyClients3B TestSnapshotUnreliableRecover3B 超过大小  超时
+		// 去除了还是有问题
 		//if kv.rf.SendGetBeforeHeartBeat() == false {
 		//	kv.mu.Unlock()
 		//	return

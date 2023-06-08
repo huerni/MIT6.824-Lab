@@ -4,14 +4,19 @@ package shardctrler
 // Shardctrler clerk.
 //
 
-import "6.5840/labrpc"
-import "time"
-import "crypto/rand"
-import "math/big"
+import (
+	"crypto/rand"
+	"math/big"
+	"time"
+
+	"6.5840/labrpc"
+)
 
 type Clerk struct {
 	servers []*labrpc.ClientEnd
 	// Your data here.
+	clientId   int64
+	sequenceId int
 }
 
 func nrand() int64 {
@@ -25,13 +30,19 @@ func MakeClerk(servers []*labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
 	ck.servers = servers
 	// Your code here.
+	ck.clientId = nrand()
+	ck.sequenceId = 0
 	return ck
 }
 
+// num配置号，查询最新配置，即最新的config
 func (ck *Clerk) Query(num int) Config {
 	args := &QueryArgs{}
 	// Your code here.
 	args.Num = num
+	args.ClientId = ck.clientId
+	ck.sequenceId++
+	args.SequenceId = ck.sequenceId
 	for {
 		// try each known server.
 		for _, srv := range ck.servers {
@@ -45,11 +56,14 @@ func (ck *Clerk) Query(num int) Config {
 	}
 }
 
+// 添加新的配置
 func (ck *Clerk) Join(servers map[int][]string) {
 	args := &JoinArgs{}
 	// Your code here.
 	args.Servers = servers
-
+	args.ClientId = ck.clientId
+	ck.sequenceId++
+	args.SequenceId = ck.sequenceId
 	for {
 		// try each known server.
 		for _, srv := range ck.servers {
@@ -63,11 +77,14 @@ func (ck *Clerk) Join(servers map[int][]string) {
 	}
 }
 
+// 将gids从配置中移除，重新分配分片
 func (ck *Clerk) Leave(gids []int) {
 	args := &LeaveArgs{}
 	// Your code here.
 	args.GIDs = gids
-
+	args.ClientId = ck.clientId
+	ck.sequenceId++
+	args.SequenceId = ck.sequenceId
 	for {
 		// try each known server.
 		for _, srv := range ck.servers {
